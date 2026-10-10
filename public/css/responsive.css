@@ -1,0 +1,33 @@
+/* Responsive Layout */
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.container {
+    width: min(100% - 32px, 1200px);
+    margin-inline: auto;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+.container {
+    width: min(100% - 24px, 100%);
+}
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+.container {
+    width: calc(100% - 24px);
+}
+
+.card {
+padding: var(--space-4);
+}
+
+.btn {
+    max-width: 100%;
+}
+}

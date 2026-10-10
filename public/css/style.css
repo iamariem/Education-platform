@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+@import url("../../styles/tokens.css");
+
+* {
+box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    background: var(--color-background);
+    color: var(--color-text);
+    font-size: var(--font-size-base);
+}
+    button,
+    input,
+    select,
+    textarea {
+    font: inherit;
+}
