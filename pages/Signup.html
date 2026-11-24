@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Create Account | EduSaaS</title>
+  <meta name="description" content="Create your EduSaaS account and start your learning journey.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles/tokens.css">
+  <link rel="stylesheet" href="../public/css/components.css">
+  <link rel="stylesheet" href="../public/css/style.css">
+  <link rel="stylesheet" href="../public/css/responsive.css">
+</head>
+
+<body class="auth-page signup-page">
+
+  <main class="auth-layout">
+
+    <section class="auth-welcome">
+      <a class="brand auth-brand" href="landing/index.html" aria-label="EduSaaS Home">
+        <span class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="m2 10 10-5 10 5-10 5-10-5Z" />
+            <path d="M6 12v5c3.5 3 8.5 3 12 0v-5" />
+            <path d="M22 10v6" />
+          </svg>
+        </span>
+        <span>EduSaaS</span>
+      </a>
+
+      <div class="welcome-content">
+        <span class="eyebrow">YOUR LEARNING JOURNEY STARTS HERE</span>
+        <h1>Learn today.<br><span>Grow tomorrow.</span></h1>
+        <p>
+          Join a learning community designed to help you build skills,
+          discover your potential, and achieve more.
+        </p>
+
+        <div class="welcome-benefits">
+          <div class="welcome-benefit">
+            <span class="benefit-icon">✓</span>
+            <span>Personalized learning experience</span>
+          </div>
+          <div class="welcome-benefit">
+            <span class="benefit-icon">✓</span>
+            <span>Learn at your own pace</span>
+          </div>
+          <div class="welcome-benefit">
+            <span class="benefit-icon">✓</span>
+            <span>Track your progress as you grow</span>
+          </div>
+          <div class="welcome-benefit">
+            <span class="benefit-icon">✓</span>
+            <span>Access learning resources anytime</span>
+          </div>
+          <div class="welcome-benefit">
+            <span class="benefit-icon">✓</span>
+            <span>Build skills and achieve your goals</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="welcome-decoration welcome-decoration-one"></div>
+      <div class="welcome-decoration welcome-decoration-two"></div>
+      <p class="welcome-footer">Learn better. Grow together.</p>
+    </section>
+
+    <section class="auth-form-section">
+      <div class="auth-form-wrapper">
+
+        <div class="auth-heading">
+          <span class="eyebrow">GET STARTED FOR FREE</span>
+          <h2>Create your account</h2>
+          <p id="signupSubtitle">To join us</p>
+        </div>
+
+        <form class="auth-form signup-multistep-form" id="signupForm"
+          data-student-registration-url="StudentRegistration.html">
+
+          <div class="signup-progress" aria-label="Signup progress">
+            <span class="signup-progress-step active" data-signup-indicator="0">1</span>
+            <span class="signup-progress-line"></span>
+            <span class="signup-progress-step" data-signup-indicator="1">2</span>
+            <span class="signup-progress-line"></span>
+            <span class="signup-progress-step" data-signup-indicator="2">3</span>
+          </div>
+
+          <!-- STEP 1: ACCOUNT TYPE -->
+          <section class="signup-step active" data-signup-step="0">
+            <fieldset class="role-fieldset">
+              <legend>I'm joining as a...</legend>
+
+              <div class="role-options">
+                <label class="role-option">
+                  <input type="radio" name="role" value="student" checked required>
+                  <span class="role-card">
+                    <span class="role-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m2 9 10-6 10 6-10 6-10-6Z" />
+                        <path d="M6 12v5c3.5 3 8.5 3 12 0v-5" />
+                      </svg>
+                    </span>
+                    <strong>Student</strong>
+                    <small>Learn new skills</small>
+                  </span>
+                </label>
+
+                <label class="role-option">
+                  <input type="radio" name="role" value="teacher" required>
+                  <span class="role-card">
+                    <span class="role-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+                        <path d="M9 7h7M9 11h7" />
+                      </svg>
+                    </span>
+                    <strong>Teacher / Instructor</strong>
+                    <small>Share your knowledge</small>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <button class="btn btn-primary auth-submit" type="button" data-signup-next>
+              Continue <span>→</span>
+            </button>
+          </section>
+
+          <!-- STEP 2: STUDENT PATH OR TEACHING CONTENT -->
+          <section class="signup-step" data-signup-step="1" hidden>
+
+            <div class="signup-choice-panel" id="studentPathPanel">
+              <div class="signup-step-heading">
+                <h3>What would you like to enroll in?</h3>
+                <p>Choose how you want to start learning.</p>
+              </div>
+
+              <div class="signup-path-options">
+                <label class="signup-path-option">
+                  <input type="radio" name="studentPath" value="courses" checked>
+                  <span>
+                    <strong>Courses</strong>
+                    <small>Continue with a basic account and enroll in courses.</small>
+                  </span>
+                </label>
+
+                <label class="signup-path-option">
+                  <input type="radio" name="studentPath" value="subjects">
+                  <span>
+                    <strong>Subjects</strong>
+                    <small>Complete your student profile, grade and school information.</small>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div class="signup-step-actions">
+              <button class="signup-back-button" type="button" data-signup-back>← Back</button>
+              <button class="btn btn-primary auth-submit" type="button" data-signup-next>
+                Continue <span>→</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- STEP 3: PERSONAL DETAILS -->
+          <section class="signup-step" data-signup-step="2" hidden>
+
+            <div class="signup-step-heading">
+              <h3>Your personal information</h3>
+              <p>Enter your details to create your EduSaaS account.</p>
+            </div>
+
+            <div class="auth-input-row">
+              <div class="auth-field">
+                <label for="signupFirstName">First name</label>
+                <input id="signupFirstName" name="firstName" type="text" placeholder="Enter your first name"
+                  autocomplete="given-name" required disabled>
+              </div>
+
+              <div class="auth-field">
+                <label for="signupLastName">Last name</label>
+                <input id="signupLastName" name="lastName" type="text" placeholder="Enter your last name"
+                  autocomplete="family-name" required disabled>
+              </div>
+            </div>
+
+            <div class="auth-field">
+              <label for="signupEmail">Email address</label>
+              <input id="signupEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email"
+                required disabled>
+            </div>
+
+            <div class="auth-field">
+              <label for="signupnumber">Phone number</label>
+              <input id="signupnumber" name="number" type="tel" placeholder="Enter your phone number" autocomplete="tel"
+                required disabled>
+            </div>
+
+            <div class="auth-field">
+              <label for="signupPassword">Password</label>
+              <div class="password-input-wrap">
+                <input id="signupPassword" name="password" type="password" placeholder="Create a password"
+                  autocomplete="new-password" minlength="8" required disabled>
+                <button class="password-toggle" type="button" data-password-toggle="signupPassword"
+                  aria-label="Show password">Show</button>
+              </div>
+              <p class="field-hint">Use at least 8 characters.</p>
+              <p class="password-error" id="passwordError" role="alert" hidden>Password must be at least 8 characters.
+              </p>
+            </div>
+
+            <label class="terms-check">
+              <input type="checkbox" name="terms" required disabled>
+              <span>I agree to the <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy
+                  Policy</a>.</span>
+            </label>
+
+            <div class="signup-step-actions">
+              <button class="signup-back-button" type="button" data-signup-back>← Back</button>
+              <button class="btn btn-primary auth-submit" type="submit">
+                Create Account <span>→</span>
+              </button>
+            </div>
+
+            <p class="auth-message" id="signupMessage" role="status" aria-live="polite"></p>
+
+            <div class="auth-divider"><span>OR</span></div>
+
+            <button type="button" class="google-signup-btn" id="googleSignupBtn">
+              <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true">
+                <path fill="#EA4335"
+                  d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 3.05 13.22l7.98 6.19C12.96 13.72 18.02 9.5 24 9.5Z" />
+                <path fill="#4285F4"
+                  d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.74 7.18l7.73 6C44.43 37.98 46.98 31.88 46.98 24.55Z" />
+                <path fill="#FBBC05"
+                  d="M10.03 28.59A14.4 14.4 0 0 1 9.25 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.55 2.58 10.78l7.45-6.19Z" />
+                <path fill="#34A853"
+                  d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.15 1.45-4.92 2.3-8.18 2.3-5.98 0-11.04-4.22-12.97-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48Z" />
+              </svg>
+              <span>Continue with Google</span>
+            </button>
+
+            <p class="google-signup-message" id="googleSignupMessage" role="status" aria-live="polite"></p>
+            <p class="auth-switch">Already have an account? <a href="Login.html">Log in</a></p>
+          </section>
+        </form>
+      </div>
+    </section>
+
+    <!-- Email Confirmation Screen -->
+    <section class="email-confirmation-screen" id="emailConfirmationScreen" hidden
+      aria-labelledby="emailConfirmationTitle">
+
+      <div class="confirmation-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="42" height="42" fill="none"
+          stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="3" />
+          <path d="m3 7 9 6 9-6" />
+        </svg>
+      </div>
+
+      <p class="confirmation-eyebrow">ONE LAST STEP</p>
+      <h2 id="emailConfirmationTitle">Check your inbox!</h2>
+
+      <p class="confirmation-description">
+        We've sent a confirmation link to your email address.
+        Please check your inbox and click the link to verify your account.
+      </p>
+
+      <div class="confirmation-email-box">
+        <span>CONFIRMATION SENT TO</span>
+        <strong id="confirmationEmailAddress">your@email.com</strong>
+      </div>
+
+      <a class="confirmation-primary-btn" id="openEmailAppBtn" href="#https://mail.google.com/" target="_blank"
+        rel="noopener noreferrer">
+        <span>Open Email App</span>
+        <span>↗</span>
+      </a>
+
+      <p class="confirmation-resend-text">
+        Didn't receive the email?
+        <button type="button" id="resendConfirmationBtn">Resend confirmation email</button>
+      </p>
+
+      <p class="confirmation-feedback" id="confirmationFeedback" role="status" aria-live="polite"></p>
+
+      <button type="button" class="confirmation-back-btn" id="backToSignupBtn">
+        ← Back to Sign Up
+      </button>
+    </section>
+
+  </main>
+
+  <script src="../public/js/main.js" defer></script>
+</body>
+
+</html>

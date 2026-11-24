@@ -1,23 +1,22 @@
-
 :root {
-/* Brand Colors */
-  --color-navy: #1F2D3D;
-  --color-primary: #F0787B;
-  --color-rose: #F4B0BC;
-  --color-mint: #62C4B5;
-  --color-pale-aqua: #DFF3F2;
+  /* Brand Colors */
+  --color-navy: #1f2d3d;
+  --color-primary: #f0787b;
+  --color-rose: #f4b0bc;
+  --color-mint: #62c4b5;
+  --color-pale-aqua: #dff3f2;
 
   /* Neutral Colors */
-  --color-white: #FFFFFF;
-  --color-background: #F1F5F9;
-  --color-text: #1F2D3D;
-  --color-text-muted: #64748B;
-  --color-border: #E2E8F0;
+  --color-white: #ffffff;
+  --color-background: #f1f5f9;
+  --color-text: #1f2d3d;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
 
   /* Status Colors */
-  --color-success: #16A34A;
-  --color-warning: #D97706;
-  --color-error: #DC2626;
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
 
   /* Typography */
   --font-family: "Poppins", sans-serif;
@@ -47,4 +46,8 @@
   /* Shadows */
   --shadow-card: 0 2px 8px rgba(31, 45, 61, 0.08);
   --shadow-modal: 0 8px 24px rgba(31, 45, 61, 0.16);
+
+  /* Layout */
+  --container-width: 1180px;
+  --container-gutter: 24px;
 }

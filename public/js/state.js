@@ -1,29 +1,17 @@
+/* ========================================
+   EduSaas - UI State
+======================================== */
 
-const appState = {
-  user: null,
-  language: "en",
-  theme: "light",
-  notifications: [],
-};
+(function () {
+  "use strict";
 
-const stateListeners = new Set();
+  window.EduSaas = window.EduSaas || {};
 
-function getState() {
-  return { ...appState };
-}
-
-function setState(updates) {
-  Object.assign(appState, updates);
-
-  stateListeners.forEach((listener) => {
-    listener(getState());
-  });
-}
-
-function subscribeToState(listener) {
-  stateListeners.add(listener);
-
-  return () => {
-    stateListeners.delete(listener);
+  window.EduSaas.state = {
+    menuOpen: false
   };
-}
+
+  window.EduSaas.setMenuOpen = function (isOpen) {
+    window.EduSaas.state.menuOpen = Boolean(isOpen);
+  };
+})();

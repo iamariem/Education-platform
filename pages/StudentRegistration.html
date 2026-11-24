@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f1f5f9">
+  <title>Student Registration | EduSaaS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles/tokens.css">
+  <link rel="stylesheet" href="../public/css/components.css">
+  <link rel="stylesheet" href="../public/css/style.css">
+  <link rel="stylesheet" href="../public/css/student-registration.css">
+  <link rel="stylesheet" href="../public/css/responsive.css">
+</head>
+
+<body class="registration-page">
+
+  <!-- Navbar -->
+  <header class="registration-header">
+    <a class="registration-brand" href="../pages/landing/index.html" aria-label="EduSaaS Home">
+      <span class="registration-brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="m2 9.5 10-5 10 5-10 5-10-5Z" />
+          <path d="M6 12v4.5c3.5 3 8.5 3 12 0V12" />
+          <path d="M22 9.5v6" />
+        </svg>
+      </span>
+      <span class="registration-brand-name">EduSaaS</span>
+    </a>
+
+    <div class="registration-header-actions">
+      <button class="registration-icon-button" type="button" id="registrationNotificationBtn"
+        aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 9.5a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+          <path d="M10 21h4" />
+        </svg>
+        <span class="registration-notification-dot"></span>
+      </button>
+
+      <button class="registration-profile" type="button" id="registrationProfileBtn" aria-label="Profile menu">
+        <span class="registration-avatar-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4.5 21a7.5 7.5 0 0 1 15 0" />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Student Registration -->
+  <main class="registration-container" id="studentRegistrationMain">
+
+    <a class="registration-back-link" href="../pages/Signup.html">
+      <span aria-hidden="true">←</span>
+      Back
+    </a>
+
+    <!-- Intro -->
+    <section class="registration-intro">
+      <div class="registration-intro-copy">
+        <span class="registration-eyebrow">WELCOME TO EDUSAAS</span>
+        <h1>Create Your Student Account</h1>
+        <p>
+          Complete your student profile, choose your grade and subjects,
+          and add your school information.
+        </p>
+      </div>
+
+      <div class="registration-visual-panel">
+        <div class="visual-orbit visual-orbit-one"></div>
+        <div class="visual-orbit visual-orbit-two"></div>
+
+        <div class="visual-floating-icon visual-book">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 7v14" />
+            <path d="M3 18V5a1 1 0 0 1 1-1h4a4 4 0 0 1 4 4
+                     4 4 0 0 1 4-4h4a1 1 0 0 1 1 1v13" />
+            <path d="M3 18a2 2 0 0 1 2-2h3a4 4 0 0 1 4 4
+                     4 4 0 0 1 4-4h3a2 2 0 0 1 2 2" />
+          </svg>
+        </div>
+
+        <div class="visual-floating-icon visual-cap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="m2 10 10-5 10 5-10 5-10-5Z" />
+            <path d="M6 12v4.5c3.5 3 8.5 3 12 0V12" />
+            <path d="M22 10v6" />
+          </svg>
+        </div>
+
+        <div class="visual-sparkle sparkle-one">✦</div>
+        <div class="visual-sparkle sparkle-two">✧</div>
+
+        <div class="visual-main-content">
+          <div class="visual-illustration">
+            <div class="visual-circle">
+              <div class="visual-book-stack">
+                <div class="book-layer book-layer-one"></div>
+                <div class="book-layer book-layer-two"></div>
+                <div class="book-layer book-layer-three"></div>
+                <div class="book-pages"></div>
+              </div>
+
+              <div class="visual-mini-screen">
+                <span></span>
+                <span></span>
+                <span></span>
+                <div class="screen-chart">
+                  <i></i><i></i><i></i><i></i><i></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Registration Form Card -->
+    <section class="registration-card">
+
+      <div class="registration-stepper" aria-label="Registration progress">
+        <div class="registration-step active" data-step-indicator="0">
+          <span class="step-number">1</span>
+          <span class="step-label">Basic Info</span>
+        </div>
+        <span class="step-connector"></span>
+
+        <div class="registration-step" data-step-indicator="1">
+          <span class="step-number">2</span>
+          <span class="step-label">Grade &amp; Subjects</span>
+        </div>
+        <span class="step-connector"></span>
+
+        <div class="registration-step" data-step-indicator="2">
+          <span class="step-number">3</span>
+          <span class="step-label">School Info</span>
+        </div>
+        <span class="step-connector"></span>
+
+        <div class="registration-step" data-step-indicator="3">
+          <span class="step-number">4</span>
+          <span class="step-label">Complete</span>
+        </div>
+      </div>
+
+      <form id="studentRegistrationForm" novalidate>
+
+        <!-- STEP 1: BASIC INFO -->
+        <section class="registration-form-step active" data-step="0">
+          <div class="registration-section-heading">
+            <h2>Basic Information</h2>
+            <p>Enter your details to create your student account.</p>
+          </div>
+
+
+          <div class="registration-fields">
+
+            <div class="registration-field">
+              <label for="studentFirstName">First Name</label>
+              <input id="studentFirstName" name="firstName" type="text" placeholder="Enter your first name"
+                autocomplete="given-name" required>
+              <small class="field-error" data-error-for="studentFirstName"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="studentLastName">Last Name</label>
+              <input id="studentLastName" name="lastName" type="text" placeholder="Enter your last name"
+                autocomplete="family-name" required>
+              <small class="field-error" data-error-for="studentLastName"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="studentEmail">Email</label>
+              <input id="studentEmail" name="email" type="email" placeholder="name@example.com" autocomplete="email"
+                required>
+              <small class="field-error" data-error-for="studentEmail"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="studentPhone">Student Phone Number</label>
+              <input id="studentPhone" name="phone" type="tel" placeholder="Enter student's phone number"
+                autocomplete="tel" required>
+              <small class="field-error" data-error-for="studentPhone"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="parentPhone">Parent Phone Number</label>
+              <input id="parentPhone" name="parentPhone" type="tel" placeholder="Enter parent's phone number"
+                autocomplete="tel" required>
+              <small class="field-error" data-error-for="parentPhone"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="parentEmail">Parent Email</label>
+              <input id="parentEmail" name="parentEmail" type="email" placeholder="parent@example.com"
+                autocomplete="email" required>
+              <small class="field-error" data-error-for="parentEmail"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="studentPassword">Password</label>
+              <div class="registration-password-wrap">
+                <input id="studentPassword" name="password" type="password" placeholder="Create a password"
+                  autocomplete="new-password" minlength="8" required>
+                <button class="registration-password-toggle" type="button" data-password-toggle="studentPassword"
+                  aria-label="Show password" aria-controls="studentPassword">Show</button>
+              </div>
+              <small class="field-hint">Use at least 8 characters.</small>
+              <small class="field-error" data-error-for="studentPassword"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="studentConfirmPassword">Confirm Password</label>
+              <div class="registration-password-wrap">
+                <input id="studentConfirmPassword" name="confirmPassword" type="password"
+                  placeholder="Confirm your password" autocomplete="new-password" minlength="8" required>
+                <button class="registration-password-toggle" type="button" data-password-toggle="studentConfirmPassword"
+                  aria-label="Show password" aria-controls="studentConfirmPassword">Show</button>
+              </div>
+              <small class="field-error" data-error-for="studentConfirmPassword"></small>
+            </div>
+
+          </div>
+
+          <label class="registration-checkbox">
+            <input id="studentTerms" name="terms" type="checkbox" required>
+            <span>
+              I agree to the
+              <a href="terms.html">Terms of Service</a>
+              and
+              <a href="privacy.html">Privacy Policy</a>.
+            </span>
+          </label>
+          <small class="field-error terms-error" data-error-for="studentTerms"></small>
+
+          <div class="registration-actions">
+            <span class="registration-step-caption">Step 1 of 4</span>
+            <button class="registration-primary-button" type="button" data-next-step>
+              Next <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- STEP 2: GRADE AND SUBJECTS -->
+        <section class="registration-form-step" data-step="1" hidden>
+          <div class="registration-section-heading">
+            <h2>Select Your Grade &amp; Subjects</h2>
+            <p>Choose your grade to see relevant subjects and learning content.</p>
+          </div>
+
+          <div class="registration-field">
+            <label for="studentGrade">Select Grade</label>
+            <select id="studentGrade" name="grade" required>
+              <option value="">Choose your grade</option>
+              <option value="Grade 1">Grade 1</option>
+              <option value="Grade 2">Grade 2</option>
+              <option value="Grade 3">Grade 3</option>
+              <option value="Grade 4">Grade 4</option>
+              <option value="Grade 5">Grade 5</option>
+              <option value="Grade 6">Grade 6</option>
+              <option value="Grade 7">Grade 7</option>
+              <option value="Grade 8">Grade 8</option>
+              <option value="Grade 9">Grade 9</option>
+              <option value="Grade 10">Grade 10</option>
+              <option value="Grade 11">Grade 11</option>
+              <option value="Grade 12">Grade 12</option>
+            </select>
+            <small class="field-error" data-error-for="studentGrade"></small>
+          </div>
+
+          <div class="subjects-heading">
+            <label>Select Your Subjects</label>
+            <button class="registration-text-button" id="selectAllSubjects" type="button">Select All</button>
+          </div>
+
+          <p class="field-hint subjects-hint">
+            Choose one or more subjects to personalize your learning plan.
+          </p>
+
+          <div class="registration-subjects">
+            <label class="subject-option">
+              <input type="checkbox" name="subjects" value="Mathematics">
+              <span class="subject-symbol">∑</span>
+              <span>Mathematics</span>
+            </label>
+
+            <label class="subject-option">
+              <input type="checkbox" name="subjects" value="Physics">
+              <span class="subject-symbol physics-symbol" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="32" cy="32" rx="26" ry="9" stroke="currentColor" stroke-width="3.2" />
+                  <ellipse cx="32" cy="32" rx="9" ry="26" stroke="currentColor" stroke-width="3.2" />
+                </svg>
+              </span>
+              <span>Physics</span>
+            </label>
+
+            <label class="subject-option">
+              <input type="checkbox" name="subjects" value="Chemistry">
+              <span class="subject-symbol chemistry-symbol" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M24 7H40M27 7V25L11 49
+                           C8 54 11 58 17 58H47
+                           C53 58 56 54 53 49L37 25V7" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                  <path d="M16 47L23 35H41L49 47
+                           C52 52 49 54 45 54H19
+                           C15 54 13 51 16 47Z" fill="#A5EAF0" />
+                  <circle cx="30" cy="42" r="2.5" fill="#368B9B" />
+                  <circle cx="37" cy="48" r="2" fill="#368B9B" />
+                  <circle cx="34" cy="35" r="1.8" fill="#368B9B" />
+                  <circle cx="42" cy="43" r="1.5" fill="#368B9B" />
+                </svg>
+              </span>
+              <span>Chemistry</span>
+            </label>
+
+            <label class="subject-option">
+              <input type="checkbox" name="subjects" value="Biology">
+              <span class="subject-symbol biology-symbol" aria-hidden="true">
+                <svg viewBox="0 0 48 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 4V12C8 24 40 24 40 36V44" stroke="currentColor" stroke-width="6"
+                    stroke-linecap="square" />
+                  <path d="M40 4V12C40 24 8 24 8 36V44" stroke="currentColor" stroke-width="6"
+                    stroke-linecap="square" />
+                  <path d="M8 12H40M13 20H35M18 27H30M18 37H30M13 44H35" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" />
+                </svg>
+              </span>
+              <span>Biology</span>
+            </label>
+
+            <label class="subject-option">
+              <input type="checkbox" name="subjects" value="Computer Science">
+              <span class="subject-symbol"><i data-lucide="code-2"></i></span>
+              <span>Computer Science</span>
+            </label>
+
+            <label class="subject-option">
+              <input type="checkbox" name="subjects" value="English">
+              <span class="subject-symbol">A</span>
+              <span>English</span>
+            </label>
+
+            <label class="subject-option">
+              <input type="checkbox" name="subjects" value="Arabic">
+              <span class="subject-symbol">ع</span>
+              <span>Arabic</span>
+            </label>
+
+            <label class="subject-option">
+              <input type="checkbox" name="subjects" value="Business">
+              <span class="subject-symbol">▤</span>
+              <span>Business</span>
+            </label>
+
+            <label class="subject-option">
+              <input type="checkbox" name="subjects" value="Other">
+              <span class="subject-symbol">＋</span>
+              <span>Other</span>
+            </label>
+          </div>
+
+          <small class="field-error" data-error-for="studentSubjects"></small>
+
+          <div class="registration-actions">
+            <button class="registration-secondary-button" type="button" data-previous-step>← Back</button>
+            <span class="registration-step-caption">Step 2 of 4</span>
+            <button class="registration-primary-button" type="button" data-next-step>
+              Next <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- STEP 3: SCHOOL INFO -->
+        <section class="registration-form-step" data-step="2" hidden>
+          <div class="registration-section-heading">
+            <h2>School Information</h2>
+            <p>Tell us a little more about your school.</p>
+          </div>
+
+          <div class="registration-fields">
+            <div class="registration-field">
+              <label for="studentSchool">School Name</label>
+              <input id="studentSchool" name="school" type="text" placeholder="Enter your school name"
+                autocomplete="organization" required>
+              <small class="field-error" data-error-for="studentSchool"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="studentSchoolType">School Type</label>
+              <select id="studentSchoolType" name="schoolType" required>
+                <option value="">Select school type</option>
+                <option value="Public">Public</option>
+                <option value="Private">Private</option>
+                <option value="International">International</option>
+                <option value="Other">Other</option>
+              </select>
+              <small class="field-error" data-error-for="studentSchoolType"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="studentCountry">Country</label>
+              <select id="studentCountry" name="country" required>
+                <option value="">Select your country</option>
+                <option value="Egypt">Egypt</option>
+                <option value="Saudi Arabia">Saudi Arabia</option>
+                <option value="United Arab Emirates">United Arab Emirates</option>
+                <option value="Jordan">Jordan</option>
+                <option value="Other">Other</option>
+              </select>
+              <small class="field-error" data-error-for="studentCountry"></small>
+            </div>
+
+            <div class="registration-field">
+              <label for="studentCity">City</label>
+              <input id="studentCity" name="city" type="text" placeholder="Enter your city"
+                autocomplete="address-level2" required>
+              <small class="field-error" data-error-for="studentCity"></small>
+            </div>
+          </div>
+
+          <div class="registration-actions">
+            <button class="registration-secondary-button" type="button" data-previous-step>← Back</button>
+            <span class="registration-step-caption">Step 3 of 4</span>
+            <button class="registration-primary-button" type="button" data-next-step>
+              Review Details <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- STEP 4: REVIEW AND COMPLETE -->
+        <section class="registration-form-step" data-step="3" hidden>
+          <div class="registration-section-heading">
+            <h2>Review Your Information</h2>
+            <p>Make sure your details are correct before continuing.</p>
+          </div>
+
+          <div class="review-row">
+            <span class="review-label">First Name</span>
+            <span class="review-value" id="reviewFirstName"></span>
+          </div>
+
+          <div class="review-row">
+            <span class="review-label">Last Name</span>
+            <span class="review-value" id="reviewLastName"></span>
+          </div>
+
+          <div class="review-row">
+            <span class="review-label">Email</span>
+            <span class="review-value" id="reviewEmail">—</span>
+          </div>
+
+          <div class="review-row">
+            <span class="review-label">Student Phone</span>
+            <span class="review-value" id="reviewStudentPhone"></span>
+          </div>
+
+          <div class="review-row">
+            <span class="review-label">Parent Phone</span>
+            <span class="review-value" id="reviewParentPhone"></span>
+          </div>
+
+          <div class="review-row">
+            <span class="review-label">Parent Email</span>
+            <span class="review-value" id="reviewParentEmail"></span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Grade</span>
+            <span class="review-value" id="reviewGrade">—</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Subjects</span>
+            <span class="review-value" id="reviewSubjects">—</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">School</span>
+            <span class="review-value" id="reviewSchool">—</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">School Type</span>
+            <span class="review-value" id="reviewSchoolType">—</span>
+          </div>
+          <div class="review-row">
+            <span class="review-label">Country / City</span>
+            <span class="review-value" id="reviewLocation">—</span>
+          </div>
+          </div>
+
+          <p class="registration-submit-message" id="registrationSubmitMessage" role="status">
+            Your details are ready for review.
+          </p>
+
+          <div class="registration-actions">
+            <button class="registration-secondary-button" type="button" data-previous-step>← Back</button>
+            <span class="registration-step-caption">Step 4 of 4</span>
+            <button class="registration-primary-button" type="submit">
+              Create Account <span aria-hidden="true">✓</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- SUCCESS MESSAGE -->
+        <section class="registration-form-step" data-step="4" hidden>
+          <div class="registration-complete">
+            <div class="registration-success-icon" aria-hidden="true">✓</div>
+            <div class="registration-section-heading registration-complete-heading">
+              <h2>You're All Set!</h2>
+              <p>Your registration details have been completed successfully.</p>
+            </div>
+            <p class="registration-submit-message">
+              This page is currently a front-end demo. Connect your registration
+              form to your backend to create and save real student accounts.
+            </p>
+            <div class="registration-actions registration-actions-center">
+              <a class="registration-primary-button" href="../pages/landing/index.html">
+                Back to Home
+              </a>
+            </div>
+          </div>
+        </section>
+
+      </form>
+    </section>
+
+
+    <!-- Benefits Panel -->
+    <aside class="registration-benefits">
+      <div class="benefits-heading">
+        <span class="benefits-icon" aria-hidden="true">✦</span>
+        <div>
+          <h2>Why Join EduSaaS?</h2>
+          <p>
+            Discover a smarter way to learn, stay organized, and achieve
+            your academic goals. Your learning journey starts here!
+          </p>
+        </div>
+      </div>
+
+      <div class="benefit-item">
+        <span class="benefit-check" aria-hidden="true">✓</span>
+        <div>
+          <h3>Personalized Learning</h3>
+          <p>Learning recommendations tailored to your grade and subjects.</p>
+        </div>
+      </div>
+
+      <div class="benefit-item">
+        <span class="benefit-check" aria-hidden="true">✓</span>
+        <div>
+          <h3>AI Tutor Available 24/7</h3>
+          <p>Get help understanding lessons whenever you need it.</p>
+        </div>
+      </div>
+
+      <div class="benefit-item">
+        <span class="benefit-check" aria-hidden="true">✓</span>
+        <div>
+          <h3>Interactive Quizzes</h3>
+          <p>Practice what you learn and check your understanding.</p>
+        </div>
+      </div>
+
+      <div class="benefit-item">
+        <span class="benefit-check" aria-hidden="true">✓</span>
+        <div>
+          <h3>Track Your Progress</h3>
+          <p>See your learning progress and celebrate your achievements.</p>
+        </div>
+      </div>
+
+      <div class="benefit-item">
+        <span class="benefit-check" aria-hidden="true">✓</span>
+        <div>
+          <h3>Learn From Expert Instructors</h3>
+          <p>Explore clear lessons and helpful educational resources.</p>
+        </div>
+      </div>
+
+      <div class="benefit-item">
+        <span class="benefit-check" aria-hidden="true">✓</span>
+        <div>
+          <h3>Flexible Learning</h3>
+          <p>Learn at your own pace and access your study materials whenever you need them.</p>
+        </div>
+      </div>
+
+      <div class="benefit-item">
+        <span class="benefit-check" aria-hidden="true">✓</span>
+        <div>
+          <h3>Personalized Study Plans</h3>
+          <p>Stay organized with study plans designed around your academic goals.</p>
+        </div>
+      </div>
+
+      <div class="benefit-item">
+        <span class="benefit-check" aria-hidden="true">✓</span>
+        <div>
+          <h3>Better Exam Preparation</h3>
+          <p>Build confidence and prepare for exams through practice and revision.</p>
+        </div>
+      </div>
+
+      <div class="benefit-item">
+        <span class="benefit-check" aria-hidden="true">✓</span>
+        <div>
+          <h3>Continuous Improvement</h3>
+          <p>Discover your strengths and improve your learning skills every day.</p>
+        </div>
+      </div>
+
+      <div class="registration-quote">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <p>
+          EduSaaS makes it easier to organize my lessons and understand
+          difficult topics.
+        </p>
+        <span class="quote-author">— Student feedback example</span>
+      </div>
+    </aside>
+
+
+  </main>
+
+  <!-- Student Email Confirmation -->
+  <section class="email-confirmation-screen" id="studentEmailConfirmationScreen" hidden
+    aria-labelledby="studentConfirmationTitle">
+
+    <div class="confirmation-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="42" height="42" fill="none"
+        stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="3" />
+        <path d="m3 7 9 6 9-6" />
+      </svg>
+    </div>
+
+    <p class="confirmation-eyebrow">ONE LAST STEP</p>
+    <h2 id="studentConfirmationTitle">Check your inbox!</h2>
+
+    <p class="confirmation-description">
+      We've sent a confirmation link to your email address.
+      Please check your inbox and click the link to verify your account.
+    </p>
+
+    <div class="confirmation-email-box">
+      <span>CONFIRMATION SENT TO</span>
+      <strong id="studentConfirmationEmail">your@email.com</strong>
+    </div>
+
+    <a class="confirmation-primary-btn" id="studentOpenEmailBtn" href="#https://mail.google.com/" target="_blank"
+      rel="noopener noreferrer">
+      <span>Open Email App</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+
+    <p class="confirmation-resend-text">
+      Didn't receive the email?
+      <button type="button" id="studentResendEmailBtn">
+        Resend confirmation email
+      </button>
+    </p>
+
+    <p class="confirmation-feedback" id="studentConfirmationFeedback" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="registration-footer">
+    <a class="registration-footer-brand" href="../pages/landing/index.html">
+      <span class="registration-footer-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="m2 10 10-5 10 5-10 5-10-5Z" />
+          <path d="M6 12v5c3.5 3 8.5 3 12 0v-5" />
+          <path d="M22 10v6" />
+        </svg>
+      </span>
+      <span>EduSaaS</span>
+    </a>
+
+    <p class="registration-footer-tagline">
+      Learn better. Grow together.
+    </p>
+
+    <p class="registration-footer-copyright">
+      © 2026 EduSaaS. All rights reserved.
+    </p>
+  </footer>
+
+  <script src="../public/js/main.js" defer></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>

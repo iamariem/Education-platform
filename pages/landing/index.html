@@ -1,17 +1,509 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../../public/css/style.css">
-    <link rel="stylesheet" href="../../public/css/components.css">
-    <link rel="stylesheet" href="../../public/css/responsive.css">
-</head>
-<body>
-    <button class="btn btn-primary" type="button">
-    Get Started
-</button>
-</body>
-</html>
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>EduSaaS | Learn, Practice, Grow</title>
+  <meta name="description" content="Learn, practice and grow with personalized AI-powered education.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../public/css/components.css">
+  <link rel="stylesheet" href="../../public/css/style.css">
+  <link rel="stylesheet" href="../../public/css/responsive.css">
+</head>
+
+<body>
+
+
+  <header class="navbar">
+
+
+<a class="brand" href="#home" aria-label="EduSaaS Home">
+  <span class="brand-icon">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M22 10L12 5L2 10L12 15L22 10Z"/>
+      <path d="M6 12V17C9 20 15 20 18 17V12"/>
+      <path d="M22 10V16"/>
+    </svg>
+  </span>
+
+  <span>EduSaaS</span>
+</a>
+
+    <!-- Mobile Menu Button -->
+    <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
+      aria-controls="navbarMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="navbar-menu" id="navbarMenu">
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#courses">Courses</a>
+        <a href="#subjects">Subjects</a>
+        <a href="#teachers">Teacher</a>
+        <a href="#about">About</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="search-btn" type="button" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+          </svg>
+        </button>
+
+        <a class="btn btn-secondary" href="/pages/Login.html">Log In</a>
+        <a class="btn btn-primary" href="/pages/Signup.html">Sign Up</a>
+      </div>
+
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section-container" id="home">
+      <div class="hero-content reveal">
+        <span class="eyebrow">ONE PLATFORM, INFINITE LEARNING</span>
+
+        <h1>
+          Learn. Practice.<br>
+          <span>Grow with AI.</span>
+        </h1>
+
+        <p class="hero-description">
+          Personalized learning for every student, with expert
+          instructors and powerful AI-powered tools.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-large" href="#signup">
+            Get Started <span aria-hidden="true">→</span>
+          </a>
+          <a class="btn btn-secondary btn-large" href="#features">
+            Explore Features
+          </a>
+        </div>
+
+        <div class="hero-note">
+          <span class="note-dot"></span>
+          Learn at your own pace, anytime.
+        </div>
+      </div>
+
+      <div class="hero-art reveal" aria-label="Learning illustration">
+        <div class="art-orb orb-one"></div>
+        <div class="art-orb orb-two"></div>
+
+        <div class="art-card art-card-main">
+          <div class="book-stack" aria-hidden="true">📚</div>
+          <span class="art-label">YOUR LEARNING JOURNEY</span>
+          <h2>Small steps.<br>Big achievements.</h2>
+          <div class="mini-progress">
+            <span></span>
+          </div>
+          <p>Keep up the great work!</p>
+        </div>
+
+        <div class="floating-card floating-ai">
+          <span class="floating-icon">✦</span>
+          <div>
+            <strong>AI Tutor</strong>
+            <small>Ready to help</small>
+          </div>
+        </div>
+
+        <div class="floating-card floating-progress">
+          <span class="progress-ring">✓</span>
+          <div>
+            <strong>Keep growing!</strong>
+            <small>One lesson at a time</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats section-container" id="stats">
+      <article class="stat-card reveal">
+        <h2><span data-count="12000" data-suffix="+">0</span></h2>
+        <p>Active Students</p>
+      </article>
+
+      <article class="stat-card reveal">
+        <h2><span data-count="50" data-suffix="+">0</span></h2>
+        <p>Learning Courses</p>
+      </article>
+
+      <article class="stat-card reveal">
+        <h2><span data-count="200" data-suffix="+">0</span></h2>
+        <p>Expert Instructors</p>
+      </article>
+
+      <article class="stat-card reveal">
+        <h2><span data-count="98" data-suffix="%">0</span></h2>
+        <p>Student Satisfaction</p>
+      </article>
+    </section>
+
+    <section class="features section-container" id="features">
+      <div class="section-heading reveal">
+        <span class="eyebrow">WHY EDUSAAS?</span>
+        <h2>A smarter way to learn</h2>
+        <p>Everything you need to make learning more personal and effective.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card reveal">
+          <span class="feature-icon">✦</span>
+          <h3>AI Tutor</h3>
+          <p>Get learning support and explanations when you need them.</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <span class="feature-icon">◎</span>
+          <h3>Adaptive Learning</h3>
+          <p>Follow a learning journey that fits your needs and progress.</p>
+        </article>
+
+        <article class="feature-card reveal">
+          <span class="feature-icon">✓</span>
+          <h3>Track Progress</h3>
+          <p>See your achievements and understand what to improve next.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="courses section-container" id="courses">
+
+      <div class="section-heading reveal">
+        <span class="eyebrow">START LEARNING</span>
+        <h2>Explore popular courses</h2>
+        <p>Discover new skills and keep moving forward.</p>
+      </div>
+
+      <div class="course-grid">
+
+        <!-- Python Course -->
+        <article class="course-card reveal">
+          <div class="course-visual course-python">Py</div>
+
+          <div class="course-body">
+            <span class="course-tag">Programming</span>
+            <h3>Python for Beginners</h3>
+            <p>Build your first programming skills.</p>
+
+            <div class="course-footer">
+              <span class="course-price">1,500 EGP</span>
+              <a href="#signup" class="course-link">Explore course →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- AI Course -->
+        <article class="course-card reveal">
+          <div class="course-visual course-ai">AI</div>
+
+          <div class="course-body">
+            <span class="course-tag">Artificial Intelligence</span>
+            <h3>Machine Learning</h3>
+            <p>Explore the foundations of intelligent systems.</p>
+
+            <div class="course-footer">
+              <span class="course-price">1,800 EGP</span>
+              <a href="#signup" class="course-link">Explore course →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Web Development Course -->
+        <article class="course-card reveal">
+          <div class="course-visual course-web">&lt;/&gt;</div>
+
+          <div class="course-body">
+            <span class="course-tag">Web Development</span>
+            <h3>Build for the Web</h3>
+            <p>Learn how modern websites are created.</p>
+
+            <div class="course-footer">
+              <span class="course-price">1,200 EGP</span>
+              <a href="#signup" class="course-link">Explore course →</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+    <!-- Subjects Section -->
+    <section class="subjects section-container" id="subjects">
+
+      <div class="section-heading reveal">
+        <span class="eyebrow">OUR SUBJECTS</span>
+        <h2>Explore our subjects</h2>
+        <p>Learn your favorite subjects with expert guidance.</p>
+      </div>
+
+      <div class="subject-grid">
+
+        <!-- Arabic -->
+        <article class="subject-card reveal">
+          <div class="subject-visual subject-arabic">
+            <span>عربي</span>
+          </div>
+
+          <div class="subject-body">
+            <span class="subject-tag">Language</span>
+
+            <h3>Arabic</h3>
+
+            <p>
+              Improve your Arabic skills in grammar,
+              reading and literature.
+            </p>
+
+            <div class="subject-footer">
+              <span class="subject-price">900 EGP</span>
+              <a href="#signup" class="subject-link">
+                Explore subject →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Physics -->
+        <article class="subject-card reveal">
+          <div class="subject-visual subject-physics">
+            <span>PHY</span>
+          </div>
+
+          <div class="subject-body">
+            <span class="subject-tag">Science</span>
+
+            <h3>Physics</h3>
+
+            <p>
+              Understand physical concepts and master
+              problem-solving skills.
+            </p>
+
+            <div class="subject-footer">
+              <span class="subject-price">1,500 EGP</span>
+              <a href="#signup" class="subject-link">
+                Explore subject →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chemistry -->
+        <article class="subject-card reveal">
+          <div class="subject-visual subject-chemistry">
+            <span>CHEM</span>
+          </div>
+
+          <div class="subject-body">
+            <span class="subject-tag">Science</span>
+
+            <h3>Chemistry</h3>
+
+            <p>
+              Explore chemical reactions and understand
+              the world of chemistry.
+            </p>
+
+            <div class="subject-footer">
+              <span class="subject-price">1,400 EGP</span>
+              <a href="#signup" class="subject-link">
+                Explore subject →
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Mathematics -->
+        <article class="subject-card reveal">
+          <div class="subject-visual subject-math">
+            <span>∑</span>
+          </div>
+
+          <div class="subject-body">
+            <span class="subject-tag">Mathematics</span>
+
+            <h3>Mathematics</h3>
+
+            <p>
+              Build strong mathematical skills through
+              practice and problem solving.
+            </p>
+
+            <div class="subject-footer">
+              <span class="subject-price">1,600 EGP</span>
+              <a href="#signup" class="subject-link">
+                Explore subject →
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about section-container" id="about">
+
+      <!-- Main About Content -->
+      <div class="about-content reveal">
+
+        <div class="about-text">
+          <span class="eyebrow">ABOUT EDUSAAS</span>
+
+          <h2>One Platform for Teaching and Learning.</h2>
+
+          <p>
+            EduSaaS brings teachers and students together
+            in one educational platform. Teachers can share
+            their knowledge and manage their services, while
+            students can discover courses and learning
+            opportunities to grow.
+          </p>
+
+          <a href="#signup" class="about-link">
+            Get Started →
+          </a>
+        </div>
+
+        <!-- Visual Side -->
+        <div class="about-visual">
+
+          <div class="about-main-card">
+            <span class="about-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M2 10 12 4l10 6-10 6-10-6Z" />
+                <path d="M6 12.5V17c3.5 3 8.5 3 12 0v-4.5" />
+                <path d="M22 10v6" />
+              </svg>
+            </span>
+
+            <h3>Learn. Teach. Grow.</h3>
+
+            <p>
+              Bringing knowledge and opportunities
+              closer to everyone.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- About Features -->
+      <div class="about-features">
+
+        <!-- Teachers -->
+        <article class="about-feature reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M2 10 12 4l10 6-10 6-10-6Z" />
+              <path d="M6 12.5V17c3.5 3 8.5 3 12 0v-4.5" />
+            </svg>
+          </div>
+
+          <h3>For Teachers</h3>
+          <p>
+            Showcase your educational services, manage
+            your offerings, and share your knowledge.
+          </p>
+        </article>
+
+        <!-- Students -->
+        <article class="about-feature reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15Z" />
+              <path d="M8 7h8" />
+              <path d="M8 11h8" />
+            </svg>
+          </div>
+
+          <h3>For Students</h3>
+          <p>
+            Explore subjects, discover courses, and
+            find opportunities to develop your skills.
+          </p>
+        </article>
+
+        <!-- Learning Together -->
+        <article class="about-feature reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="10" cy="7" r="4" />
+              <path d="M20 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+
+          <h3>Learning Together</h3>
+          <p>
+            Creating a connected educational experience
+            where teaching and learning come together.
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+    <section class="cta section-container" id="signup">
+      <div class="cta-inner reveal">
+        <span class="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span>
+        <h2>Ready to grow your skills?</h2>
+        <p>Start your learning journey with EduSaaS.</p>
+        <a class="btn btn-primary btn-large" href="../Signup.html">
+          Create Your Account →
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="brand" href="#home">
+      <span class="brand-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="m2 10 10-5 10 5-10 5-10-5Z" />
+          <path d="M6 12v5c3.5 3 8.5 3 12 0v-5" />
+          <path d="M22 10v6" />
+        </svg>
+      </span>
+      <span>EduSaaS</span>
+    </a>
+    <p>Learn better. Grow together.</p>
+  </footer>
+
+  <script src="../../public/js/main.js" defer></script>
+
+</body>
+
+</html>

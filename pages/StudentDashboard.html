@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard | EduSaaS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles/tokens.css">
+    <link rel="stylesheet" href="../public/css/components.css">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="../public/css/responsive.css">
+</head>
+
+
+<body class="student-dashboard">
+    <div class="sd-app">
+
+        <!-- SIDEBAR -->
+        <aside class="sd-sidebar" id="sdSidebar">
+            <a href="../pages/landing/index.html" class="sd-brand">
+                <span class="sd-brand-icon">
+                    <i data-lucide="graduation-cap"></i>
+                </span>
+                <span class="sd-brand-accent">EduSaaS</span>
+            </a>
+
+            <p class="sd-nav-caption">STUDENT SPACE</p>
+
+
+
+            <nav class="sd-side-nav" aria-label="Student navigation">
+
+                <a class="sd-side-link active" href="#home">
+                    <i data-lucide="house"></i>
+                    <span>Home</span>
+                </a>
+
+                <a class="sd-side-link" href="student-courses.html">
+                    <i data-lucide="book-open"></i>
+                    <span>Courses</span>
+                </a>
+
+
+                <a class="sd-side-link" href="../pages/AITutor.html">
+                    <i data-lucide="bot"></i>
+                    <span>AI Assistant</span>
+                </a>
+
+                <a class="sd-side-link" href="#progress">
+                    <i data-lucide="chart-no-axes-column-increasing"></i>
+                    <span>Progress</span>
+                </a>
+
+                <a class="sd-side-link" href="student-assessment.html">
+                    <i data-lucide="clipboard-check"></i>
+                    <span>Assessment</span>
+                </a>
+
+                <button class="sd-side-link" id="sdSidebarNotificationBtn" type="button" aria-expanded="false"
+                    aria-controls="sdNotificationDropdown">
+
+                    <i data-lucide="bell"></i>
+                    <span>Notifications</span>
+                    <span class="sd-nav-badge" id="sdNavUnread">2</span>
+
+                </button>
+
+                <a class="sd-side-link" href="student-profile.html">
+                    <i data-lucide="user-round"></i>
+                    <span>Profile</span>
+                </a>
+
+                <a class="sd-side-link" href="student-settings.html">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </a>
+
+            </nav>
+
+            <div class="sd-sidebar-footer">
+                <button class="sd-side-link sd-logout" id="sdLogoutBtn" type="button">
+                    <i data-lucide="log-out"></i>
+                    <span>Log Out</span>
+                </button>
+
+                <div class="sd-side-user">
+                    <span class="sd-avatar" data-sd-avatar>ST</span>
+                    <div>
+                        <strong data-sd-name>Student</strong>
+                        <small>Student account</small>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="sd-backdrop" id="sdBackdrop" hidden></div>
+
+        <!-- PAGE -->
+        <div class="sd-page">
+
+            <!-- TOP NAVBAR -->
+            <header class="sd-topbar">
+                <div class="sd-top-left">
+                    <button class="sd-icon-btn sd-menu-btn" id="sdMenuBtn" type="button" aria-label="Open sidebar"
+                        aria-expanded="false">
+                        <i data-lucide="menu"></i>
+                    </button>
+
+                    <a class="sd-mobile-brand" href="../index.html">
+                        Edu<span>SaaS</span>
+                    </a>
+
+                    <label class="sd-search">
+                        <i data-lucide="search"></i>
+                        <input type="search" id="sdSearchInput" placeholder="Search your courses..."
+                            aria-label="Search your courses">
+                    </label>
+                </div>
+
+                <div class="sd-top-actions">
+
+                    <div class="sd-notification-wrapper">
+
+                        <button class="sd-icon-btn sd-bell-btn" id="sdNotificationBtn" type="button"
+                            aria-label="Notifications" aria-expanded="false" aria-controls="sdNotificationDropdown">
+
+                            <i data-lucide="bell"></i>
+
+                            <span class="sd-notification-dot" id="sdTopDot">
+                            </span>
+
+                        </button>
+
+                        <!-- Notification Dropdown -->
+
+                        <section class="sd-notification-dropdown" id="sdNotificationDropdown" aria-label="Notifications"
+                            hidden>
+
+                            <div class="sd-dropdown-header">
+
+                                <div>
+                                    <h3>Notifications</h3>
+                                    <p id="sdDropdownUnread">2 unread notifications</p>
+                                </div>
+                                <button class="sd-icon-btn" id="sdCloseNotifications" type="button"
+                                    aria-label="Close notifications">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+
+                            <div class="sd-dropdown-list" id="sdDropdownNotificationList">
+                            </div>
+
+                            <div class="sd-dropdown-footer">
+
+                                <button class="sd-text-btn" id="sdDropdownMarkRead" type="button">
+
+                                    <i data-lucide="check-check"></i>
+                                    Mark all as read
+
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                    <a href="../profile.html" class="sd-top-user">
+                        <span class="sd-avatar" data-sd-avatar>ST</span>
+
+                        <span class="sd-top-user-text">
+                            <strong data-sd-name>Student</strong>
+                            <small>Student</small>
+                        </span>
+
+                        <i data-lucide="chevron-down"></i>
+                    </a>
+                </div>
+            </header>
+
+            <main class="sd-main">
+
+                <!-- WELCOME -->
+                <section class="sd-intro" id="home">
+                    <div>
+                        <p class="sd-eyebrow">YOUR LEARNING SPACE</p>
+                        <h1>Hi <span id="sdFirstName">Student</span></h1>
+                        <p>Let's continue your learning journey!</p>
+                    </div>
+
+                    <span class="sd-date-chip" id="sdTodayDate"></span>
+                </section>
+
+                <!-- STATS -->
+                <section class="sd-stats-grid" aria-label="Learning summary">
+                    <article class="sd-stat-card">
+                        <span class="sd-stat-icon sd-mint">
+                            <i data-lucide="book-open"></i>
+                        </span>
+                        <div>
+                            <strong id="sdStatCourses">0</strong>
+                            <small>Enrolled Courses</small>
+                        </div>
+                    </article>
+
+                    <article class="sd-stat-card">
+                        <span class="sd-stat-icon sd-blue">
+                            <i data-lucide="chart-no-axes-column-increasing"></i>
+                        </span>
+                        <div>
+                            <strong id="sdStatProgress">0%</strong>
+                            <small>Overall Progress</small>
+                        </div>
+                    </article>
+
+                    <article class="sd-stat-card">
+                        <span class="sd-stat-icon sd-rose">
+                            <i data-lucide="clipboard-check"></i>
+                        </span>
+                        <div>
+                            <strong id="sdStatAssessments">0</strong>
+                            <small>Assessments Done</small>
+                        </div>
+                    </article>
+
+                    <article class="sd-stat-card">
+                        <span class="sd-stat-icon sd-peach">
+                            <i data-lucide="bell"></i>
+                        </span>
+                        <div>
+                            <strong id="sdStatUnread">0</strong>
+                            <small>New Notifications</small>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- CONTINUE LEARNING + TODAY'S PLAN -->
+                <div class="sd-feature-grid">
+                    <section class="sd-panel">
+                        <div class="sd-panel-heading">
+                            <h2>Continue Learning</h2>
+                            <a href="student-courses.html">
+                                View all <i data-lucide="arrow-up-right"></i>
+                            </a>
+                        </div>
+                        <div id="sdContinueCourse"></div>
+                    </section>
+
+                    <section class="sd-panel">
+                        <div class="sd-panel-heading">
+                            <h2>Today's Plan</h2>
+                        </div>
+                        <p class="sd-panel-subtitle">A little progress every day ✨</p>
+                        <div id="sdTodayPlan"></div>
+                    </section>
+                </div>
+
+                <!-- ENROLLED COURSES -->
+
+                <!-- ENROLLED COURSES OVERVIEW -->
+
+                <section class="sd-section" id="courses">
+
+                    <div class="sd-section-heading">
+
+                        <div>
+                            <p class="sd-eyebrow">KEEP EXPLORING</p>
+                            <h2>Enrolled Courses</h2>
+                            <p>Overview of your enrolled courses.</p>
+                        </div>
+                        <div class="sd-section-actions">
+                            <span class="sd-count-chip" id="sdCourseCount">
+                            </span>
+                            <a class="sd-inline-link" href="student-courses.html">
+
+                                View all courses
+                                <i data-lucide="arrow-up-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sd-course-grid" id="sdCourseGrid"></div>
+                    <p class="sd-empty" id="sdSearchEmpty" hidden>
+                        No courses match your search.
+                    </p>
+                </section>
+
+
+                <!-- PROGRESS -->
+                <section class="sd-section" id="progress">
+                    <div class="sd-section-heading">
+                        <div>
+                            <p class="sd-eyebrow">YOUR GROWTH</p>
+                            <h2>Learning Progress</h2>
+                            <p>See how far you've come.</p>
+                        </div>
+                    </div>
+
+                    <div class="sd-panel">
+                        <div class="sd-progress-summary">
+                            <div class="sd-progress-ring" id="sdProgressRing">
+                                <span id="sdProgressRingText">0%</span>
+                            </div>
+
+                            <div>
+                                <h3>You're doing great!</h3>
+                                <p>Keep showing up. Every completed lesson counts.</p>
+                            </div>
+                        </div>
+
+                        <div class="sd-progress-bars" id="sdProgressBars"></div>
+                    </div>
+                </section>
+
+
+                <!-- ASSESSMENT & NOTIFICATION OVERVIEW -->
+
+                <div class="sd-lower-grid">
+
+                    <section class="sd-section" id="assessments">
+
+                        <div class="sd-section-heading">
+
+                            <div>
+                                <p class="sd-eyebrow">CHECK YOUR SKILLS</p>
+                                <h2>Assessment Overview</h2>
+                            </div>
+
+                            <a class="sd-inline-link" href="student-assessment.html">
+
+                                View all
+                                <i data-lucide="arrow-up-right"></i>
+
+                            </a>
+
+                        </div>
+
+                        <div class="sd-panel sd-list-panel" id="sdAssessmentList">
+                        </div>
+
+                    </section>
+                </div>
+
+                <footer class="sd-footer">
+                    © 2026 EduSaaS · Learn better. Grow together.
+                </footer>
+
+            </main>
+        </div>
+    </div>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+    <script src="../public/js/main.js" defer></script>
+</body>
+
+</html>

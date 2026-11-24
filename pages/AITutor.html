@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Assistant | EduSaaS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../styles/tokens.css">
+    <link rel="stylesheet" href="../public/css/components.css">
+    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="../public/css/responsive.css">
+
+</head>
+
+<body class="student-dashboard">
+
+    <div class="sd-app">
+
+        <!-- =========================
+             SIDEBAR
+        ========================== -->
+
+        <aside class="sd-sidebar" id="sdSidebar">
+
+            <a href="../pages/landing/index.html" class="sd-brand">
+
+                <span class="sd-brand-icon">
+                    <i data-lucide="graduation-cap"></i>
+                </span>
+
+                <span class="sd-brand-accent">
+                    EduSaaS
+                </span>
+
+            </a>
+
+            <p class="sd-nav-caption">STUDENT SPACE</p>
+
+            <nav class="sd-side-nav">
+
+                <a class="sd-side-link" href="../pages/StudentDashboard.html">
+                    <i data-lucide="house"></i>
+                    <span>Home</span>
+                </a>
+                <a class="sd-side-link" href="student-courses.html">
+                    <i data-lucide="book-open"></i>
+                    <span>Courses</span>
+                </a>
+
+                <a class="sd-side-link active" href="../pages/AITutor.html" id="ragSidebarLink">
+
+                    <i data-lucide="bot"></i>
+                    <span>AI Assistant</span>
+
+                </a>
+
+                <a class="sd-side-link" href="student-dashboard.html#progress">
+                    <i data-lucide="chart-no-axes-column-increasing"></i>
+                    <span>Progress</span>
+                </a>
+
+                <a class="sd-side-link" href="student-assessment.html">
+                    <i data-lucide="clipboard-check"></i>
+                    <span>Assessment</span>
+                </a>
+
+                <button class="sd-side-link" id="sdSidebarNotificationBtn" type="button" aria-expanded="false"
+                    aria-controls="sdNotificationDropdown">
+
+                    <i data-lucide="bell"></i>
+
+                    <span>Notifications</span>
+
+                    <span class="sd-nav-badge" id="sdNavUnread">
+                        2
+                    </span>
+
+                </button>
+
+                <a class="sd-side-link" href="student-profile.html">
+                    <i data-lucide="user-round"></i>
+                    <span>Profile</span>
+                </a>
+
+                <a class="sd-side-link" href="student-settings.html">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </a>
+
+            </nav>
+
+            <div class="sd-sidebar-footer">
+
+                <button class="sd-side-link sd-logout" id="sdLogoutBtn" type="button">
+
+                    <i data-lucide="log-out"></i>
+                    <span>Log Out</span>
+
+                </button>
+
+                <div class="sd-side-user">
+
+                    <span class="sd-avatar" data-sd-avatar>
+                        ST
+                    </span>
+
+                    <div>
+                        <strong data-sd-name>Student</strong>
+                        <small>Student account</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <div class="sd-backdrop" id="sdBackdrop" hidden></div>
+
+        <!-- =========================
+             PAGE
+        ========================== -->
+
+        <div class="sd-page">
+
+            <!-- TOP NAVBAR -->
+
+            <header class="sd-topbar">
+
+                <div class="sd-top-left">
+
+                    <button class="sd-icon-btn sd-menu-btn" id="sdMenuBtn" type="button" aria-label="Open sidebar"
+                        aria-expanded="false">
+
+                        <i data-lucide="menu"></i>
+
+                    </button>
+
+                    <a class="sd-mobile-brand" href="student-dashboard.html">
+                        Edu<span>SaaS</span>
+                    </a>
+
+                    <label class="sd-search" id="ragSearchWrapper">
+
+                        <i data-lucide="search"></i>
+
+                        <input type="search" id="ragSearchInput" placeholder="Search your courses..."
+                            aria-label="Search your courses">
+
+                    </label>
+
+                    <div class="rag-topbar-title" id="ragTopbarTitle" hidden>
+
+                        <i data-lucide="sparkles"></i>
+                        <span>AI Assistant</span>
+
+                    </div>
+
+                </div>
+
+                <div class="sd-top-actions">
+
+                    <div class="sd-notification-wrapper">
+
+                        <button class="sd-icon-btn sd-bell-btn" id="sdNotificationBtn" type="button"
+                            aria-label="Notifications" aria-expanded="false" aria-controls="sdNotificationDropdown">
+
+                            <i data-lucide="bell"></i>
+
+                            <span class="sd-notification-dot" id="sdTopDot">
+                            </span>
+
+                        </button>
+
+                        <section class="sd-notification-dropdown" id="sdNotificationDropdown" aria-label="Notifications"
+                            hidden>
+
+                            <div class="sd-dropdown-header">
+
+                                <div>
+
+                                    <h3>Notifications</h3>
+
+                                    <p id="sdDropdownUnread">
+                                        2 unread notifications
+                                    </p>
+
+                                </div>
+
+                                <button class="sd-icon-btn" id="sdCloseNotifications" type="button"
+                                    aria-label="Close notifications">
+
+                                    <i data-lucide="x"></i>
+
+                                </button>
+
+                            </div>
+
+                            <div class="sd-dropdown-list" id="sdDropdownNotificationList">
+                            </div>
+
+                            <div class="sd-dropdown-footer">
+
+                                <button class="sd-text-btn" id="sdDropdownMarkRead" type="button">
+
+                                    <i data-lucide="check-check"></i>
+                                    Mark all as read
+
+                                </button>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+
+                    <a href="student-profile.html" class="sd-top-user">
+
+                        <span class="sd-avatar" data-sd-avatar>
+                            ST
+                        </span>
+
+                        <span class="sd-top-user-text">
+
+                            <strong data-sd-name>Student</strong>
+
+                            <small>Student</small>
+
+                        </span>
+
+                        <i data-lucide="chevron-down"></i>
+
+                    </a>
+
+                </div>
+
+            </header>
+
+            <!-- =========================
+                 RAG MAIN CONTENT
+            ========================== -->
+
+            <main class="sd-main rag-main">
+
+                <!-- =========================
+                     STEP 1 - CHOOSE COURSE
+                ========================== -->
+
+                <div id="ragCoursesView">
+
+                    <!-- HERO -->
+
+                    <section class="rag-hero">
+
+                        <div class="rag-hero-content">
+
+                            <span class="rag-hero-badge">
+
+                                <i data-lucide="sparkles"></i>
+
+                                AI POWERED LEARNING
+
+                            </span>
+
+                            <h1>
+                                Learn smarter with <span>AI.</span>
+                            </h1>
+
+                            <p>
+                                Meet your personal AI learning assistant.
+                                Ask questions, understand difficult concepts,
+                                and explore your course materials at your
+                                own pace.
+                            </p>
+
+                            <div class="rag-hero-features">
+
+                                <span>
+                                    <i data-lucide="message-circle"></i>
+                                    Instant Help
+                                </span>
+
+                                <span>
+                                    <i data-lucide="book-open"></i>
+                                    Course-Based Learning
+                                </span>
+
+                                <span>
+                                    <i data-lucide="image-plus"></i>
+                                    Image Support
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ROBOT ILLUSTRATION -->
+
+                        <div class="rag-hero-art">
+
+                            <div class="rag-ai-circle">
+
+                                <svg class="rag-robot-svg" viewBox="0 0 240 240" role="img"
+                                    aria-label="AI learning assistant">
+
+                                    <!-- ANTENNA -->
+
+                                    <path d="M120 65 V38" stroke="var(--color-navy)" stroke-width="6"
+                                        stroke-linecap="round" />
+
+                                    <circle cx="120" cy="32" r="11" fill="var(--color-primary)" />
+
+                                    <!-- SPEECH BUBBLE -->
+
+                                    <path d="M135 170 L181 203 L164 169" fill="var(--color-white)"
+                                        stroke="var(--color-navy)" stroke-width="4" stroke-linejoin="round" />
+
+                                    <!-- HEAD -->
+
+                                    <rect x="40" y="62" width="160" height="108" rx="38" fill="var(--color-white)"
+                                        stroke="var(--color-navy)" stroke-width="4" />
+
+                                    <!-- FACE -->
+
+                                    <rect x="63" y="85" width="114" height="57" rx="25" fill="var(--color-navy)" />
+
+                                    <!-- EYES -->
+
+                                    <ellipse cx="91" cy="110" rx="11" ry="10" fill="var(--color-mint)" />
+
+                                    <ellipse cx="149" cy="110" rx="11" ry="10" fill="var(--color-mint)" />
+
+                                    <!-- SMILE -->
+
+                                    <path d="M107 126 Q120 137 133 126" fill="none" stroke="var(--color-white)"
+                                        stroke-width="4" stroke-linecap="round" />
+
+                                    <!-- EARS -->
+
+                                    <rect x="23" y="94" width="23" height="44" rx="11" fill="var(--color-primary)" />
+
+                                    <rect x="194" y="94" width="23" height="44" rx="11" fill="var(--color-primary)" />
+
+                                </svg>
+
+                            </div>
+
+                            <span class="rag-floating-icon rag-float-one">
+                                <i data-lucide="sparkles"></i>
+                            </span>
+
+                            <span class="rag-floating-icon rag-float-two">
+                                <i data-lucide="message-circle"></i>
+                            </span>
+
+                            <span class="rag-floating-icon rag-float-three">
+                                <i data-lucide="book-open"></i>
+                            </span>
+
+                        </div>
+
+                    </section>
+
+                    <!-- COURSES -->
+
+                    <section class="sd-section rag-courses-section">
+
+                        <div class="sd-section-heading">
+
+                            <div>
+
+                                <p class="sd-eyebrow">
+                                    YOUR LEARNING COMPANION
+                                </p>
+
+                                <h2>Choose a Course</h2>
+
+                                <p>
+                                    Select one of your enrolled courses
+                                    to start chatting with your AI assistant.
+                                </p>
+
+                            </div>
+
+                            <span class="sd-count-chip" id="ragCourseCount">
+                            </span>
+
+                        </div>
+
+                        <div class="rag-course-grid" id="ragCourseGrid">
+                        </div>
+
+                        <p class="sd-empty" id="ragSearchEmpty" hidden>
+
+                            No courses match your search.
+
+                        </p>
+
+                    </section>
+
+                    <!-- INFORMATION -->
+
+                    <section class="rag-info">
+
+                        <span class="rag-info-icon">
+                            <i data-lucide="info"></i>
+                        </span>
+
+                        <div>
+
+                            <h3>Your AI study companion</h3>
+
+                            <p>
+                                Use your AI assistant to review lessons,
+                                simplify complex topics, and practice
+                                questions from your enrolled courses.
+                            </p>
+
+                        </div>
+
+                    </section>
+
+                    <footer class="sd-footer">
+                        © 2026 EduSaaS · Learn better. Grow together.
+                    </footer>
+
+                </div>
+
+                <!-- =========================
+                     STEP 2 - CHAT SCREEN
+                ========================== -->
+
+                <div id="ragChatView" hidden>
+
+                    <section class="rag-chat-panel" id="ragChatPanel">
+
+                        <!-- CHAT HEADER -->
+
+                        <header class="rag-chat-header">
+
+                            <button class="rag-back-btn" id="ragBackBtn" type="button" aria-label="Back to courses">
+
+                                <i data-lucide="arrow-left"></i>
+                                <span>Courses</span>
+
+                            </button>
+
+                            <div class="rag-chat-course">
+
+                                <h1 id="ragChatCourseTitle" tabindex="-1">
+                                    AI Assistant
+                                </h1>
+
+                                <p id="ragChatCourseId"></p>
+
+                            </div>
+
+                            <button class="rag-new-chat-btn" id="ragNewChatBtn" type="button" aria-label="New chat">
+
+                                <i data-lucide="plus"></i>
+                                <span>New Chat</span>
+
+                            </button>
+
+                        </header>
+
+                        <!-- CHAT MESSAGES -->
+
+                        <div class="rag-chat-messages" id="ragChatMessages" role="log" aria-live="polite">
+
+                            <!-- WELCOME SCREEN -->
+
+                            <div class="rag-chat-welcome" id="ragChatWelcome">
+
+                                <div class="rag-chat-welcome-icon">
+                                    <i data-lucide="sparkles"></i>
+                                </div>
+
+                                <h2>What would you like to learn?</h2>
+
+                                <p>
+                                    Ask questions about your course materials
+                                    or upload an image to get started.
+                                </p>
+
+                                <div class="rag-suggestions">
+
+                                    <button type="button" class="rag-suggestion-btn"
+                                        data-rag-prompt="Explain the main concepts of this course.">
+
+                                        <i data-lucide="lightbulb"></i>
+                                        Explain a concept
+
+                                    </button>
+
+                                    <button type="button" class="rag-suggestion-btn"
+                                        data-rag-prompt="Help me review this course.">
+
+                                        <i data-lucide="book-open"></i>
+                                        Review my course
+
+                                    </button>
+
+                                    <button type="button" class="rag-suggestion-btn"
+                                        data-rag-prompt="Give me some practice questions.">
+
+                                        <i data-lucide="clipboard-check"></i>
+                                        Practice questions
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- CHAT INPUT -->
+
+                        <div class="rag-chat-bottom">
+
+                            <form class="rag-chat-form" id="ragChatForm">
+
+                                <!-- IMAGE PREVIEW -->
+
+                                <div class="rag-image-preview" id="ragImagePreview" hidden>
+
+                                    <img id="ragPreviewImage" alt="Attached image">
+
+                                    <span id="ragImageName"></span>
+
+                                    <button type="button" class="rag-remove-image" id="ragRemoveImage"
+                                        aria-label="Remove image">
+
+                                        <i data-lucide="x"></i>
+
+                                    </button>
+
+                                </div>
+
+                                <!-- COMPOSER -->
+
+                                <div class="rag-composer">
+
+                                    <button type="button" class="rag-upload-btn" id="ragUploadBtn"
+                                        aria-label="Upload image">
+
+                                        <i data-lucide="image-plus"></i>
+                                        <span>Image</span>
+
+                                    </button>
+
+                                    <input type="file" id="ragImageInput" accept="image/jpeg,image/png,image/webp"
+                                        hidden>
+
+                                    <div class="rag-message-box">
+
+                                        <textarea id="ragMessageInput" rows="1"
+                                            placeholder="Message about this course..."
+                                            aria-label="Your message"></textarea>
+
+                                        <button type="submit" class="rag-send-btn" id="ragSendBtn"
+                                            aria-label="Send message" disabled>
+
+                                            <i data-lucide="send"></i>
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <p class="rag-chat-hint">
+
+                                    <i data-lucide="info"></i>
+
+                                    Ask questions using text or images.
+
+                                </p>
+
+                                <p class="rag-chat-error" id="ragChatError" role="alert" hidden>
+                                </p>
+
+                            </form>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+
+    <script src="../public/js/main.js" defer></script>
+
+</body>
+
+</html>
