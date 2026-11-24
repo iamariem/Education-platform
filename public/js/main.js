@@ -1092,7 +1092,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (account.role === "student") {
 
-        window.location.href = "StudentDashboard.html";
+        window.location.href = "../student/StudentDashboard.html";
 
         return;
 
@@ -2133,7 +2133,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Demo link until lesson pages are created
 
-      button.href = "student-dashboard.html#progress";
+      button.href = "StudentDashboard.html#progress";
 
       button.append(makeIcon("arrow-right"));
 
@@ -2192,7 +2192,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "Continue Learning"
     );
 
-    button.href = "student-dashboard.html#progress";
+    button.href = "StudentDashboard.html#progress";
 
     button.append(makeIcon("arrow-right"));
 
@@ -2703,7 +2703,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (linkPage !== currentPage) return;
 
-      if (currentPage === "student-dashboard.html") {
+      if (currentPage === "studentdashboard.html") {
 
         const targetHash =
           currentHash === "#progress"
@@ -3264,7 +3264,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const currentPage =
         window.location.pathname.split("/").pop();
 
-      if (currentPage !== "student-rag.html") return;
+      if (currentPage !== "aitutor.html") return;
 
       event.preventDefault();
 
