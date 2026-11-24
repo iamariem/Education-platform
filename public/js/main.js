@@ -1,4 +1,58 @@
 "use strict";
+/* =========================================
+   EduSaaS - Demo Account Verification
+========================================= */
+
+const eduVerification = {
+
+  getAccount(email) {
+
+    const key =
+      "edusaas.account." + email.trim().toLowerCase();
+
+    const savedAccount = localStorage.getItem(key);
+
+    return savedAccount
+      ? JSON.parse(savedAccount)
+      : null;
+
+  },
+
+  saveAccount(email, role) {
+
+    const normalizedEmail =
+      email.trim().toLowerCase();
+
+    const account = {
+      email: normalizedEmail,
+      role: role,
+      emailVerified: false
+    };
+
+    localStorage.setItem(
+      "edusaas.account." + normalizedEmail,
+      JSON.stringify(account)
+    );
+
+    return account;
+
+  },
+
+  openVerification(email, source) {
+
+    sessionStorage.setItem(
+      "edusaas.verification",
+      JSON.stringify({
+        email: email.trim().toLowerCase(),
+        source: source
+      })
+    );
+
+    window.location.href = "EmailVerification.html";
+
+  }
+
+};
 
 /* =========================================
    EduSaaS - Shared Page Features
@@ -106,6 +160,64 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
+/* =========================================
+   Mobile Navigation Toggle
+========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const menuToggle = document.querySelector(".menu-toggle");
+  const navbarMenu = document.getElementById("navbarMenu");
+
+  if (!menuToggle || !navbarMenu) return;
+
+  function setMenu(isOpen) {
+    navbarMenu.classList.toggle("open", isOpen);
+    menuToggle.classList.toggle("active", isOpen);
+
+    menuToggle.setAttribute(
+      "aria-expanded",
+      String(isOpen)
+    );
+
+    menuToggle.setAttribute(
+      "aria-label",
+      isOpen
+        ? "Close navigation menu"
+        : "Open navigation menu"
+    );
+  }
+
+  menuToggle.addEventListener("click", () => {
+    const isOpen =
+      menuToggle.getAttribute("aria-expanded") === "true";
+
+    setMenu(!isOpen);
+  });
+
+  navbarMenu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      setMenu(false);
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setMenu(false);
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (
+      !menuToggle.contains(event.target) &&
+      !navbarMenu.contains(event.target)
+    ) {
+      setMenu(false);
+    }
+  });
+});
+
+
 /* =========================================
    Sticky Navbar Scroll Effect
 ========================================= */
@@ -123,305 +235,482 @@ if (navbar) {
     passive: true,
   });
 }
-
 /* =========================================
    EduSaaS — Multi-Step Signup & Email Confirmation
 ========================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
+
   const form = document.getElementById("signupForm");
+
   if (!form) return;
 
-  const steps = [...form.querySelectorAll("[data-signup-step]")];
-  const indicators = [...form.querySelectorAll("[data-signup-indicator]")];
-  const nextButtons = [...form.querySelectorAll("[data-signup-next]")];
-  const backButtons = [...form.querySelectorAll("[data-signup-back]")];
+  const steps = [
+    ...form.querySelectorAll("[data-signup-step]")
+  ];
 
-  const roleInputs = [...form.querySelectorAll('input[name="role"]')];
-  const studentPathInputs = [...form.querySelectorAll('input[name="studentPath"]')];
-  const teacherTypeInputs = [...form.querySelectorAll('input[name="teacherContentType"]')];
+  const indicators = [
+    ...form.querySelectorAll("[data-signup-indicator]")
+  ];
 
-  const studentPathPanel = document.getElementById("studentPathPanel");
-  const teacherContentPanel = document.getElementById("teacherContentPanel");
-  const teacherSubject = document.getElementById("teacherSubject");
-  const teacherGrade = document.getElementById("teacherGrade");
-  const teacherSubjectField = document.getElementById("teacherSubjectField");
-  const teacherGradeField = document.getElementById("teacherGradeField");
-  const teacherCourseNote = document.getElementById("teacherCourseNote");
+  const nextButtons = [
+    ...form.querySelectorAll("[data-signup-next]")
+  ];
+
+  const backButtons = [
+    ...form.querySelectorAll("[data-signup-back]")
+  ];
+
+  const roleInputs = [
+    ...form.querySelectorAll('input[name="role"]')
+  ];
 
   const emailInput = document.getElementById("signupEmail");
   const passwordInput = document.getElementById("signupPassword");
   const passwordError = document.getElementById("passwordError");
   const signupMessage = document.getElementById("signupMessage");
-  const confirmationScreen = document.getElementById("emailConfirmationScreen");
-  const confirmationEmail = document.getElementById("confirmationEmailAddress");
-  const confirmationFeedback = document.getElementById("confirmationFeedback");
-  const resendButton = document.getElementById("resendConfirmationBtn");
-  const backToSignupButton = document.getElementById("backToSignupBtn");
-  const openEmailButton = document.getElementById("openEmailAppBtn");
+
+  const confirmationScreen = document.getElementById(
+    "emailConfirmationScreen"
+  );
+
+  const confirmationEmail = document.getElementById(
+    "confirmationEmailAddress"
+  );
+
+  const confirmationFeedback = document.getElementById(
+    "confirmationFeedback"
+  );
+
+  const resendButton = document.getElementById(
+    "resendConfirmationBtn"
+  );
+
+  const backToSignupButton = document.getElementById(
+    "backToSignupBtn"
+  );
+
+  const openEmailButton = document.getElementById(
+    "openEmailAppBtn"
+  );
+
   const authLayout = document.querySelector(".auth-layout");
-  const authFormWrapper = document.querySelector(".auth-form-wrapper");
+
+  const authFormWrapper = document.querySelector(
+    ".auth-form-wrapper"
+  );
+
+  const signupProgress = form.querySelector(".signup-progress");
 
   let currentStep = 0;
   let currentEmail = "";
 
-  const signupProgress = form.querySelector(".signup-progress");
 
-  function updateProgressVisibility() {
-    const isTeacher = selectedValue(roleInputs) === "teacher";
-
-    if (signupProgress) {
-      signupProgress.style.display = isTeacher ? "none" : "";
-    }
-
-    const signupSubtitle = document.getElementById("signupSubtitle");
-
-    if (signupSubtitle) {
-      signupSubtitle.style.display = isTeacher ? "" : "none";
-    }
-  }
+  /* =========================================
+     Account Role
+  ========================================= */
 
   function selectedValue(inputs) {
-    return inputs.find((input) => input.checked)?.value || "";
+
+    return inputs.find(
+      (input) => input.checked
+    )?.value || "";
+
   }
+
+
+  /* =========================================
+     Progress Visibility
+  ========================================= */
+
+  function updateProgressVisibility() {
+
+    const isTeacher =
+      selectedValue(roleInputs) === "teacher";
+
+    if (signupProgress) {
+
+      signupProgress.style.display =
+        isTeacher ? "none" : "";
+
+    }
+
+    const signupSubtitle = document.getElementById(
+      "signupSubtitle"
+    );
+
+    if (signupSubtitle) {
+
+      signupSubtitle.style.display =
+        isTeacher ? "" : "none";
+
+    }
+
+  }
+
+
+  /* =========================================
+     Enable Active Form Fields
+  ========================================= */
 
   function setPanelEnabled(panel, enabled) {
+
     if (!panel) return;
-    panel.querySelectorAll("input, select, textarea").forEach((field) => {
+
+    panel.querySelectorAll(
+      "input, select, textarea"
+    ).forEach((field) => {
+
       field.disabled = !enabled;
+
     });
+
   }
 
+
+  /* =========================================
+     Form Validation Styles
+  ========================================= */
+
   function checkSignupFields() {
+
     const fields = form.querySelectorAll(
       'input[required]:not(:disabled), select[required]:not(:disabled), textarea[required]:not(:disabled)'
     );
 
     fields.forEach((field) => {
+
       const invalid = !field.checkValidity();
 
-      field.classList.toggle("is-invalid", invalid);
+      field.classList.toggle(
+        "is-invalid",
+        invalid
+      );
+
     });
+
   }
 
   form.addEventListener("click", (event) => {
+
     const button = event.target.closest("button");
 
     if (
       button &&
       button.textContent.trim().toLowerCase().includes("create")
     ) {
+
       checkSignupFields();
+
     }
+
   });
 
   form.addEventListener("input", (event) => {
+
     if (event.target.matches("input, select, textarea")) {
+
       event.target.classList.toggle(
         "is-invalid",
         !event.target.checkValidity()
       );
+
     }
+
   });
 
   form.addEventListener("change", (event) => {
+
     if (event.target.matches("input, select, textarea")) {
+
       event.target.classList.toggle(
         "is-invalid",
         !event.target.checkValidity()
       );
+
     }
+
   });
 
-  function updateStepTwo() {
-    const role = selectedValue(roleInputs);
-    const isStudent = role === "student";
 
-    if (studentPathPanel) studentPathPanel.hidden = !isStudent;
-    if (teacherContentPanel) teacherContentPanel.hidden = true;
-
-    setPanelEnabled(studentPathPanel, isStudent);
-    setPanelEnabled(teacherContentPanel, false);
-
-  }
-
-  function updateTeacherContentFields() {
-    const type = selectedValue(teacherTypeInputs);
-    const isSubject = type === "subject";
-
-    if (teacherSubjectField) teacherSubjectField.hidden = !isSubject;
-    if (teacherGradeField) teacherGradeField.hidden = !isSubject;
-    if (teacherCourseNote) teacherCourseNote.hidden = isSubject;
-
-    if (teacherSubject) {
-      teacherSubject.disabled = !isSubject || selectedValue(roleInputs) !== "teacher";
-      teacherSubject.required = isSubject;
-    }
-
-    if (teacherGrade) {
-      teacherGrade.disabled = !isSubject || selectedValue(roleInputs) !== "teacher";
-      teacherGrade.required = isSubject;
-    }
-  }
+  /* =========================================
+     Display Signup Step
+  ========================================= */
 
   function showStep(index) {
-    currentStep = Math.max(0, Math.min(index, steps.length - 1));
+
+    currentStep = Math.max(
+      0,
+      Math.min(index, steps.length - 1)
+    );
 
     steps.forEach((step, i) => {
-      step.hidden = i !== currentStep;
-      step.classList.toggle("active", i === currentStep);
-      setPanelEnabled(step, i === currentStep);
+
+      const isActive = i === currentStep;
+
+      step.hidden = !isActive;
+
+      step.classList.toggle(
+        "active",
+        isActive
+      );
+
+      setPanelEnabled(step, isActive);
+
     });
 
-    if (currentStep === 0) setPanelEnabled(steps[0], true);
+    if (currentStep === 0) {
 
-    if (currentStep === 1) {
-      setPanelEnabled(steps[1], true);
-      updateStepTwo();
+      setPanelEnabled(steps[0], true);
+
     }
 
     updateProgressVisibility();
 
     indicators.forEach((indicator, i) => {
-      indicator.classList.toggle("active", i === currentStep);
-      indicator.classList.toggle("completed", i < currentStep);
+
+      indicator.classList.toggle(
+        "active",
+        i === currentStep
+      );
+
+      indicator.classList.toggle(
+        "completed",
+        i < currentStep
+      );
 
       if (i === currentStep) {
-        indicator.setAttribute("aria-current", "step");
+
+        indicator.setAttribute(
+          "aria-current",
+          "step"
+        );
+
       } else {
-        indicator.removeAttribute("aria-current");
+
+        indicator.removeAttribute(
+          "aria-current"
+        );
+
       }
+
     });
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
   }
 
+
+  /* =========================================
+     Validate Current Step
+  ========================================= */
+
   function validateCurrentStep() {
+
     const activeStep = steps[currentStep];
+
     if (!activeStep) return false;
 
+    /* STEP 1: ACCOUNT TYPE */
+
     if (currentStep === 0) {
+
       if (!selectedValue(roleInputs)) {
+
         form.reportValidity();
+
         return false;
+
       }
 
       return true;
+
     }
 
-    if (currentStep === 1) {
-      const role = selectedValue(roleInputs);
-
-      if (role === "student") {
-        if (!selectedValue(studentPathInputs)) {
-          studentPathInputs[0]?.focus();
-          return false;
-        }
-
-        return true;
-      }
-
-      if (
-        role === "teacher" &&
-        selectedValue(teacherTypeInputs) === "subject"
-      ) {
-        if (!teacherSubject?.value) {
-          teacherSubject?.focus();
-          teacherSubject?.reportValidity();
-          return false;
-        }
-
-        if (!teacherGrade?.value) {
-          teacherGrade?.focus();
-          teacherGrade?.reportValidity();
-          return false;
-        }
-      }
-
-      return true;
-    }
+    /* STEP 2: PERSONAL INFORMATION */
 
     const requiredFields = [
-      ...activeStep.querySelectorAll("input[required], select[required]")
+      ...activeStep.querySelectorAll(
+        "input[required], select[required]"
+      )
     ];
 
     const firstInvalid = requiredFields.find(
-      (field) => !field.disabled && !field.checkValidity()
+      (field) =>
+        !field.disabled &&
+        !field.checkValidity()
     );
 
     if (firstInvalid) {
+
       firstInvalid.reportValidity();
+
       firstInvalid.focus();
+
       return false;
+
     }
 
-    if (passwordInput && passwordInput.value.length < 8) {
-      if (passwordError) passwordError.hidden = false;
+    if (
+      passwordInput &&
+      passwordInput.value.length < 8
+    ) {
+
+      if (passwordError) {
+
+        passwordError.hidden = false;
+
+      }
+
       passwordInput.focus();
+
       return false;
+
     }
 
-    if (passwordError) passwordError.hidden = true;
+    if (passwordError) {
+
+      passwordError.hidden = true;
+
+    }
 
     return true;
+
   }
 
+
+  /* =========================================
+     Email Provider
+  ========================================= */
+
   function updateEmailProviderLink() {
+
     if (!openEmailButton) return;
 
-    const domain = currentEmail.split("@")[1]?.toLowerCase();
+    const domain = currentEmail
+      .split("@")[1]
+      ?.toLowerCase();
+
     let url = "https://mail.google.com/";
 
-    if (["outlook.com", "hotmail.com", "live.com"].includes(domain)) {
+    if (
+      ["outlook.com", "hotmail.com", "live.com"]
+        .includes(domain)
+    ) {
+
       url = "https://outlook.live.com/mail/";
-    } else if (["yahoo.com", "yahoo.co.uk"].includes(domain)) {
+
+    } else if (
+      ["yahoo.com", "yahoo.co.uk"]
+        .includes(domain)
+    ) {
+
       url = "https://mail.yahoo.com/";
+
     }
 
     openEmailButton.href = url;
+
   }
 
+
+  /* =========================================
+     Email Confirmation Screen
+  ========================================= */
+
   function showConfirmationScreen(email) {
+
     currentEmail = email.trim();
 
     if (confirmationEmail) {
-      confirmationEmail.textContent = currentEmail;
+
+      confirmationEmail.textContent =
+        currentEmail;
+
     }
 
     if (confirmationFeedback) {
+
       confirmationFeedback.textContent =
         "Demo mode: Email verification is not connected yet. No email has been sent.";
+
     }
 
-    if (signupMessage) signupMessage.textContent = "";
+    if (signupMessage) {
 
-    if (confirmationScreen) confirmationScreen.hidden = false;
+      signupMessage.textContent = "";
 
-    authLayout?.classList.add("showing-confirmation");
+    }
 
-    if (authFormWrapper) authFormWrapper.hidden = true;
+    if (confirmationScreen) {
+
+      confirmationScreen.hidden = false;
+
+    }
+
+    authLayout?.classList.add(
+      "showing-confirmation"
+    );
+
+    if (authFormWrapper) {
+
+      authFormWrapper.hidden = true;
+
+    }
 
     form.hidden = true;
 
     updateEmailProviderLink();
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
   }
 
+
+  /* =========================================
+     Back To Signup
+  ========================================= */
+
   function returnToSignup() {
-    if (confirmationScreen) confirmationScreen.hidden = true;
 
-    authLayout?.classList.remove("showing-confirmation");
+    if (confirmationScreen) {
 
-    if (authFormWrapper) authFormWrapper.hidden = false;
+      confirmationScreen.hidden = true;
+
+    }
+
+    authLayout?.classList.remove(
+      "showing-confirmation"
+    );
+
+    if (authFormWrapper) {
+
+      authFormWrapper.hidden = false;
+
+    }
 
     form.hidden = false;
 
-    if (confirmationFeedback) confirmationFeedback.textContent = "";
+    if (confirmationFeedback) {
 
-    showStep(2);
+      confirmationFeedback.textContent = "";
+
+    }
+
+    showStep(1);
+
   }
 
+
+  /* =========================================
+     Preserve Personal Information By Role
+  ========================================= */
 
   const personalFieldIds = [
     "signupFirstName",
@@ -432,163 +721,291 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   function getPersonalInfo() {
+
     const data = {};
 
     personalFieldIds.forEach((id) => {
+
       const field = document.getElementById(id);
-      if (field) data[id] = field.value;
+
+      if (field) {
+
+        data[id] = field.value;
+
+      }
+
     });
 
-    const terms = form.querySelector(".terms-check input");
-    if (terms) data.terms = terms.checked;
+    const terms = form.querySelector(
+      ".terms-check input"
+    );
+
+    if (terms) {
+
+      data.terms = terms.checked;
+
+    }
 
     return data;
+
   }
 
   function setPersonalInfo(data) {
+
     personalFieldIds.forEach((id) => {
+
       const field = document.getElementById(id);
-      if (field) field.value = data[id] || "";
+
+      if (field) {
+
+        field.value = data[id] || "";
+
+      }
+
     });
 
-    const terms = form.querySelector(".terms-check input");
-    if (terms) terms.checked = data.terms || false;
+    const terms = form.querySelector(
+      ".terms-check input"
+    );
+
+    if (terms) {
+
+      terms.checked = data.terms || false;
+
+    }
+
   }
 
-  let currentPersonalRole = selectedValue(roleInputs);
+  let currentPersonalRole =
+    selectedValue(roleInputs);
 
   const personalInfoByRole = {
-    student: currentPersonalRole === "student" ? getPersonalInfo() : null,
-    teacher: currentPersonalRole === "teacher" ? getPersonalInfo() : null
+
+    student:
+      currentPersonalRole === "student"
+        ? getPersonalInfo()
+        : null,
+
+    teacher:
+      currentPersonalRole === "teacher"
+        ? getPersonalInfo()
+        : null
+
   };
 
   roleInputs.forEach((input) => {
+
     input.addEventListener("change", () => {
-      // Save the previous role's information
+
       if (currentPersonalRole) {
-        personalInfoByRole[currentPersonalRole] = getPersonalInfo();
+
+        personalInfoByRole[currentPersonalRole] =
+          getPersonalInfo();
+
       }
 
-      // Load the newly selected role's information
       const newRole = selectedValue(roleInputs);
 
       if (newRole) {
-        setPersonalInfo(personalInfoByRole[newRole] || {});
+
+        setPersonalInfo(
+          personalInfoByRole[newRole] || {}
+        );
+
       }
 
       currentPersonalRole = newRole;
-      updateStepTwo();
+
     });
+
   });
 
 
-  teacherTypeInputs.forEach((input) => {
-    input.addEventListener("change", updateTeacherContentFields);
-  });
-
+  /* =========================================
+     Continue Button
+  ========================================= */
 
   nextButtons.forEach((button) => {
+
     button.addEventListener("click", () => {
-      if (!validateCurrentStep()) return;
 
-      if (currentStep === 0) {
-        const role = selectedValue(roleInputs);
+      if (
+        currentStep === 0 &&
+        validateCurrentStep()
+      ) {
 
-        // Teacher skips the course/subject step
-        if (role === "teacher") {
-          showStep(2);
-          return;
-        }
-
-        // Student goes to the course/subject choice
         showStep(1);
-        return;
+
       }
 
-      if (currentStep === 1) {
-        const role = selectedValue(roleInputs);
-        const studentPath = selectedValue(studentPathInputs);
-
-        if (role === "student" && studentPath === "subjects") {
-          const target =
-            form.dataset.studentRegistrationUrl || "StudentRegistration.html";
-
-          const destination = new URL(target, window.location.href);
-          destination.searchParams.set("flow", "subjects");
-
-          window.location.href = destination.href;
-          return;
-        }
-
-        showStep(2);
-      }
     });
+
   });
 
+
+  /* =========================================
+     Back Button
+  ========================================= */
 
   backButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const role = selectedValue(roleInputs);
 
-      if (role === "teacher" && currentStep === 2) {
-        showStep(0);
+    button.addEventListener("click", () => {
+
+      showStep(0);
+
+    });
+
+  });
+
+  /* =========================================
+     Create Account
+  ========================================= */
+
+  form.addEventListener("submit", (event) => {
+
+    event.preventDefault();
+
+    if (
+      currentStep !== 1 ||
+      !validateCurrentStep()
+    ) {
+      return;
+    }
+
+    const email =
+      emailInput?.value.trim().toLowerCase() || "";
+
+    if (!email) {
+      emailInput?.focus();
+      return;
+    }
+
+    const role = selectedValue(roleInputs);
+
+    try {
+
+      const existingAccount =
+        eduVerification.getAccount(email);
+
+      if (existingAccount) {
+
+        if (signupMessage) {
+
+          signupMessage.textContent =
+            "An account with this email already exists. Please log in.";
+
+          signupMessage.className =
+            "auth-message is-visible is-error";
+
+        }
+
         return;
+
       }
 
-      showStep(currentStep - 1);
-    });
+      eduVerification.saveAccount(email, role);
+
+      eduVerification.openVerification(
+        email,
+        "signup"
+      );
+
+    } catch (error) {
+
+      if (signupMessage) {
+
+        signupMessage.textContent =
+          "Unable to save your account. Please try again.";
+
+        signupMessage.className =
+          "auth-message is-visible is-error";
+
+      }
+
+    }
+
   });
-form.addEventListener("submit", (event) => {
-
-  event.preventDefault();
-
-  if (currentStep !== 2 || !validateCurrentStep()) return;
-
-  const email = emailInput?.value.trim() || "";
-
-  if (!email) {
-
-    emailInput?.focus();
-
-    return;
-
-  }
-
-  showConfirmationScreen(email);
-
-});
+  /* =========================================
+     Password Validation
+  ========================================= */
 
   passwordInput?.addEventListener("input", () => {
-    if (passwordInput.value.length >= 8 && passwordError) {
+
+    if (
+      passwordInput.value.length >= 8 &&
+      passwordError
+    ) {
+
       passwordError.hidden = true;
+
     }
+
   });
+
+
+  /* =========================================
+     Confirmation Back Button
+  ========================================= */
 
   if (backToSignupButton) {
-    backToSignupButton.addEventListener("click", returnToSignup);
+
+    backToSignupButton.addEventListener(
+      "click",
+      returnToSignup
+    );
+
   }
 
+
+  /* =========================================
+     Resend Confirmation
+  ========================================= */
+
   resendButton?.addEventListener("click", () => {
+
     if (confirmationFeedback) {
-      confirmationFeedback.textContent = currentEmail
-        ? "Resending isn't connected yet. No email has been sent."
-        : "Please return to the signup form and enter your email.";
+
+      confirmationFeedback.textContent =
+        currentEmail
+          ? "Resending isn't connected yet. No email has been sent."
+          : "Please return to the signup form and enter your email.";
+
     }
+
   });
 
-  const googleSignupButton = document.getElementById("googleSignupBtn");
-  const googleSignupMessage = document.getElementById("googleSignupMessage");
+
+  /* =========================================
+     Google Signup
+  ========================================= */
+
+  const googleSignupButton = document.getElementById(
+    "googleSignupBtn"
+  );
+
+  const googleSignupMessage = document.getElementById(
+    "googleSignupMessage"
+  );
 
   googleSignupButton?.addEventListener("click", () => {
+
     if (googleSignupMessage) {
-      googleSignupMessage.textContent = "Google Sign-In isn't connected yet.";
+
+      googleSignupMessage.textContent =
+        "Google Sign-In isn't connected yet.";
+
     }
+
   });
 
-  updateStepTwo();
-  showStep(0);
-});
 
+  /* =========================================
+     Initial State
+  ========================================= */
+
+  showStep(0);
+
+});
 /* =========================================
    EduSaaS — Login
 ========================================= */
@@ -642,12 +1059,57 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    /* OPEN STUDENT DASHBOARD */
+    /* CHECK ACCOUNT VERIFICATION */
 
-    window.location.href = "/pages/StudentDashboard.html";
+    const normalizedEmail =
+      email.value.trim().toLowerCase();
 
+    try {
+
+      const account =
+        eduVerification.getAccount(normalizedEmail);
+
+      if (!account) {
+
+        showMessage(
+          "No account found. Please create an account first."
+        );
+
+        return;
+
+      }
+
+      if (account.emailVerified !== true) {
+
+        eduVerification.openVerification(
+          normalizedEmail,
+          "login"
+        );
+
+        return;
+
+      }
+
+      if (account.role === "student") {
+
+        window.location.href = "StudentDashboard.html";
+
+        return;
+
+      }
+
+      showMessage(
+        "The teacher dashboard is not available yet."
+      );
+
+    } catch (error) {
+
+      showMessage(
+        "Unable to access your account. Please try again."
+      );
+
+    }
   });
-
   /* CLEAR VALIDATION MESSAGES */
 
   email?.addEventListener("input", clearMessage);
@@ -1196,69 +1658,69 @@ document.addEventListener("DOMContentLoaded", () => {
       [country, city].filter(Boolean).join(" / ")
     );
   }
-/* Final Form Submission */
-form.addEventListener("submit", (event) => {
+  /* Final Form Submission */
+  form.addEventListener("submit", (event) => {
 
-  event.preventDefault();
+    event.preventDefault();
 
-  if (
-    currentStep !== 3 ||
-    !validateStep(0) ||
-    !validateStep(1) ||
-    !validateStep(2)
-  ) {
-    return;
-  }
+    if (
+      currentStep !== 3 ||
+      !validateStep(0) ||
+      !validateStep(1) ||
+      !validateStep(2)
+    ) {
+      return;
+    }
 
-  updateReview();
+    updateReview();
 
-  registeredEmail =
-    document.getElementById("studentEmail")?.value.trim() || "";
+    registeredEmail =
+      document.getElementById("studentEmail")?.value.trim() || "";
 
-  if (
-    !registrationContainer ||
-    !confirmationScreen ||
-    !confirmationEmail
-  ) {
-    return;
-  }
+    if (
+      !registrationContainer ||
+      !confirmationScreen ||
+      !confirmationEmail
+    ) {
+      return;
+    }
 
-  confirmationEmail.textContent = registeredEmail;
+    confirmationEmail.textContent = registeredEmail;
 
-  if (confirmationFeedback) {
-    confirmationFeedback.textContent =
-      "Demo mode: No verification email has been sent.";
-  }
+    if (confirmationFeedback) {
+      confirmationFeedback.textContent =
+        "Demo mode: No verification email has been sent.";
+    }
 
-  const emailDomain = registeredEmail
-    .split("@")[1]
-    ?.toLowerCase();
+    const emailDomain = registeredEmail
+      .split("@")[1]
+      ?.toLowerCase();
 
-  let emailUrl = "https://mail.google.com/";
+    let emailUrl = "https://mail.google.com/";
 
-  if (
-    emailDomain === "outlook.com" ||
-    emailDomain === "hotmail.com" ||
-    emailDomain === "live.com"
-  ) {
-    emailUrl = "https://outlook.live.com/mail/";
-  } else if (emailDomain === "yahoo.com") {
-    emailUrl = "https://mail.yahoo.com/";
-  }
+    if (
+      emailDomain === "outlook.com" ||
+      emailDomain === "hotmail.com" ||
+      emailDomain === "live.com"
+    ) {
+      emailUrl = "https://outlook.live.com/mail/";
+    } else if (emailDomain === "yahoo.com") {
+      emailUrl = "https://mail.yahoo.com/";
+    }
 
-  if (openEmailButton) {
-    openEmailButton.href = emailUrl;
-  }
+    if (openEmailButton) {
+      openEmailButton.href = emailUrl;
+    }
 
-  registrationContainer.hidden = true;
-  confirmationScreen.hidden = false;
+    registrationContainer.hidden = true;
+    confirmationScreen.hidden = false;
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
   });
-
-});
 
   /* Resend confirmation (demo only) */
 
@@ -1795,11 +2257,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const average = courses.length
       ? Math.round(
-          courses.reduce(
-            (sum, course) => sum + course.progress,
-            0
-          ) / courses.length
-        )
+        courses.reduce(
+          (sum, course) => sum + course.progress,
+          0
+        ) / courses.length
+      )
       : 0;
 
     setText("#sdStatCourses", courses.length);
@@ -1881,9 +2343,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const status = make(
         "span",
         "sd-status-pill" +
-          (assessment.status === "Upcoming"
-            ? " upcoming"
-            : ""),
+        (assessment.status === "Upcoming"
+          ? " upcoming"
+          : ""),
         assessment.status
       );
 
@@ -1901,7 +2363,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = make(
       "div",
       "sd-list-item" +
-        (!notification.read ? " unread" : "")
+      (!notification.read ? " unread" : "")
     );
 
     const symbol = make(
@@ -2208,111 +2670,111 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-/* ==========================================
-   ACTIVE SIDEBAR PAGE
-========================================== */
+  /* ==========================================
+     ACTIVE SIDEBAR PAGE
+  ========================================== */
 
-function updateActiveSidebar() {
+  function updateActiveSidebar() {
 
-  const currentPage = decodeURIComponent(
-    window.location.pathname
-  ).split("/").pop().toLowerCase();
-
-  const currentHash = window.location.hash;
-
-  const links = Array.from(
-    document.querySelectorAll(
-      ".sd-side-nav .sd-side-link"
-    )
-  );
-
-  let activeLink = null;
-
-  // Find the current page
-  links.forEach(link => {
-
-    if (link.tagName !== "A") return;
-
-    const url = new URL(link.href);
-
-    const linkPage = decodeURIComponent(
-      url.pathname
+    const currentPage = decodeURIComponent(
+      window.location.pathname
     ).split("/").pop().toLowerCase();
 
-    if (linkPage !== currentPage) return;
+    const currentHash = window.location.hash;
 
-    if (currentPage === "student-dashboard.html") {
+    const links = Array.from(
+      document.querySelectorAll(
+        ".sd-side-nav .sd-side-link"
+      )
+    );
 
-      const targetHash =
-        currentHash === "#progress"
-          ? "#progress"
-          : "#home";
+    let activeLink = null;
 
-      if (url.hash === targetHash) {
+    // Find the current page
+    links.forEach(link => {
+
+      if (link.tagName !== "A") return;
+
+      const url = new URL(link.href);
+
+      const linkPage = decodeURIComponent(
+        url.pathname
+      ).split("/").pop().toLowerCase();
+
+      if (linkPage !== currentPage) return;
+
+      if (currentPage === "student-dashboard.html") {
+
+        const targetHash =
+          currentHash === "#progress"
+            ? "#progress"
+            : "#home";
+
+        if (url.hash === targetHash) {
+          activeLink = link;
+        }
+
+      } else if (!url.hash || url.hash === currentHash) {
+
         activeLink = link;
+
       }
 
-    } else if (!url.hash || url.hash === currentHash) {
+    });
 
-      activeLink = link;
-
+    // Keep the HTML active state if no URL matches
+    if (!activeLink) {
+      activeLink = links.find(link =>
+        link.tagName === "A" &&
+        link.classList.contains("active")
+      );
     }
 
-  });
+    // Only one active link
+    links.forEach(link => {
 
-  // Keep the HTML active state if no URL matches
-  if (!activeLink) {
-    activeLink = links.find(link =>
-      link.tagName === "A" &&
-      link.classList.contains("active")
-    );
+      const isActive = link === activeLink;
+
+      link.classList.toggle("active", isActive);
+
+      if (isActive) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+
+    });
+
   }
 
-  // Only one active link
-  links.forEach(link => {
+  updateActiveSidebar();
 
-    const isActive = link === activeLink;
+  window.addEventListener(
+    "hashchange",
+    updateActiveSidebar
+  );
 
-    link.classList.toggle("active", isActive);
-
-    if (isActive) {
-      link.setAttribute("aria-current", "page");
-    } else {
-      link.removeAttribute("aria-current");
-    }
-
-  });
-
-}
-
-updateActiveSidebar();
-
-window.addEventListener(
-  "hashchange",
-  updateActiveSidebar
-);
-
-window.addEventListener(
-  "pageshow",
-  updateActiveSidebar
-);
+  window.addEventListener(
+    "pageshow",
+    updateActiveSidebar
+  );
 
 
-/* SIDEBAR NAVIGATION */
+  /* SIDEBAR NAVIGATION */
 
-document.querySelectorAll(
-  ".sd-side-nav a.sd-side-link"
-).forEach(link => {
+  document.querySelectorAll(
+    ".sd-side-nav a.sd-side-link"
+  ).forEach(link => {
 
-  link.addEventListener("click", () => {
+    link.addEventListener("click", () => {
 
-    setSidebar(false);
+      setSidebar(false);
 
-    setNotifications(false);
+      setNotifications(false);
+
+    });
 
   });
-
-});
 
 
   /* STUDENT PROFILE */
@@ -2322,10 +2784,10 @@ document.querySelectorAll(
   const initials = studentName === "Student"
     ? "ST"
     : studentName
-        .split(/\s+/)
-        .slice(0, 2)
-        .map(part => part.charAt(0).toUpperCase())
-        .join("");
+      .split(/\s+/)
+      .slice(0, 2)
+      .map(part => part.charAt(0).toUpperCase())
+      .join("");
 
   document.querySelectorAll(
     "[data-sd-name]"
@@ -2380,743 +2842,1105 @@ document.querySelectorAll(
 
 
 
-/* ==========================================
-   EDUSAAS - RAG AI ASSISTANT
-   SINGLE PAGE
-========================================== */
-
-function initRagAssistant() {
-
-  /* PAGE ELEMENTS */
-
-  const coursesView = $("#ragCoursesView");
-
-  const chatView = $("#ragChatView");
-
-  const grid = $("#ragCourseGrid");
-
-  if (!coursesView || !chatView || !grid) return;
-
-
-  /* CHAT ELEMENTS */
-
-  const searchInput = $("#ragSearchInput");
-
-  const searchWrapper = $("#ragSearchWrapper");
-
-  const topbarTitle = $("#ragTopbarTitle");
-
-  const sidebarLink = $("#ragSidebarLink");
-
-  const backBtn = $("#ragBackBtn");
-
-  const newChatBtn = $("#ragNewChatBtn");
-
-  const courseTitle = $("#ragChatCourseTitle");
-
-  const courseId = $("#ragChatCourseId");
-
-  const form = $("#ragChatForm");
-
-  const messages = $("#ragChatMessages");
-
-  const welcome = $("#ragChatWelcome");
-
-  const messageInput = $("#ragMessageInput");
-
-  const uploadBtn = $("#ragUploadBtn");
-
-  const imageInput = $("#ragImageInput");
-
-  const imagePreview = $("#ragImagePreview");
-
-  const previewImage = $("#ragPreviewImage");
-
-  const imageName = $("#ragImageName");
-
-  const removeImageBtn = $("#ragRemoveImage");
-
-  const sendBtn = $("#ragSendBtn");
-
-  const errorMessage = $("#ragChatError");
-
-
-  /* RAG STATE */
-
-  let selectedCourse = null;
-
-  let selectedImage = null;
-
-  let imageData = null;
-
-  let imageLoading = false;
-
-  let imageVersion = 0;
-
-  let lastCourseButton = null;
-
-  let coursesScrollPosition = 0;
-
-
-  /* SEPARATE CHAT FOR EACH COURSE */
-
-  const conversations = new Map();
-
-
   /* ==========================================
-     RENDER ENROLLED COURSES
+     EDUSAAS - RAG AI ASSISTANT
+     SINGLE PAGE
   ========================================== */
 
-  function renderRagCourses(search = "") {
+  function initRagAssistant() {
 
-    grid.replaceChildren();
+    /* PAGE ELEMENTS */
 
-    const enrolledCourses = data.courses;
+    const coursesView = $("#ragCoursesView");
 
-    const filteredCourses = enrolledCourses.filter(course =>
+    const chatView = $("#ragChatView");
 
-      `${course.title} ${course.category}`
-        .toLowerCase()
-        .includes(search.toLowerCase().trim())
+    const grid = $("#ragCourseGrid");
 
-    );
+    if (!coursesView || !chatView || !grid) return;
 
-    setText(
-      "#ragCourseCount",
-      `${filteredCourses.length} courses`
-    );
 
-    const empty = $("#ragSearchEmpty");
+    /* CHAT ELEMENTS */
 
-    if (empty) {
+    const searchInput = $("#ragSearchInput");
 
-      empty.hidden = filteredCourses.length > 0;
+    const searchWrapper = $("#ragSearchWrapper");
 
-      empty.textContent = enrolledCourses.length === 0
+    const topbarTitle = $("#ragTopbarTitle");
 
-        ? "You have no enrolled courses yet."
+    const sidebarLink = $("#ragSidebarLink");
 
-        : "No courses match your search.";
+    const backBtn = $("#ragBackBtn");
 
-    }
+    const newChatBtn = $("#ragNewChatBtn");
 
-    filteredCourses.forEach(course => {
+    const courseTitle = $("#ragChatCourseTitle");
 
-      /* COURSE CARD */
+    const courseId = $("#ragChatCourseId");
 
-      const card = make(
-        "article",
-        "rag-course-card"
+    const form = $("#ragChatForm");
+
+    const messages = $("#ragChatMessages");
+
+    const welcome = $("#ragChatWelcome");
+
+    const messageInput = $("#ragMessageInput");
+
+    const uploadBtn = $("#ragUploadBtn");
+
+    const imageInput = $("#ragImageInput");
+
+    const imagePreview = $("#ragImagePreview");
+
+    const previewImage = $("#ragPreviewImage");
+
+    const imageName = $("#ragImageName");
+
+    const removeImageBtn = $("#ragRemoveImage");
+
+    const sendBtn = $("#ragSendBtn");
+
+    const errorMessage = $("#ragChatError");
+
+
+    /* RAG STATE */
+
+    let selectedCourse = null;
+
+    let selectedImage = null;
+
+    let imageData = null;
+
+    let imageLoading = false;
+
+    let imageVersion = 0;
+
+    let lastCourseButton = null;
+
+    let coursesScrollPosition = 0;
+
+
+    /* SEPARATE CHAT FOR EACH COURSE */
+
+    const conversations = new Map();
+
+
+    /* ==========================================
+       RENDER ENROLLED COURSES
+    ========================================== */
+
+    function renderRagCourses(search = "") {
+
+      grid.replaceChildren();
+
+      const enrolledCourses = data.courses;
+
+      const filteredCourses = enrolledCourses.filter(course =>
+
+        `${course.title} ${course.category}`
+          .toLowerCase()
+          .includes(search.toLowerCase().trim())
+
       );
 
-
-      /* COURSE IMAGE */
-
-      const art = make(
-        "div",
-        "rag-course-image"
+      setText(
+        "#ragCourseCount",
+        `${filteredCourses.length} courses`
       );
 
-      art.append(
-        makeImage(course)
-      );
+      const empty = $("#ragSearchEmpty");
 
+      if (empty) {
 
-      /* COURSE CONTENT */
+        empty.hidden = filteredCourses.length > 0;
 
-      const body = make(
-        "div",
-        "rag-course-body"
-      );
+        empty.textContent = enrolledCourses.length === 0
 
-      const category = make(
-        "span",
-        "rag-course-category",
-        course.category
-      );
+          ? "You have no enrolled courses yet."
 
-      const title = make(
-        "h3",
-        "",
-        course.title
-      );
+          : "No courses match your search.";
 
-      const description = make(
-        "p",
-        "",
-        course.description
-      );
+      }
 
+      filteredCourses.forEach(course => {
 
-      /* START CHAT BUTTON */
+        /* COURSE CARD */
 
-      const chatButton = make(
-        "button",
-        "rag-start-btn"
-      );
+        const card = make(
+          "article",
+          "rag-course-card"
+        );
 
-      chatButton.type = "button";
 
-      chatButton.setAttribute(
-        "aria-label",
-        `Start chat for ${course.title}`
-      );
+        /* COURSE IMAGE */
 
-      chatButton.append(
-        makeIcon("message-circle"),
-        make("span", "", "Start Chat"),
-        makeIcon("arrow-right")
-      );
+        const art = make(
+          "div",
+          "rag-course-image"
+        );
 
+        art.append(
+          makeImage(course)
+        );
 
-      /* OPEN CHAT IN SAME PAGE */
 
-      chatButton.addEventListener(
-        "click",
-        () => {
+        /* COURSE CONTENT */
 
-          lastCourseButton = chatButton;
+        const body = make(
+          "div",
+          "rag-course-body"
+        );
 
-          openChat(course);
+        const category = make(
+          "span",
+          "rag-course-category",
+          course.category
+        );
 
-        }
-      );
+        const title = make(
+          "h3",
+          "",
+          course.title
+        );
 
+        const description = make(
+          "p",
+          "",
+          course.description
+        );
 
-      /* APPEND CARD CONTENT */
 
-      body.append(
-        category,
-        title,
-        description,
-        chatButton
-      );
+        /* START CHAT BUTTON */
 
-      card.append(
-        art,
-        body
-      );
+        const chatButton = make(
+          "button",
+          "rag-start-btn"
+        );
 
-      grid.append(card);
+        chatButton.type = "button";
 
-    });
+        chatButton.setAttribute(
+          "aria-label",
+          `Start chat for ${course.title}`
+        );
 
-    refreshIcons();
+        chatButton.append(
+          makeIcon("message-circle"),
+          make("span", "", "Start Chat"),
+          makeIcon("arrow-right")
+        );
 
-  }
 
+        /* OPEN CHAT IN SAME PAGE */
 
-  /* ==========================================
-     SIDEBAR ACTIVE STATE
-  ========================================== */
-function keepAssistantActive() {
-  updateActiveSidebar();
-}
+        chatButton.addEventListener(
+          "click",
+          () => {
 
+            lastCourseButton = chatButton;
 
-  /* ==========================================
-     OPEN CHAT
-  ========================================== */
+            openChat(course);
 
-  function openChat(course) {
+          }
+        );
 
-    if (!course) return;
 
-    coursesScrollPosition = window.scrollY;
+        /* APPEND CARD CONTENT */
 
-    selectedCourse = course;
+        body.append(
+          category,
+          title,
+          description,
+          chatButton
+        );
 
+        card.append(
+          art,
+          body
+        );
 
-    /* UPDATE COURSE HEADER */
+        grid.append(card);
 
-    courseTitle.textContent =
-      selectedCourse.title;
+      });
 
-    courseId.textContent =
-      `Course ID: ${selectedCourse.id}`;
-
-
-    /* UPDATE PAGE TITLE */
-
-    document.title =
-      `${selectedCourse.title} | AI Assistant | EduSaaS`;
-
-
-    /* SWITCH VIEWS */
-
-    coursesView.hidden = true;
-
-    chatView.hidden = false;
-
-
-    /* SWITCH TOPBAR CONTENT */
-
-    if (searchWrapper) {
-
-      searchWrapper.hidden = true;
-
-    }
-
-    if (topbarTitle) {
-
-      topbarTitle.hidden = false;
-
-    }
-
-
-    /* RESET COMPOSER */
-
-    messageInput.value = "";
-
-    clearImage();
-
-    clearError();
-
-    resizeTextarea();
-
-
-    /* LOAD COURSE CONVERSATION */
-
-    renderConversation();
-
-
-    /* KEEP SIDEBAR ACTIVE */
-
-    keepAssistantActive();
-
-
-    /* CLOSE MOBILE SIDEBAR */
-
-    setSidebar(false);
-
-    setNotifications(false);
-
-
-    /* SCROLL TO TOP */
-
-    window.scrollTo({
-      top: 0,
-      behavior: "instant"
-    });
-
-    courseTitle.focus({
-      preventScroll: true
-    });
-
-    refreshIcons();
-
-    updateSendButton();
-
-  }
-
-
-  /* ==========================================
-     BACK TO COURSES
-  ========================================== */
-
-  function showCourses() {
-
-    const wasChatOpen = !chatView.hidden;
-
-
-    /* SWITCH VIEWS */
-
-    chatView.hidden = true;
-
-    coursesView.hidden = false;
-
-
-    /* RESTORE SEARCH */
-
-    if (searchWrapper) {
-
-      searchWrapper.hidden = false;
-
-    }
-
-    if (topbarTitle) {
-
-      topbarTitle.hidden = true;
+      refreshIcons();
 
     }
 
 
-    /* RESET CURRENT COURSE */
-
-    selectedCourse = null;
-
-    messageInput.value = "";
-
-    clearImage();
-
-    clearError();
+    /* ==========================================
+       SIDEBAR ACTIVE STATE
+    ========================================== */
+    function keepAssistantActive() {
+      updateActiveSidebar();
+    }
 
 
-    /* RESET PAGE TITLE */
+    /* ==========================================
+       OPEN CHAT
+    ========================================== */
 
-    document.title =
-      "AI Assistant | EduSaaS";
+    function openChat(course) {
 
+      if (!course) return;
 
-    /* KEEP SIDEBAR ACTIVE */
+      coursesScrollPosition = window.scrollY;
 
-    keepAssistantActive();
-
-    setSidebar(false);
-
-    setNotifications(false);
-
-    refreshIcons();
+      selectedCourse = course;
 
 
-    /* RESTORE COURSE POSITION */
+      /* UPDATE COURSE HEADER */
 
-    if (wasChatOpen) {
+      courseTitle.textContent =
+        selectedCourse.title;
+
+      courseId.textContent =
+        `Course ID: ${selectedCourse.id}`;
+
+
+      /* UPDATE PAGE TITLE */
+
+      document.title =
+        `${selectedCourse.title} | AI Assistant | EduSaaS`;
+
+
+      /* SWITCH VIEWS */
+
+      coursesView.hidden = true;
+
+      chatView.hidden = false;
+
+
+      /* SWITCH TOPBAR CONTENT */
+
+      if (searchWrapper) {
+
+        searchWrapper.hidden = true;
+
+      }
+
+      if (topbarTitle) {
+
+        topbarTitle.hidden = false;
+
+      }
+
+
+      /* RESET COMPOSER */
+
+      messageInput.value = "";
+
+      clearImage();
+
+      clearError();
+
+      resizeTextarea();
+
+
+      /* LOAD COURSE CONVERSATION */
+
+      renderConversation();
+
+
+      /* KEEP SIDEBAR ACTIVE */
+
+      keepAssistantActive();
+
+
+      /* CLOSE MOBILE SIDEBAR */
+
+      setSidebar(false);
+
+      setNotifications(false);
+
+
+      /* SCROLL TO TOP */
 
       window.scrollTo({
-        top: coursesScrollPosition,
+        top: 0,
         behavior: "instant"
       });
 
-      lastCourseButton?.focus({
+      courseTitle.focus({
         preventScroll: true
       });
 
-    }
-
-  }
-
-
-  /* BACK BUTTON */
-
-  backBtn.addEventListener(
-    "click",
-    showCourses
-  );
-
-
-/* AI ASSISTANT SIDEBAR LINK */
-
-sidebarLink?.addEventListener("click", event => {
-
-  const currentPage =
-    window.location.pathname.split("/").pop();
-
-  if (currentPage !== "student-rag.html") return;
-
-  event.preventDefault();
-
-  showCourses();
-
-});
-
-
-  /* ==========================================
-     SEARCH COURSES
-  ========================================== */
-
-  searchInput?.addEventListener(
-    "input",
-    event => {
-
-      renderRagCourses(
-        event.target.value
-      );
-
-    }
-  );
-
-
-  /* ==========================================
-     CHAT ERROR
-  ========================================== */
-
-  function showError(text) {
-
-    if (!errorMessage) return;
-
-    errorMessage.textContent = text;
-
-    errorMessage.hidden = false;
-
-  }
-
-
-  function clearError() {
-
-    if (!errorMessage) return;
-
-    errorMessage.textContent = "";
-
-    errorMessage.hidden = true;
-
-  }
-
-
-  /* ==========================================
-     SEND BUTTON STATE
-  ========================================== */
-
-  function updateSendButton() {
-
-    const hasText =
-      messageInput.value.trim().length > 0;
-
-    const hasImage =
-      Boolean(selectedImage && imageData);
-
-    sendBtn.disabled =
-
-      !selectedCourse ||
-
-      imageLoading ||
-
-      (!hasText && !hasImage);
-
-  }
-
-
-  /* ==========================================
-     AUTO RESIZE TEXTAREA
-  ========================================== */
-
-  function resizeTextarea() {
-
-    messageInput.style.height = "auto";
-
-    messageInput.style.height =
-
-      `${Math.min(messageInput.scrollHeight, 140)}px`;
-
-  }
-
-
-  messageInput.addEventListener(
-    "input",
-    () => {
-
-      resizeTextarea();
+      refreshIcons();
 
       updateSendButton();
 
     }
-  );
 
 
-  /* ==========================================
-     SCROLL CHAT
-  ========================================== */
+    /* ==========================================
+       BACK TO COURSES
+    ========================================== */
 
-  function scrollToBottom() {
+    function showCourses() {
 
-    messages.scrollTop =
-      messages.scrollHeight;
-
-  }
+      const wasChatOpen = !chatView.hidden;
 
 
-  /* ==========================================
-     IMAGE UPLOAD
-  ========================================== */
+      /* SWITCH VIEWS */
 
-  uploadBtn.addEventListener(
-    "click",
-    () => {
+      chatView.hidden = true;
 
-      imageInput.click();
-
-    }
-  );
+      coursesView.hidden = false;
 
 
-  /* CLEAR SELECTED IMAGE */
+      /* RESTORE SEARCH */
 
-  function clearImage() {
+      if (searchWrapper) {
 
-    imageVersion++;
+        searchWrapper.hidden = false;
 
-    selectedImage = null;
+      }
 
-    imageData = null;
+      if (topbarTitle) {
 
-    imageLoading = false;
+        topbarTitle.hidden = true;
 
-    imageInput.value = "";
-
-    previewImage.removeAttribute("src");
-
-    imageName.textContent = "";
-
-    imagePreview.hidden = true;
-
-    updateSendButton();
-
-  }
+      }
 
 
-  /* SELECT IMAGE */
+      /* RESET CURRENT COURSE */
 
-  imageInput.addEventListener(
-    "change",
-    () => {
+      selectedCourse = null;
 
-      const file = imageInput.files[0];
+      messageInput.value = "";
 
-      if (!file || !selectedCourse) return;
+      clearImage();
 
       clearError();
 
-      const allowedTypes = [
 
-        "image/jpeg",
+      /* RESET PAGE TITLE */
 
-        "image/png",
-
-        "image/webp"
-
-      ];
+      document.title =
+        "AI Assistant | EduSaaS";
 
 
-      /* VALIDATE FILE TYPE */
+      /* KEEP SIDEBAR ACTIVE */
 
-      if (!allowedTypes.includes(file.type)) {
+      keepAssistantActive();
 
-        clearImage();
+      setSidebar(false);
 
-        showError(
-          "Please select a JPG, PNG or WEBP image."
-        );
+      setNotifications(false);
 
-        return;
-
-      }
+      refreshIcons();
 
 
-      /* VALIDATE FILE SIZE */
+      /* RESTORE COURSE POSITION */
 
-      if (file.size > 10 * 1024 * 1024) {
+      if (wasChatOpen) {
 
-        clearImage();
+        window.scrollTo({
+          top: coursesScrollPosition,
+          behavior: "instant"
+        });
 
-        showError(
-          "Image size must not exceed 10 MB."
-        );
-
-        return;
+        lastCourseButton?.focus({
+          preventScroll: true
+        });
 
       }
 
+    }
 
-      /* IMAGE STATE */
 
-      const version = ++imageVersion;
+    /* BACK BUTTON */
 
-      selectedImage = file;
+    backBtn.addEventListener(
+      "click",
+      showCourses
+    );
+
+
+    /* AI ASSISTANT SIDEBAR LINK */
+
+    sidebarLink?.addEventListener("click", event => {
+
+      const currentPage =
+        window.location.pathname.split("/").pop();
+
+      if (currentPage !== "student-rag.html") return;
+
+      event.preventDefault();
+
+      showCourses();
+
+    });
+
+
+    /* ==========================================
+       SEARCH COURSES
+    ========================================== */
+
+    searchInput?.addEventListener(
+      "input",
+      event => {
+
+        renderRagCourses(
+          event.target.value
+        );
+
+      }
+    );
+
+
+    /* ==========================================
+       CHAT ERROR
+    ========================================== */
+
+    function showError(text) {
+
+      if (!errorMessage) return;
+
+      errorMessage.textContent = text;
+
+      errorMessage.hidden = false;
+
+    }
+
+
+    function clearError() {
+
+      if (!errorMessage) return;
+
+      errorMessage.textContent = "";
+
+      errorMessage.hidden = true;
+
+    }
+
+
+    /* ==========================================
+       SEND BUTTON STATE
+    ========================================== */
+
+    function updateSendButton() {
+
+      const hasText =
+        messageInput.value.trim().length > 0;
+
+      const hasImage =
+        Boolean(selectedImage && imageData);
+
+      sendBtn.disabled =
+
+        !selectedCourse ||
+
+        imageLoading ||
+
+        (!hasText && !hasImage);
+
+    }
+
+
+    /* ==========================================
+       AUTO RESIZE TEXTAREA
+    ========================================== */
+
+    function resizeTextarea() {
+
+      messageInput.style.height = "auto";
+
+      messageInput.style.height =
+
+        `${Math.min(messageInput.scrollHeight, 140)}px`;
+
+    }
+
+
+    messageInput.addEventListener(
+      "input",
+      () => {
+
+        resizeTextarea();
+
+        updateSendButton();
+
+      }
+    );
+
+
+    /* ==========================================
+       SCROLL CHAT
+    ========================================== */
+
+    function scrollToBottom() {
+
+      messages.scrollTop =
+        messages.scrollHeight;
+
+    }
+
+
+    /* ==========================================
+       IMAGE UPLOAD
+    ========================================== */
+
+    uploadBtn.addEventListener(
+      "click",
+      () => {
+
+        imageInput.click();
+
+      }
+    );
+
+
+    /* CLEAR SELECTED IMAGE */
+
+    function clearImage() {
+
+      imageVersion++;
+
+      selectedImage = null;
 
       imageData = null;
 
-      imageLoading = true;
+      imageLoading = false;
+
+      imageInput.value = "";
+
+      previewImage.removeAttribute("src");
+
+      imageName.textContent = "";
 
       imagePreview.hidden = true;
 
       updateSendButton();
 
+    }
 
-      /* READ IMAGE */
 
-      const reader = new FileReader();
+    /* SELECT IMAGE */
 
-      reader.onload = () => {
+    imageInput.addEventListener(
+      "change",
+      () => {
 
-        if (version !== imageVersion) return;
+        const file = imageInput.files[0];
 
-        const imageCheck = new Image();
+        if (!file || !selectedCourse) return;
 
-        imageCheck.onload = () => {
+        clearError();
+
+        const allowedTypes = [
+
+          "image/jpeg",
+
+          "image/png",
+
+          "image/webp"
+
+        ];
+
+
+        /* VALIDATE FILE TYPE */
+
+        if (!allowedTypes.includes(file.type)) {
+
+          clearImage();
+
+          showError(
+            "Please select a JPG, PNG or WEBP image."
+          );
+
+          return;
+
+        }
+
+
+        /* VALIDATE FILE SIZE */
+
+        if (file.size > 10 * 1024 * 1024) {
+
+          clearImage();
+
+          showError(
+            "Image size must not exceed 10 MB."
+          );
+
+          return;
+
+        }
+
+
+        /* IMAGE STATE */
+
+        const version = ++imageVersion;
+
+        selectedImage = file;
+
+        imageData = null;
+
+        imageLoading = true;
+
+        imagePreview.hidden = true;
+
+        updateSendButton();
+
+
+        /* READ IMAGE */
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
 
           if (version !== imageVersion) return;
 
-          imageData = reader.result;
+          const imageCheck = new Image();
 
-          previewImage.src = imageData;
+          imageCheck.onload = () => {
 
-          imageName.textContent = file.name;
+            if (version !== imageVersion) return;
 
-          imagePreview.hidden = false;
+            imageData = reader.result;
 
-          imageLoading = false;
+            previewImage.src = imageData;
 
-          updateSendButton();
+            imageName.textContent = file.name;
+
+            imagePreview.hidden = false;
+
+            imageLoading = false;
+
+            updateSendButton();
+
+          };
+
+          imageCheck.onerror = () => {
+
+            if (version !== imageVersion) return;
+
+            clearImage();
+
+            showError(
+              "This image could not be opened."
+            );
+
+          };
+
+          imageCheck.src = reader.result;
 
         };
 
-        imageCheck.onerror = () => {
+
+        reader.onerror = () => {
 
           if (version !== imageVersion) return;
 
           clearImage();
 
           showError(
-            "This image could not be opened."
+            "Unable to open this image. Please try again."
           );
 
         };
 
-        imageCheck.src = reader.result;
+        reader.readAsDataURL(file);
 
-      };
-
-
-      reader.onerror = () => {
-
-        if (version !== imageVersion) return;
-
-        clearImage();
-
-        showError(
-          "Unable to open this image. Please try again."
-        );
-
-      };
-
-      reader.readAsDataURL(file);
-
-    }
-  );
+      }
+    );
 
 
-  /* REMOVE IMAGE */
+    /* REMOVE IMAGE */
 
-  removeImageBtn.addEventListener(
-    "click",
-    () => {
-
-      clearImage();
-
-      clearError();
-
-      messageInput.focus();
-
-    }
-  );
-
-
-  /* ==========================================
-     SUGGESTED QUESTIONS
-  ========================================== */
-
-  chatView.querySelectorAll(
-    "[data-rag-prompt]"
-  ).forEach(button => {
-
-    button.addEventListener(
+    removeImageBtn.addEventListener(
       "click",
       () => {
 
-        messageInput.value =
-          button.dataset.ragPrompt;
+        clearImage();
+
+        clearError();
+
+        messageInput.focus();
+
+      }
+    );
+
+
+    /* ==========================================
+       SUGGESTED QUESTIONS
+    ========================================== */
+
+    chatView.querySelectorAll(
+      "[data-rag-prompt]"
+    ).forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          messageInput.value =
+            button.dataset.ragPrompt;
+
+          resizeTextarea();
+
+          updateSendButton();
+
+          messageInput.focus();
+
+        }
+      );
+
+    });
+
+
+    /* ==========================================
+       GET COURSE CONVERSATION
+    ========================================== */
+
+    function getConversation() {
+
+      if (!selectedCourse) return [];
+
+      if (!conversations.has(selectedCourse.id)) {
+
+        conversations.set(
+          selectedCourse.id,
+          []
+        );
+
+      }
+
+      return conversations.get(
+        selectedCourse.id
+      );
+
+    }
+
+
+    /* ==========================================
+       CREATE MESSAGE ELEMENT
+    ========================================== */
+
+    function createMessageElement(message) {
+
+      const row = make(
+        "div",
+        `rag-message-row ${message.role}`
+      );
+
+
+      /* ASSISTANT AVATAR */
+
+      if (message.role === "assistant") {
+
+        const avatar = make(
+          "span",
+          "rag-message-avatar"
+        );
+
+        avatar.append(
+          makeIcon("bot")
+        );
+
+        row.append(avatar);
+
+      }
+
+
+      /* MESSAGE BUBBLE */
+
+      const bubble = make(
+        "div",
+        "rag-message-bubble"
+      );
+
+      bubble.setAttribute(
+        "aria-label",
+        message.role === "user"
+          ? "Your message"
+          : "Assistant message"
+      );
+
+
+      /* MESSAGE IMAGE */
+
+      if (message.image) {
+
+        const image = document.createElement("img");
+
+        image.alt = "Uploaded course question";
+
+        image.addEventListener(
+          "load",
+          scrollToBottom
+        );
+
+        image.src = message.image;
+
+        bubble.append(image);
+
+      }
+
+
+      /* MESSAGE TEXT */
+
+      if (message.text) {
+
+        const paragraph = make(
+          "p",
+          "",
+          message.text
+        );
+
+        bubble.append(paragraph);
+
+      }
+
+
+      /* MESSAGE TIME */
+
+      const time = make(
+        "span",
+        "rag-message-time",
+        message.time
+      );
+
+      bubble.append(time);
+
+      row.append(bubble);
+
+      return row;
+
+    }
+
+
+    /* ==========================================
+       ADD MESSAGE
+    ========================================== */
+
+    function addMessage(role, text, image = null) {
+
+      if (!selectedCourse) return;
+
+      const message = {
+
+        role,
+
+        text,
+
+        image,
+
+        time: new Intl.DateTimeFormat(
+          "en",
+          {
+            hour: "numeric",
+            minute: "2-digit"
+          }
+        ).format(new Date())
+
+      };
+
+
+      /* SAVE IN CURRENT COURSE CHAT */
+
+      getConversation().push(message);
+
+
+      /* HIDE WELCOME SCREEN */
+
+      welcome.hidden = true;
+
+
+      /* DISPLAY MESSAGE */
+
+      messages.append(
+        createMessageElement(message)
+      );
+
+      refreshIcons();
+
+      scrollToBottom();
+
+    }
+
+
+    /* ==========================================
+       RENDER COURSE CONVERSATION
+    ========================================== */
+
+    function renderConversation() {
+
+      messages.querySelectorAll(
+        ".rag-message-row"
+      ).forEach(message => {
+
+        message.remove();
+
+      });
+
+      const conversation = getConversation();
+
+      welcome.hidden =
+        conversation.length > 0;
+
+      conversation.forEach(message => {
+
+        messages.append(
+          createMessageElement(message)
+        );
+
+      });
+
+      refreshIcons();
+
+      scrollToBottom();
+
+    }
+
+
+    /* ==========================================
+       DEMO ASSISTANT MESSAGE
+    ========================================== */
+
+    function getDemoReply(hasImage) {
+
+      if (hasImage) {
+
+        return "Your image has been added to the conversation. This is a preview of the image chat experience.";
+
+      }
+
+      return `Welcome to your ${selectedCourse.title} learning space! Your message has been added to this demo conversation.`;
+
+    }
+
+
+    /* ==========================================
+       SEND MESSAGE
+    ========================================== */
+
+    form.addEventListener(
+      "submit",
+      event => {
+
+        event.preventDefault();
+
+        if (!selectedCourse || imageLoading) return;
+
+        const text =
+          messageInput.value.trim();
+
+        const image = imageData;
+
+        if (!text && !image) return;
+
+        clearError();
+
+
+        /* USER MESSAGE */
+
+        addMessage(
+          "user",
+          text,
+          image
+        );
+
+
+        /* RESET INPUT */
+
+        messageInput.value = "";
+
+        clearImage();
 
         resizeTextarea();
+
+        updateSendButton();
+
+
+        /* ASSISTANT DEMO MESSAGE */
+
+        addMessage(
+          "assistant",
+          getDemoReply(Boolean(image))
+        );
+
+        messageInput.focus();
+
+      }
+    );
+
+
+    /* ==========================================
+       ENTER TO SEND
+    ========================================== */
+
+    messageInput.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+
+          event.key === "Enter" &&
+
+          !event.shiftKey &&
+
+          !event.isComposing
+
+        ) {
+
+          event.preventDefault();
+
+          if (!sendBtn.disabled) {
+
+            form.requestSubmit();
+
+          }
+
+        }
+
+      }
+    );
+
+
+    /* ==========================================
+       NEW CHAT
+    ========================================== */
+
+    newChatBtn.addEventListener(
+      "click",
+      () => {
+
+        if (!selectedCourse) return;
+
+        const conversation = getConversation();
+
+        if (conversation.length > 0) {
+
+          const confirmed = window.confirm(
+            "Start a new conversation?"
+          );
+
+          if (!confirmed) return;
+
+        }
+
+
+        /* CLEAR CURRENT COURSE CONVERSATION */
+
+        conversations.set(
+          selectedCourse.id,
+          []
+        );
+
+
+        /* RESET CHAT */
+
+        messageInput.value = "";
+
+        clearImage();
+
+        clearError();
+
+        resizeTextarea();
+
+        renderConversation();
 
         updateSendButton();
 
@@ -3125,404 +3949,191 @@ sidebarLink?.addEventListener("click", event => {
       }
     );
 
-  });
 
+    /* ==========================================
+       INITIAL RAG STATE
+    ========================================== */
 
-  /* ==========================================
-     GET COURSE CONVERSATION
-  ========================================== */
+    renderRagCourses();
 
-  function getConversation() {
+    showCourses();
 
-    if (!selectedCourse) return [];
-
-    if (!conversations.has(selectedCourse.id)) {
-
-      conversations.set(
-        selectedCourse.id,
-        []
-      );
-
-    }
-
-    return conversations.get(
-      selectedCourse.id
-    );
-
-  }
-
-
-  /* ==========================================
-     CREATE MESSAGE ELEMENT
-  ========================================== */
-
-  function createMessageElement(message) {
-
-    const row = make(
-      "div",
-      `rag-message-row ${message.role}`
-    );
-
-
-    /* ASSISTANT AVATAR */
-
-    if (message.role === "assistant") {
-
-      const avatar = make(
-        "span",
-        "rag-message-avatar"
-      );
-
-      avatar.append(
-        makeIcon("bot")
-      );
-
-      row.append(avatar);
-
-    }
-
-
-    /* MESSAGE BUBBLE */
-
-    const bubble = make(
-      "div",
-      "rag-message-bubble"
-    );
-
-    bubble.setAttribute(
-      "aria-label",
-      message.role === "user"
-        ? "Your message"
-        : "Assistant message"
-    );
-
-
-    /* MESSAGE IMAGE */
-
-    if (message.image) {
-
-      const image = document.createElement("img");
-
-      image.alt = "Uploaded course question";
-
-      image.addEventListener(
-        "load",
-        scrollToBottom
-      );
-
-      image.src = message.image;
-
-      bubble.append(image);
-
-    }
-
-
-    /* MESSAGE TEXT */
-
-    if (message.text) {
-
-      const paragraph = make(
-        "p",
-        "",
-        message.text
-      );
-
-      bubble.append(paragraph);
-
-    }
-
-
-    /* MESSAGE TIME */
-
-    const time = make(
-      "span",
-      "rag-message-time",
-      message.time
-    );
-
-    bubble.append(time);
-
-    row.append(bubble);
-
-    return row;
-
-  }
-
-
-  /* ==========================================
-     ADD MESSAGE
-  ========================================== */
-
-  function addMessage(role, text, image = null) {
-
-    if (!selectedCourse) return;
-
-    const message = {
-
-      role,
-
-      text,
-
-      image,
-
-      time: new Intl.DateTimeFormat(
-        "en",
-        {
-          hour: "numeric",
-          minute: "2-digit"
-        }
-      ).format(new Date())
-
-    };
-
-
-    /* SAVE IN CURRENT COURSE CHAT */
-
-    getConversation().push(message);
-
-
-    /* HIDE WELCOME SCREEN */
-
-    welcome.hidden = true;
-
-
-    /* DISPLAY MESSAGE */
-
-    messages.append(
-      createMessageElement(message)
-    );
+    updateSendButton();
 
     refreshIcons();
 
-    scrollToBottom();
-
   }
 
 
   /* ==========================================
-     RENDER COURSE CONVERSATION
+     INITIAL RENDER
   ========================================== */
-
-  function renderConversation() {
-
-    messages.querySelectorAll(
-      ".rag-message-row"
-    ).forEach(message => {
-
-      message.remove();
-
-    });
-
-    const conversation = getConversation();
-
-    welcome.hidden =
-      conversation.length > 0;
-
-    conversation.forEach(message => {
-
-      messages.append(
-        createMessageElement(message)
-      );
-
-    });
-
-    refreshIcons();
-
-    scrollToBottom();
-
-  }
-
-
-  /* ==========================================
-     DEMO ASSISTANT MESSAGE
-  ========================================== */
-
-  function getDemoReply(hasImage) {
-
-    if (hasImage) {
-
-      return "Your image has been added to the conversation. This is a preview of the image chat experience.";
-
-    }
-
-    return `Welcome to your ${selectedCourse.title} learning space! Your message has been added to this demo conversation.`;
-
-  }
-
-
-  /* ==========================================
-     SEND MESSAGE
-  ========================================== */
-
-  form.addEventListener(
-    "submit",
-    event => {
-
-      event.preventDefault();
-
-      if (!selectedCourse || imageLoading) return;
-
-      const text =
-        messageInput.value.trim();
-
-      const image = imageData;
-
-      if (!text && !image) return;
-
-      clearError();
-
-
-      /* USER MESSAGE */
-
-      addMessage(
-        "user",
-        text,
-        image
-      );
-
-
-      /* RESET INPUT */
-
-      messageInput.value = "";
-
-      clearImage();
-
-      resizeTextarea();
-
-      updateSendButton();
-
-
-      /* ASSISTANT DEMO MESSAGE */
-
-      addMessage(
-        "assistant",
-        getDemoReply(Boolean(image))
-      );
-
-      messageInput.focus();
-
-    }
-  );
-
-
-  /* ==========================================
-     ENTER TO SEND
-  ========================================== */
-
-  messageInput.addEventListener(
-    "keydown",
-    event => {
-
-      if (
-
-        event.key === "Enter" &&
-
-        !event.shiftKey &&
-
-        !event.isComposing
-
-      ) {
-
-        event.preventDefault();
-
-        if (!sendBtn.disabled) {
-
-          form.requestSubmit();
-
-        }
-
-      }
-
-    }
-  );
-
-
-  /* ==========================================
-     NEW CHAT
-  ========================================== */
-
-  newChatBtn.addEventListener(
-    "click",
-    () => {
-
-      if (!selectedCourse) return;
-
-      const conversation = getConversation();
-
-      if (conversation.length > 0) {
-
-        const confirmed = window.confirm(
-          "Start a new conversation?"
-        );
-
-        if (!confirmed) return;
-
-      }
-
-
-      /* CLEAR CURRENT COURSE CONVERSATION */
-
-      conversations.set(
-        selectedCourse.id,
-        []
-      );
-
-
-      /* RESET CHAT */
-
-      messageInput.value = "";
-
-      clearImage();
-
-      clearError();
-
-      resizeTextarea();
-
-      renderConversation();
-
-      updateSendButton();
-
-      messageInput.focus();
-
-    }
-  );
-
-
-  /* ==========================================
-     INITIAL RAG STATE
-  ========================================== */
-
-  renderRagCourses();
-
-  showCourses();
-
-  updateSendButton();
 
   refreshIcons();
 
-}
+  renderFeatured();
 
+  renderPlan();
 
-/* ==========================================
-   INITIAL RENDER
-========================================== */
+  renderCourses();
 
-refreshIcons();
+  renderProgress();
 
-renderFeatured();
+  renderAssessments();
 
-renderPlan();
+  renderNotifications();
 
-renderCourses();
+  initRagAssistant();
 
-renderProgress();
+  refreshIcons();
 
-renderAssessments();
+});
+/* =========================================
+   EduSaaS - Shared Email Verification Page
+========================================= */
 
-renderNotifications();
+document.addEventListener("DOMContentLoaded", () => {
 
-initRagAssistant();
+  if (!document.body.classList.contains(
+    "verification-page"
+  )) return;
 
-refreshIcons();
+  const title = document.getElementById(
+    "emailConfirmationTitle"
+  );
+
+  const eyebrow = document.getElementById(
+    "verificationEyebrow"
+  );
+
+  const description = document.getElementById(
+    "verificationDescription"
+  );
+
+  const emailAddress = document.getElementById(
+    "confirmationEmailAddress"
+  );
+
+  const feedback = document.getElementById(
+    "confirmationFeedback"
+  );
+
+  const resendButton = document.getElementById(
+    "resendConfirmationBtn"
+  );
+
+  const openEmailButton = document.getElementById(
+    "openEmailAppBtn"
+  );
+
+  let verificationData;
+  let account;
+
+  try {
+
+    verificationData = JSON.parse(
+      sessionStorage.getItem(
+        "edusaas.verification"
+      ) || "null"
+    );
+
+    if (verificationData?.email) {
+
+      account = eduVerification.getAccount(
+        verificationData.email
+      );
+
+    }
+
+  } catch (error) {
+
+    window.location.replace("Login.html");
+    return;
+
+  }
+
+  if (
+    !verificationData?.email ||
+    !account ||
+    account.emailVerified === true
+  ) {
+
+    window.location.replace("Login.html");
+    return;
+
+  }
+
+  const email = verificationData.email;
+
+  emailAddress.textContent = email;
+
+  /* Coming from Login */
+
+  if (verificationData.source === "login") {
+
+    eyebrow.textContent = "ACCOUNT ACTIVATION";
+
+    title.textContent = "Email not verified";
+
+    description.textContent =
+      "Your account has not been activated yet. Please verify your email address before logging in.";
+
+  } else {
+
+    /* Coming from Signup */
+
+    eyebrow.textContent = "ONE LAST STEP";
+
+    title.textContent = "Check your inbox!";
+
+    description.textContent =
+      "Your account has been created. Please verify your email address to activate your account.";
+
+  }
+
+  /* Email Provider */
+
+  const domain = email.split("@")[1];
+
+  let emailUrl = "https://mail.google.com/";
+
+  if (
+    ["outlook.com", "hotmail.com", "live.com"]
+      .includes(domain)
+  ) {
+
+    emailUrl = "https://outlook.live.com/mail/";
+
+  } else if (
+    ["yahoo.com", "yahoo.co.uk"]
+      .includes(domain)
+  ) {
+
+    emailUrl = "https://mail.yahoo.com/";
+
+  } else if (
+    ["icloud.com", "me.com", "mac.com"]
+      .includes(domain)
+  ) {
+
+    emailUrl = "https://www.icloud.com/mail/";
+
+  }
+
+  openEmailButton.href = emailUrl;
+
+  /* Demo Feedback */
+
+  feedback.textContent =
+    "Demo mode: Email verification is not connected yet. No email has been sent.";
+
+  /* Resend Confirmation */
+
+  resendButton.addEventListener("click", () => {
+
+    feedback.textContent =
+      "Resending is not connected yet. No email has been sent.";
+
+  });
 
 });

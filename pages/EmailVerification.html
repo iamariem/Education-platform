@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Email Verification | EduSaaS</title>
+
+  <meta name="description"
+    content="Verify your email address to activate your EduSaaS account.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles/tokens.css">
+  <link rel="stylesheet" href="../public/css/components.css">
+  <link rel="stylesheet" href="../public/css/style.css">
+  <link rel="stylesheet" href="../public/css/responsive.css">
+</head>
+
+<body class="auth-page verification-page">
+
+  <main class="auth-layout showing-confirmation">
+
+    <section
+      class="email-confirmation-screen"
+      id="emailConfirmationScreen"
+      aria-labelledby="emailConfirmationTitle">
+
+      <div class="confirmation-icon">
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="42"
+          height="42"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true">
+
+          <rect x="3" y="5" width="18" height="14" rx="3"/>
+          <path d="m3 7 9 6 9-6"/>
+
+        </svg>
+
+      </div>
+
+      <p class="confirmation-eyebrow" id="verificationEyebrow">
+        ONE LAST STEP
+      </p>
+
+      <h2 id="emailConfirmationTitle">
+        Check your inbox!
+      </h2>
+
+      <p class="confirmation-description" id="verificationDescription">
+        Please verify your email address to activate your account.
+      </p>
+
+      <div class="confirmation-email-box">
+
+        <span>YOUR EMAIL ADDRESS</span>
+
+        <strong id="confirmationEmailAddress"></strong>
+
+      </div>
+
+      <a
+        class="confirmation-primary-btn"
+        id="openEmailAppBtn"
+        href="https://mail.google.com/"
+        target="_blank"
+        rel="noopener noreferrer">
+
+        <span>Open Email App</span>
+        <span aria-hidden="true">↗</span>
+
+      </a>
+
+      <p class="confirmation-resend-text">
+
+        Didn't receive the email?
+
+        <button type="button" id="resendConfirmationBtn">
+          Resend confirmation email
+        </button>
+
+      </p>
+
+      <p
+        class="confirmation-feedback"
+        id="confirmationFeedback"
+        role="status"
+        aria-live="polite">
+      </p>
+
+      <a class="confirmation-back-btn" href="Login.html">
+        ← Back to Login
+      </a>
+
+    </section>
+
+  </main>
+
+  <script src="../public/js/main.js" defer></script>
+
+</body>
+
+</html>

@@ -7794,3 +7794,46 @@ html[dir="rtl"] .about-content {
 .student-dashboard .sd-side-nav .sd-side-link.active svg {
   stroke: currentColor;
 }
+/* =========================================
+   SHARED EMAIL VERIFICATION PAGE
+========================================= */
+
+.verification-page .auth-layout.showing-confirmation {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.verification-page .email-confirmation-screen {
+  max-width: 540px;
+  width: 100%;
+}
+
+.verification-page .confirmation-email-box strong {
+  overflow-wrap: anywhere;
+}
+
+.verification-page .confirmation-back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 576px) {
+
+  .verification-page .auth-layout.showing-confirmation {
+    padding: 20px 14px;
+  }
+
+  .verification-page .email-confirmation-screen {
+    width: 100%;
+    max-width: 100%;
+  }
+
+}
