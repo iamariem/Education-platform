@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<template id="student-sidebar-template">
+  <aside class="sd-sidebar" id="sdSidebar">
+    <a href="../shared/landing/index.html" class="sd-brand">
+      <span class="sd-brand-icon">
+        <i data-lucide="graduation-cap"></i>
+      </span>
+      <span class="sd-brand-accent">EduSaaS</span>
+    </a>
+
+    <p class="sd-nav-caption">STUDENT SPACE</p>
+
+    <nav class="sd-side-nav" aria-label="Student navigation">
+      <a class="sd-side-link" data-layout-active="dashboard-home" href="StudentDashboard.html">
+        <i data-lucide="house"></i>
+        <span>Home</span>
+      </a>
+      <a class="sd-side-link" href="student-courses.html">
+        <i data-lucide="book-open"></i>
+        <span>Courses</span>
+      </a>
+      <a class="sd-side-link" data-layout-active="ai-tutor" href="AITutor.html" id="ragSidebarLink">
+        <i data-lucide="bot"></i>
+        <span>AI Assistant</span>
+      </a>
+      <a class="sd-side-link" data-layout-active="dashboard-progress" href="StudentDashboard.html#progress">
+        <i data-lucide="chart-no-axes-column-increasing"></i>
+        <span>Progress</span>
+      </a>
+      <a class="sd-side-link" href="student-assessment.html">
+        <i data-lucide="clipboard-check"></i>
+        <span>Assessment</span>
+      </a>
+      <button class="sd-side-link" id="sdSidebarNotificationBtn" type="button" aria-expanded="false"
+        aria-controls="sdNotificationDropdown">
+        <i data-lucide="bell"></i>
+        <span>Notifications</span>
+        <span class="sd-nav-badge" id="sdNavUnread">2</span>
+      </button>
+      <a class="sd-side-link" href="student-profile.html">
+        <i data-lucide="user-round"></i>
+        <span>Profile</span>
+      </a>
+      <a class="sd-side-link" href="student-settings.html">
+        <i data-lucide="settings"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sd-sidebar-footer">
+      <button class="sd-side-link sd-logout" id="sdLogoutBtn" type="button">
+        <i data-lucide="log-out"></i>
+        <span>Log Out</span>
+      </button>
+      <div class="sd-side-user">
+        <span class="sd-avatar" data-sd-avatar>ST</span>
+        <div>
+          <strong data-sd-name>Student</strong>
+          <small>Student account</small>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sd-backdrop" id="sdBackdrop" hidden></div>
+</template>
+
+</body>
+</html>

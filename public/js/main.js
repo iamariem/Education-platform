@@ -1,4 +1,8 @@
 "use strict";
+
+const eduLayoutReady =
+  window.eduLayouts?.ready || Promise.resolve();
+
 /* =========================================
    EduSaaS - Demo Account Verification
 ========================================= */
@@ -166,10 +170,14 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
-  const menuToggle = document.querySelector(".menu-toggle");
-  const navbarMenu = document.getElementById("navbarMenu");
+  eduLayoutReady.then(() => {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navbarMenu = document.getElementById("navbarMenu");
 
-  if (!menuToggle || !navbarMenu) return;
+    if (!menuToggle || !navbarMenu) return;
+
+    if (menuToggle.dataset.layoutInitialized === "true") return;
+    menuToggle.dataset.layoutInitialized = "true";
 
   function setMenu(isOpen) {
     navbarMenu.classList.toggle("open", isOpen);
@@ -215,6 +223,9 @@ document.addEventListener("DOMContentLoaded", () => {
       setMenu(false);
     }
   });
+  }).catch((error) => {
+    console.error("Unable to initialize the landing navbar:", error);
+  });
 });
 
 
@@ -222,9 +233,11 @@ document.addEventListener("DOMContentLoaded", () => {
    Sticky Navbar Scroll Effect
 ========================================= */
 
-const navbar = document.querySelector(".navbar");
+eduLayoutReady.then(() => {
+  const navbar = document.querySelector(".navbar");
 
-if (navbar) {
+  if (!navbar) return;
+
   const updateNavbar = () => {
     navbar.classList.toggle("scrolled", window.scrollY > 20);
   };
@@ -234,7 +247,9 @@ if (navbar) {
   window.addEventListener("scroll", updateNavbar, {
     passive: true,
   });
-}
+}).catch((error) => {
+  console.error("Unable to initialize the landing navbar:", error);
+});
 /* =========================================
    EduSaaS — Multi-Step Signup & Email Confirmation
 ========================================= */
@@ -1895,12 +1910,15 @@ document.querySelectorAll("[data-password-toggle]").forEach((button) => {
 ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+  eduLayoutReady.then(() => {
+    // Run only on student dashboard pages
 
-  // Run only on student dashboard pages
+    if (!document.body.classList.contains("student-dashboard")) {
+      return;
+    }
 
-  if (!document.body.classList.contains("student-dashboard")) {
-    return;
-  }
+    if (document.body.dataset.layoutInitialized === "true") return;
+    document.body.dataset.layoutInitialized = "true";
 
   /* DATA */
 
@@ -2547,17 +2565,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Header Bell
 
-  notificationBtn?.addEventListener(
-    "click",
-    toggleNotifications
-  );
+  if (
+    notificationBtn &&
+    notificationBtn.dataset.notificationInitialized !== "true"
+  ) {
+    notificationBtn.dataset.notificationInitialized = "true";
+    notificationBtn.addEventListener(
+      "click",
+      toggleNotifications
+    );
+  }
 
   // Sidebar Notifications
 
-  sidebarNotificationBtn?.addEventListener(
-    "click",
-    toggleNotifications
-  );
+  if (
+    sidebarNotificationBtn &&
+    sidebarNotificationBtn.dataset.notificationInitialized !== "true"
+  ) {
+    sidebarNotificationBtn.dataset.notificationInitialized = "true";
+    sidebarNotificationBtn.addEventListener(
+      "click",
+      toggleNotifications
+    );
+  }
 
   // Home Overview - View All
 
@@ -2579,85 +2609,110 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Close Button
 
-  $("#sdCloseNotifications")?.addEventListener(
-    "click",
-    () => {
+  const closeNotificationsButton =
+    $("#sdCloseNotifications");
 
-      setNotifications(false);
+  if (
+    closeNotificationsButton &&
+    closeNotificationsButton.dataset.notificationInitialized !== "true"
+  ) {
+    closeNotificationsButton.dataset.notificationInitialized = "true";
+    closeNotificationsButton.addEventListener(
+      "click",
+      () => {
 
-      notificationBtn?.focus();
+        setNotifications(false);
 
-    }
-  );
+        notificationBtn?.focus();
+
+      }
+    );
+  }
 
   // Close when clicking outside
 
-  document.addEventListener("click", event => {
+  if (
+    notificationDropdown &&
+    notificationDropdown.dataset.outsideDismissInitialized !== "true"
+  ) {
+    notificationDropdown.dataset.outsideDismissInitialized = "true";
 
-    if (
-      !notificationDropdown ||
-      notificationDropdown.hidden
-    ) return;
+    document.addEventListener("click", event => {
 
-    const clickedInside =
-      notificationDropdown.contains(event.target);
+      if (notificationDropdown.hidden) return;
 
-    const clickedBell =
-      notificationBtn?.contains(event.target);
+      const clickedInside =
+        notificationDropdown.contains(event.target);
 
-    const clickedSidebar =
-      sidebarNotificationBtn?.contains(event.target);
+      const clickedBell =
+        notificationBtn?.contains(event.target);
 
-    const clickedViewAll =
-      viewNotificationsBtn?.contains(event.target);
+      const clickedSidebar =
+        sidebarNotificationBtn?.contains(event.target);
 
-    if (
-      !clickedInside &&
-      !clickedBell &&
-      !clickedSidebar &&
-      !clickedViewAll
-    ) {
+      const clickedViewAll =
+        viewNotificationsBtn?.contains(event.target);
 
-      setNotifications(false);
+      if (
+        !clickedInside &&
+        !clickedBell &&
+        !clickedSidebar &&
+        !clickedViewAll
+      ) {
 
-    }
-  });
+        setNotifications(false);
+
+      }
+    });
+  }
 
   // Escape Key
 
-  document.addEventListener("keydown", event => {
+  if (
+    notificationDropdown &&
+    notificationDropdown.dataset.escapeDismissInitialized !== "true"
+  ) {
+    notificationDropdown.dataset.escapeDismissInitialized = "true";
 
-    if (event.key !== "Escape") return;
+    document.addEventListener("keydown", event => {
 
-    if (
-      notificationDropdown &&
-      !notificationDropdown.hidden
-    ) {
+      if (event.key !== "Escape") return;
 
-      setNotifications(false);
+      if (!notificationDropdown.hidden) {
 
-      notificationBtn?.focus();
+        setNotifications(false);
 
-    }
+        notificationBtn?.focus();
 
-    setSidebar(false);
+      }
 
-  });
+      setSidebar(false);
+
+    });
+  }
 
   /* MARK ALL AS READ */
 
-  $("#sdDropdownMarkRead")?.addEventListener(
-    "click",
-    () => {
+  const markReadButton = $("#sdDropdownMarkRead");
 
-      data.notifications.forEach(notification => {
-        notification.read = true;
-      });
+  if (
+    markReadButton &&
+    markReadButton.dataset.notificationInitialized !== "true"
+  ) {
+    markReadButton.dataset.notificationInitialized = "true";
+    markReadButton.addEventListener(
+      "click",
+      () => {
 
-      renderNotifications();
+        data.notifications.forEach(notification => {
+          notification.read = true;
+        });
 
-    }
-  );
+        renderNotifications();
+
+      }
+    );
+  }
 
   /* SEARCH */
 
@@ -3987,6 +4042,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   refreshIcons();
 
+  }).catch((error) => {
+    console.error("Unable to initialize the student dashboard layouts:", error);
+  });
 });
 /* =========================================
    EduSaaS - Shared Email Verification Page

@@ -23,106 +23,7 @@
 
     <div class="sd-app">
 
-        <!-- =========================
-             SIDEBAR
-        ========================== -->
-
-        <aside class="sd-sidebar" id="sdSidebar">
-
-            <a href="../shared/landing/index.html" class="sd-brand">
-
-                <span class="sd-brand-icon">
-                    <i data-lucide="graduation-cap"></i>
-                </span>
-
-                <span class="sd-brand-accent">
-                    EduSaaS
-                </span>
-
-            </a>
-
-            <p class="sd-nav-caption">STUDENT SPACE</p>
-
-            <nav class="sd-side-nav">
-
-                <a class="sd-side-link" href="StudentDashboard.html">
-                    <i data-lucide="house"></i>
-                    <span>Home</span>
-                </a>
-                <a class="sd-side-link" href="student-courses.html">
-                    <i data-lucide="book-open"></i>
-                    <span>Courses</span>
-                </a>
-
-                <a class="sd-side-link active" href="AITutor.html" id="ragSidebarLink">
-
-                    <i data-lucide="bot"></i>
-                    <span>AI Assistant</span>
-
-                </a>
-
-                <a class="sd-side-link" href="StudentDashboard.html#progress">
-                    <i data-lucide="chart-no-axes-column-increasing"></i>
-                    <span>Progress</span>
-                </a>
-
-                <a class="sd-side-link" href="student-assessment.html">
-                    <i data-lucide="clipboard-check"></i>
-                    <span>Assessment</span>
-                </a>
-
-                <button class="sd-side-link" id="sdSidebarNotificationBtn" type="button" aria-expanded="false"
-                    aria-controls="sdNotificationDropdown">
-
-                    <i data-lucide="bell"></i>
-
-                    <span>Notifications</span>
-
-                    <span class="sd-nav-badge" id="sdNavUnread">
-                        2
-                    </span>
-
-                </button>
-
-                <a class="sd-side-link" href="student-profile.html">
-                    <i data-lucide="user-round"></i>
-                    <span>Profile</span>
-                </a>
-
-                <a class="sd-side-link" href="student-settings.html">
-                    <i data-lucide="settings"></i>
-                    <span>Settings</span>
-                </a>
-
-            </nav>
-
-            <div class="sd-sidebar-footer">
-
-                <button class="sd-side-link sd-logout" id="sdLogoutBtn" type="button">
-
-                    <i data-lucide="log-out"></i>
-                    <span>Log Out</span>
-
-                </button>
-
-                <div class="sd-side-user">
-
-                    <span class="sd-avatar" data-sd-avatar>
-                        ST
-                    </span>
-
-                    <div>
-                        <strong data-sd-name>Student</strong>
-                        <small>Student account</small>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </aside>
-
-        <div class="sd-backdrop" id="sdBackdrop" hidden></div>
+        <div data-layout="sidebar" data-layout-variant="student-ai"></div>
 
         <!-- =========================
              PAGE
@@ -130,118 +31,7 @@
 
         <div class="sd-page">
 
-            <!-- TOP NAVBAR -->
-
-            <header class="sd-topbar">
-
-                <div class="sd-top-left">
-
-                    <button class="sd-icon-btn sd-menu-btn" id="sdMenuBtn" type="button" aria-label="Open sidebar"
-                        aria-expanded="false">
-
-                        <i data-lucide="menu"></i>
-
-                    </button>
-
-                    <a class="sd-mobile-brand" href="StudentDashboard.html">
-                        Edu<span>SaaS</span>
-                    </a>
-
-                    <label class="sd-search" id="ragSearchWrapper">
-
-                        <i data-lucide="search"></i>
-
-                        <input type="search" id="ragSearchInput" placeholder="Search your courses..."
-                            aria-label="Search your courses">
-
-                    </label>
-
-                    <div class="rag-topbar-title" id="ragTopbarTitle" hidden>
-
-                        <i data-lucide="sparkles"></i>
-                        <span>AI Assistant</span>
-
-                    </div>
-
-                </div>
-
-                <div class="sd-top-actions">
-
-                    <div class="sd-notification-wrapper">
-
-                        <button class="sd-icon-btn sd-bell-btn" id="sdNotificationBtn" type="button"
-                            aria-label="Notifications" aria-expanded="false" aria-controls="sdNotificationDropdown">
-
-                            <i data-lucide="bell"></i>
-
-                            <span class="sd-notification-dot" id="sdTopDot">
-                            </span>
-
-                        </button>
-
-                        <section class="sd-notification-dropdown" id="sdNotificationDropdown" aria-label="Notifications"
-                            hidden>
-
-                            <div class="sd-dropdown-header">
-
-                                <div>
-
-                                    <h3>Notifications</h3>
-
-                                    <p id="sdDropdownUnread">
-                                        2 unread notifications
-                                    </p>
-
-                                </div>
-
-                                <button class="sd-icon-btn" id="sdCloseNotifications" type="button"
-                                    aria-label="Close notifications">
-
-                                    <i data-lucide="x"></i>
-
-                                </button>
-
-                            </div>
-
-                            <div class="sd-dropdown-list" id="sdDropdownNotificationList">
-                            </div>
-
-                            <div class="sd-dropdown-footer">
-
-                                <button class="sd-text-btn" id="sdDropdownMarkRead" type="button">
-
-                                    <i data-lucide="check-check"></i>
-                                    Mark all as read
-
-                                </button>
-
-                            </div>
-
-                        </section>
-
-                    </div>
-
-                    <a href="student-profile.html" class="sd-top-user">
-
-                        <span class="sd-avatar" data-sd-avatar>
-                            ST
-                        </span>
-
-                        <span class="sd-top-user-text">
-
-                            <strong data-sd-name>Student</strong>
-
-                            <small>Student</small>
-
-                        </span>
-
-                        <i data-lucide="chevron-down"></i>
-
-                    </a>
-
-                </div>
-
-            </header>
+            <div data-layout="navbar" data-layout-variant="student-ai"></div>
 
             <!-- =========================
                  RAG MAIN CONTENT
@@ -427,9 +217,7 @@
 
                     </section>
 
-                    <footer class="sd-footer">
-                        © 2026 EduSaaS · Learn better. Grow together.
-                    </footer>
+                    <div data-layout="footer" data-layout-variant="student"></div>
 
                 </div>
 
@@ -604,6 +392,7 @@
 
     <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
 
+    <script src="../../public/js/layout.js" defer></script>
     <script src="../../public/js/main.js" defer></script>
 
 </body>

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<template id="public-navbar-template">
+  <header class="navbar">
+    <a class="brand" href="#home" aria-label="EduSaaS Home">
+      <span class="brand-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M22 10L12 5L2 10L12 15L22 10Z"/>
+          <path d="M6 12V17C9 20 15 20 18 17V12"/>
+          <path d="M22 10V16"/>
+        </svg>
+      </span>
+      <span>EduSaaS</span>
+    </a>
+
+    <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
+      aria-controls="navbarMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="navbar-menu" id="navbarMenu">
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#courses">Courses</a>
+        <a href="#subjects">Subjects</a>
+        <a href="#teachers">Teacher</a>
+        <a href="#about">About</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="search-btn" type="button" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+          </svg>
+        </button>
+
+        <a class="btn btn-secondary" href="../Login.html">Log In</a>
+        <a class="btn btn-primary" href="../Signup.html">Sign Up</a>
+      </div>
+    </div>
+  </header>
+</template>
+
+<template id="student-dashboard-topbar-template">
+  <header class="sd-topbar">
+    <div class="sd-top-left">
+      <button class="sd-icon-btn sd-menu-btn" id="sdMenuBtn" type="button" aria-label="Open sidebar"
+        aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <a class="sd-mobile-brand" href="StudentDashboard.html">
+        Edu<span>SaaS</span>
+      </a>
+
+      <label class="sd-search">
+        <i data-lucide="search"></i>
+        <input type="search" id="sdSearchInput" placeholder="Search your courses..."
+          aria-label="Search your courses">
+      </label>
+    </div>
+
+    <div class="sd-top-actions">
+      <div class="sd-notification-wrapper">
+        <button class="sd-icon-btn sd-bell-btn" id="sdNotificationBtn" type="button"
+          aria-label="Notifications" aria-expanded="false" aria-controls="sdNotificationDropdown">
+          <i data-lucide="bell"></i>
+          <span class="sd-notification-dot" id="sdTopDot"></span>
+        </button>
+
+        <section class="sd-notification-dropdown" id="sdNotificationDropdown" aria-label="Notifications" hidden>
+          <div class="sd-dropdown-header">
+            <div>
+              <h3>Notifications</h3>
+              <p id="sdDropdownUnread">2 unread notifications</p>
+            </div>
+            <button class="sd-icon-btn" id="sdCloseNotifications" type="button" aria-label="Close notifications">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          <div class="sd-dropdown-list" id="sdDropdownNotificationList"></div>
+          <div class="sd-dropdown-footer">
+            <button class="sd-text-btn" id="sdDropdownMarkRead" type="button">
+              <i data-lucide="check-check"></i>
+              Mark all as read
+            </button>
+          </div>
+        </section>
+      </div>
+      <a href="student-profile.html" class="sd-top-user">
+        <span class="sd-avatar" data-sd-avatar>ST</span>
+        <span class="sd-top-user-text">
+          <strong data-sd-name>Student</strong>
+          <small>Student</small>
+        </span>
+        <i data-lucide="chevron-down"></i>
+      </a>
+    </div>
+  </header>
+</template>
+
+<template id="student-ai-topbar-template">
+  <header class="sd-topbar">
+    <div class="sd-top-left">
+      <button class="sd-icon-btn sd-menu-btn" id="sdMenuBtn" type="button" aria-label="Open sidebar"
+        aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <a class="sd-mobile-brand" href="StudentDashboard.html">
+        Edu<span>SaaS</span>
+      </a>
+
+      <label class="sd-search" id="ragSearchWrapper">
+        <i data-lucide="search"></i>
+        <input type="search" id="ragSearchInput" placeholder="Search your courses..."
+          aria-label="Search your courses">
+      </label>
+
+      <div class="rag-topbar-title" id="ragTopbarTitle" hidden>
+        <i data-lucide="sparkles"></i>
+        <span>AI Assistant</span>
+      </div>
+    </div>
+
+    <div class="sd-top-actions">
+      <div class="sd-notification-wrapper">
+        <button class="sd-icon-btn sd-bell-btn" id="sdNotificationBtn" type="button"
+          aria-label="Notifications" aria-expanded="false" aria-controls="sdNotificationDropdown">
+          <i data-lucide="bell"></i>
+          <span class="sd-notification-dot" id="sdTopDot"></span>
+        </button>
+
+        <section class="sd-notification-dropdown" id="sdNotificationDropdown" aria-label="Notifications" hidden>
+          <div class="sd-dropdown-header">
+            <div>
+              <h3>Notifications</h3>
+              <p id="sdDropdownUnread">2 unread notifications</p>
+            </div>
+            <button class="sd-icon-btn" id="sdCloseNotifications" type="button" aria-label="Close notifications">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          <div class="sd-dropdown-list" id="sdDropdownNotificationList"></div>
+          <div class="sd-dropdown-footer">
+            <button class="sd-text-btn" id="sdDropdownMarkRead" type="button">
+              <i data-lucide="check-check"></i>
+              Mark all as read
+            </button>
+          </div>
+        </section>
+      </div>
+      <a href="student-profile.html" class="sd-top-user">
+        <span class="sd-avatar" data-sd-avatar>ST</span>
+        <span class="sd-top-user-text">
+          <strong data-sd-name>Student</strong>
+          <small>Student</small>
+        </span>
+        <i data-lucide="chevron-down"></i>
+      </a>
+    </div>
+  </header>
+</template>
+
+</body>
+</html>

@@ -21,63 +21,7 @@
 <body>
 
 
-  <header class="navbar">
-
-
-<a class="brand" href="#home" aria-label="EduSaaS Home">
-  <span class="brand-icon">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M22 10L12 5L2 10L12 15L22 10Z"/>
-      <path d="M6 12V17C9 20 15 20 18 17V12"/>
-      <path d="M22 10V16"/>
-    </svg>
-  </span>
-
-  <span>EduSaaS</span>
-</a>
-
-    <!-- Mobile Menu Button -->
-    <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false"
-      aria-controls="navbarMenu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-    <div class="navbar-menu" id="navbarMenu">
-
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="#home">Home</a>
-        <a href="#courses">Courses</a>
-        <a href="#subjects">Subjects</a>
-        <a href="#teachers">Teacher</a>
-        <a href="#about">About</a>
-      </nav>
-
-      <div class="nav-actions">
-        <button class="search-btn" type="button" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <circle cx="11" cy="11" r="7"></circle>
-            <path d="m20 20-4-4"></path>
-          </svg>
-        </button>
-
-        <a class="btn btn-secondary" href="../Login.html">Log In</a>
-        <a class="btn btn-primary" href="../Signup.html">Sign Up</a>
-      </div>
-
-    </div>
-  </header>
+  <div data-layout="navbar" data-layout-variant="public"></div>
 
   <main>
     <section class="hero section-container" id="home">
@@ -487,21 +431,9 @@
     </section>
   </main>
 
-  <footer class="footer">
-    <a class="brand" href="#home">
-      <span class="brand-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="m2 10 10-5 10 5-10 5-10-5Z" />
-          <path d="M6 12v5c3.5 3 8.5 3 12 0v-5" />
-          <path d="M22 10v6" />
-        </svg>
-      </span>
-      <span>EduSaaS</span>
-    </a>
-    <p>Learn better. Grow together.</p>
-  </footer>
+  <div data-layout="footer" data-layout-variant="public"></div>
 
+  <script src="../../../public/js/layout.js" defer></script>
   <script src="../../../public/js/main.js" defer></script>
 
 </body>
