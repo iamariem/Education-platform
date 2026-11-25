@@ -179,50 +179,50 @@ document.addEventListener("DOMContentLoaded", () => {
     if (menuToggle.dataset.layoutInitialized === "true") return;
     menuToggle.dataset.layoutInitialized = "true";
 
-  function setMenu(isOpen) {
-    navbarMenu.classList.toggle("open", isOpen);
-    menuToggle.classList.toggle("active", isOpen);
+    function setMenu(isOpen) {
+      navbarMenu.classList.toggle("open", isOpen);
+      menuToggle.classList.toggle("active", isOpen);
 
-    menuToggle.setAttribute(
-      "aria-expanded",
-      String(isOpen)
-    );
+      menuToggle.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
 
-    menuToggle.setAttribute(
-      "aria-label",
-      isOpen
-        ? "Close navigation menu"
-        : "Open navigation menu"
-    );
-  }
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen
+          ? "Close navigation menu"
+          : "Open navigation menu"
+      );
+    }
 
-  menuToggle.addEventListener("click", () => {
-    const isOpen =
-      menuToggle.getAttribute("aria-expanded") === "true";
+    menuToggle.addEventListener("click", () => {
+      const isOpen =
+        menuToggle.getAttribute("aria-expanded") === "true";
 
-    setMenu(!isOpen);
-  });
-
-  navbarMenu.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      setMenu(false);
+      setMenu(!isOpen);
     });
-  });
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      setMenu(false);
-    }
-  });
+    navbarMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        setMenu(false);
+      });
+    });
 
-  document.addEventListener("click", (event) => {
-    if (
-      !menuToggle.contains(event.target) &&
-      !navbarMenu.contains(event.target)
-    ) {
-      setMenu(false);
-    }
-  });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        setMenu(false);
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (
+        !menuToggle.contains(event.target) &&
+        !navbarMenu.contains(event.target)
+      ) {
+        setMenu(false);
+      }
+    });
   }).catch((error) => {
     console.error("Unable to initialize the landing navbar:", error);
   });
@@ -1920,1720 +1920,2082 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.body.dataset.layoutInitialized === "true") return;
     document.body.dataset.layoutInitialized = "true";
 
-  /* DATA */
-
-  const data = {
-    courses: [
-      {
-        id: "neural-networks",
-        title: "Neural Networks",
-        category: "Artificial Intelligence",
-        description:
-          "Explore neural networks, deep learning and intelligent models.",
-        image:
-          "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=80",
-        progress: 68,
-        lessons: "8 of 12 lessons"
-      },
-      {
-        id: "operating-systems",
-        title: "Operating Systems",
-        category: "Computer Science",
-        description:
-          "Understand processes, memory management and modern operating systems.",
-        image:
-          "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=80",
-        progress: 42,
-        lessons: "5 of 12 lessons"
-      },
-      {
-        id: "data-structures",
-        title: "Data Structures",
-        category: "Programming",
-        description:
-          "Master arrays, linked lists, stacks, queues, trees and graphs.",
-        image:
-          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80",
-        progress: 85,
-        lessons: "11 of 13 lessons"
-      }
-    ],
-
-    plan: [
-      {
-        title: "Watch Lesson 9",
-        subtitle: "Neural Networks",
-        time: "30 min",
-        icon: "play-circle",
-        tone: "sd-blue"
-      },
-      {
-        title: "Take Quick Quiz",
-        subtitle: "Operating Systems",
-        time: "15 min",
-        icon: "clipboard-check",
-        tone: "sd-rose"
-      },
-      {
-        title: "Review Summary",
-        subtitle: "Data Structures",
-        time: "10 min",
-        icon: "book-open-check",
-        tone: "sd-mint"
-      }
-    ],
-
-    assessments: [
-      {
-        title: "Neural Networks Quiz",
-        course: "Neural Networks",
-        detail: "Score: 92%",
-        status: "Completed"
-      },
-      {
-        title: "OS Fundamentals Quiz",
-        course: "Operating Systems",
-        detail: "Not started",
-        status: "Upcoming"
-      },
-      {
-        title: "Data Structures Test",
-        course: "Data Structures",
-        detail: "Score: 88%",
-        status: "Completed"
-      }
-    ],
-
-    notifications: [
-      {
-        title: "New lesson available",
-        detail: "A new Neural Networks lesson is ready.",
-        time: "Today",
-        icon: "book-open",
-        read: false
-      },
-      {
-        title: "Assessment reminder",
-        detail: "Your Operating Systems quiz is coming up.",
-        time: "Yesterday",
-        icon: "clipboard-check",
-        read: false
-      },
-      {
-        title: "Great progress!",
-        detail: "You reached 85% in Data Structures.",
-        time: "2 days ago",
-        icon: "award",
-        read: true
-      }
-    ]
-  };
-
-  /* HELPERS */
-
-  const $ = selector => document.querySelector(selector);
-
-  function make(tag, className = "", text = "") {
-    const element = document.createElement(tag);
-
-    element.className = className;
-    element.textContent = text;
-
-    return element;
-  }
-
-  function makeIcon(name) {
-    const element = document.createElement("i");
-
-    element.setAttribute("data-lucide", name);
-
-    return element;
-  }
-
-  function refreshIcons() {
-    if (window.lucide?.createIcons) {
-      window.lucide.createIcons();
-    }
-  }
-
-  function setText(selector, value) {
-    const element = $(selector);
-
-    if (element) {
-      element.textContent = value;
-    }
-  }
-
-  function makeImage(course) {
-    const image = document.createElement("img");
-
-    image.src = course.image;
-    image.alt = course.title;
-    image.loading = "lazy";
-
-    return image;
-  }
-
-  function progressMeta(label, value) {
-    const wrapper = make("div", "sd-progress-meta");
-
-    wrapper.append(
-      make("span", "", label),
-      make("strong", "", `${value}%`)
-    );
-
-    return wrapper;
-  }
-
-  function progressBar(value) {
-    const track = make("div", "sd-progress-track");
-    const fill = make("span", "sd-progress-fill");
-
-    fill.style.width = `${value}%`;
-
-    track.append(fill);
-
-    return track;
-  }
-
-  /* ENROLLED COURSES */
-
-  function renderCourses(search = "") {
-
-    const grid = $("#sdCourseGrid");
-
-    if (!grid) return;
-
-    grid.replaceChildren();
-
-    const filteredCourses = data.courses.filter(course =>
-      `${course.title} ${course.category}`
-        .toLowerCase()
-        .includes(search.toLowerCase().trim())
-    );
-
-    const empty = $("#sdSearchEmpty");
-
-    if (empty) {
-      empty.hidden = filteredCourses.length > 0;
-    }
-
-    filteredCourses.forEach(course => {
-
-      const card = make("article", "sd-course-card");
-
-      const art = make("div", "sd-course-art");
-
-      art.append(makeImage(course));
-
-      const body = make("div", "sd-course-body");
-
-      const progress = make("div", "sd-course-progress");
-
-      progress.append(
-        progressMeta("Course Progress", course.progress),
-        progressBar(course.progress)
-      );
-
-      const footer = make("div", "sd-course-footer");
-
-      const lessons = make(
-        "span",
-        "sd-course-lessons",
-        course.lessons
-      );
-
-      const button = make(
-        "a",
-        "sd-course-continue-btn",
-        "Continue Learning"
-      );
-
-      // Demo link until lesson pages are created
-
-      button.href = "StudentDashboard.html#progress";
-
-      button.append(makeIcon("arrow-right"));
-
-      footer.append(lessons, button);
-
-      body.append(
-        make("span", "sd-course-category", course.category),
-        make("h3", "", course.title),
-        make("p", "", course.description),
-        progress,
-        footer
-      );
-
-      card.append(art, body);
-
-      grid.append(card);
-
-    });
-
-    setText(
-      "#sdCourseCount",
-      `${filteredCourses.length} courses`
-    );
-
-    refreshIcons();
-  }
-
-  /* CONTINUE LEARNING */
-
-  function renderFeatured() {
-
-    const container = $("#sdContinueCourse");
-
-    if (!container) return;
-
-    container.replaceChildren();
-
-    const course = data.courses[0];
-
-    if (!course) {
-      container.textContent = "No enrolled courses yet.";
-      return;
-    }
-
-    const wrapper = make("div", "sd-featured-course");
-
-    const art = make("div", "sd-featured-art");
-
-    art.append(makeImage(course));
-
-    const details = make("div", "sd-featured-details");
-
-    const button = make(
-      "a",
-      "sd-primary-btn",
-      "Continue Learning"
-    );
-
-    button.href = "StudentDashboard.html#progress";
-
-    button.append(makeIcon("arrow-right"));
-
-    details.append(
-      make("span", "sd-course-category", course.category),
-      make("h3", "", course.title),
-      make("p", "", course.lessons),
-      progressMeta("Progress", course.progress),
-      progressBar(course.progress),
-      button
-    );
-
-    wrapper.append(art, details);
-
-    container.append(wrapper);
-  }
-
-  /* TODAY'S PLAN */
-
-  function renderPlan() {
-
-    const container = $("#sdTodayPlan");
-
-    if (!container) return;
-
-    container.replaceChildren();
-
-    data.plan.forEach(item => {
-
-      const row = make("div", "sd-plan-item");
-
-      const symbol = make(
-        "span",
-        `sd-mini-icon ${item.tone}`
-      );
-
-      symbol.append(makeIcon(item.icon));
-
-      const copy = make("div", "sd-plan-copy");
-
-      copy.append(
-        make("strong", "", item.title),
-        make("small", "", item.subtitle)
-      );
-
-      row.append(
-        symbol,
-        copy,
-        make("span", "sd-plan-time", item.time)
-      );
-
-      container.append(row);
-
-    });
-  }
-
-  /* PROGRESS */
-
-  function renderProgress() {
-
-    const courses = data.courses;
-
-    const average = courses.length
-      ? Math.round(
-        courses.reduce(
-          (sum, course) => sum + course.progress,
-          0
-        ) / courses.length
-      )
-      : 0;
-
-    setText("#sdStatCourses", courses.length);
-
-    setText("#sdStatProgress", `${average}%`);
-
-    setText("#sdProgressRingText", `${average}%`);
-
-    const ring = $("#sdProgressRing");
-
-    if (ring) {
-
-      ring.style.background =
-        `conic-gradient(
-          var(--color-mint) ${average}%,
-          var(--color-background) ${average}%
-        )`;
-
-    }
-
-    const container = $("#sdProgressBars");
-
-    if (!container) return;
-
-    container.replaceChildren();
-
-    courses.forEach(course => {
-
-      const item = make("div", "sd-progress-item");
-
-      item.append(
-        progressMeta(course.title, course.progress),
-        progressBar(course.progress)
-      );
-
-      container.append(item);
-
-    });
-  }
-
-  /* ASSESSMENTS */
-
-  function renderAssessments() {
-
-    const completed = data.assessments.filter(
-      assessment => assessment.status === "Completed"
-    ).length;
-
-    setText("#sdStatAssessments", completed);
-
-    const container = $("#sdAssessmentList");
-
-    if (!container) return;
-
-    container.replaceChildren();
-
-    data.assessments.forEach(assessment => {
-
-      const row = make("div", "sd-list-item");
-
-      const symbol = make(
-        "span",
-        "sd-mini-icon sd-blue"
-      );
-
-      symbol.append(makeIcon("clipboard-check"));
-
-      const copy = make("div", "sd-list-copy");
-
-      copy.append(
-        make("strong", "", assessment.title),
-        make(
-          "small",
-          "",
-          `${assessment.course} · ${assessment.detail}`
-        )
-      );
-
-      const status = make(
-        "span",
-        "sd-status-pill" +
-        (assessment.status === "Upcoming"
-          ? " upcoming"
-          : ""),
-        assessment.status
-      );
-
-      row.append(symbol, copy, status);
-
-      container.append(row);
-
-    });
-  }
-
-  /* NOTIFICATIONS */
-
-  function createNotification(notification) {
-
-    const row = make(
-      "div",
-      "sd-list-item" +
-      (!notification.read ? " unread" : "")
-    );
-
-    const symbol = make(
-      "span",
-      "sd-mini-icon sd-rose"
-    );
-
-    symbol.append(makeIcon(notification.icon));
-
-    const copy = make("div", "sd-list-copy");
-
-    copy.append(
-      make("strong", "", notification.title),
-      make("small", "", notification.detail),
-      make(
-        "span",
-        "sd-notification-time",
-        notification.time
-      )
-    );
-
-    row.append(symbol, copy);
-
-    if (!notification.read) {
-      row.append(make("span", "sd-unread-mark"));
-    }
-
-    return row;
-  }
-
-  function renderNotifications() {
-
-    const overview = $("#sdNotificationList");
-
-    const dropdown = $("#sdDropdownNotificationList");
-
-    // Home Overview
-
-    if (overview) {
-
-      overview.replaceChildren();
-
-      data.notifications.slice(0, 3)
-        .forEach(notification => {
-
-          overview.append(
-            createNotification(notification)
-          );
-
-        });
-    }
-
-    // Header Dropdown
-
-    if (dropdown) {
-
-      dropdown.replaceChildren();
-
-      data.notifications.forEach(notification => {
-
-        dropdown.append(
-          createNotification(notification)
-        );
-
-      });
-    }
-
-    // Unread Counter
-
-    const unread = data.notifications.filter(
-      notification => !notification.read
-    ).length;
-
-    setText("#sdStatUnread", unread);
-
-    setText("#sdNavUnread", unread);
-
-    const navUnread = $("#sdNavUnread");
-
-    const topDot = $("#sdTopDot");
-
-    if (navUnread) {
-      navUnread.hidden = unread === 0;
-    }
-
-    if (topDot) {
-      topDot.hidden = unread === 0;
-    }
-
-    setText(
-      "#sdDropdownUnread",
-      unread === 0
-        ? "You're all caught up!"
-        : `${unread} unread notification${unread === 1 ? "" : "s"}`
-    );
-
-    refreshIcons();
-  }
-
-  /* MOBILE SIDEBAR */
-
-  const sidebar = $("#sdSidebar");
-
-  const backdrop = $("#sdBackdrop");
-
-  const menuBtn = $("#sdMenuBtn");
-
-  function setSidebar(open) {
-
-    sidebar?.classList.toggle("open", open);
-
-    backdrop?.classList.toggle("open", open);
-
-    if (backdrop) {
-      backdrop.hidden = !open;
-    }
-
-    menuBtn?.setAttribute(
-      "aria-expanded",
-      String(open)
-    );
-  }
-
-  menuBtn?.addEventListener("click", () => {
-
-    const isOpen = sidebar?.classList.contains("open");
-
-    setSidebar(!isOpen);
-
-  });
-
-  backdrop?.addEventListener("click", () => {
-
-    setSidebar(false);
-
-  });
-
-  /* NOTIFICATION DROPDOWN */
-
-  const notificationDropdown =
-    $("#sdNotificationDropdown");
-
-  const notificationBtn =
-    $("#sdNotificationBtn");
-
-  const sidebarNotificationBtn =
-    $("#sdSidebarNotificationBtn");
-
-  const viewNotificationsBtn =
-    $("#sdViewNotifications");
-
-  function setNotifications(open) {
-
-    if (!notificationDropdown) return;
-
-    notificationDropdown.hidden = !open;
-
-    notificationBtn?.setAttribute(
-      "aria-expanded",
-      String(open)
-    );
-
-    sidebarNotificationBtn?.setAttribute(
-      "aria-expanded",
-      String(open)
-    );
-  }
-
-  function toggleNotifications() {
-
-    if (!notificationDropdown) return;
-
-    const shouldOpen = notificationDropdown.hidden;
-
-    if (shouldOpen) {
-      setSidebar(false);
-    }
-
-    setNotifications(shouldOpen);
-  }
-
-  // Header Bell
-
-  if (
-    notificationBtn &&
-    notificationBtn.dataset.notificationInitialized !== "true"
-  ) {
-    notificationBtn.dataset.notificationInitialized = "true";
-    notificationBtn.addEventListener(
-      "click",
-      toggleNotifications
-    );
-  }
-
-  // Sidebar Notifications
-
-  if (
-    sidebarNotificationBtn &&
-    sidebarNotificationBtn.dataset.notificationInitialized !== "true"
-  ) {
-    sidebarNotificationBtn.dataset.notificationInitialized = "true";
-    sidebarNotificationBtn.addEventListener(
-      "click",
-      toggleNotifications
-    );
-  }
-
-  // Home Overview - View All
-
-  viewNotificationsBtn?.addEventListener(
-    "click",
-    () => {
-
-      setSidebar(false);
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-      setNotifications(true);
-
-    }
-  );
-
-  // Close Button
-
-  const closeNotificationsButton =
-    $("#sdCloseNotifications");
-
-  if (
-    closeNotificationsButton &&
-    closeNotificationsButton.dataset.notificationInitialized !== "true"
-  ) {
-    closeNotificationsButton.dataset.notificationInitialized = "true";
-    closeNotificationsButton.addEventListener(
-      "click",
-      () => {
-
-        setNotifications(false);
-
-        notificationBtn?.focus();
-
-      }
-    );
-  }
-
-  // Close when clicking outside
-
-  if (
-    notificationDropdown &&
-    notificationDropdown.dataset.outsideDismissInitialized !== "true"
-  ) {
-    notificationDropdown.dataset.outsideDismissInitialized = "true";
-
-    document.addEventListener("click", event => {
-
-      if (notificationDropdown.hidden) return;
-
-      const clickedInside =
-        notificationDropdown.contains(event.target);
-
-      const clickedBell =
-        notificationBtn?.contains(event.target);
-
-      const clickedSidebar =
-        sidebarNotificationBtn?.contains(event.target);
-
-      const clickedViewAll =
-        viewNotificationsBtn?.contains(event.target);
-
-      if (
-        !clickedInside &&
-        !clickedBell &&
-        !clickedSidebar &&
-        !clickedViewAll
-      ) {
-
-        setNotifications(false);
-
-      }
-    });
-  }
-
-  // Escape Key
-
-  if (
-    notificationDropdown &&
-    notificationDropdown.dataset.escapeDismissInitialized !== "true"
-  ) {
-    notificationDropdown.dataset.escapeDismissInitialized = "true";
-
-    document.addEventListener("keydown", event => {
-
-      if (event.key !== "Escape") return;
-
-      if (!notificationDropdown.hidden) {
-
-        setNotifications(false);
-
-        notificationBtn?.focus();
-
-      }
-
-      setSidebar(false);
-
-    });
-  }
-
-  /* MARK ALL AS READ */
-
-  const markReadButton = $("#sdDropdownMarkRead");
-
-  if (
-    markReadButton &&
-    markReadButton.dataset.notificationInitialized !== "true"
-  ) {
-    markReadButton.dataset.notificationInitialized = "true";
-    markReadButton.addEventListener(
-      "click",
-      () => {
-
-        data.notifications.forEach(notification => {
-          notification.read = true;
-        });
-
-        renderNotifications();
-
-      }
-    );
-  }
-
-  /* SEARCH */
-
-  $("#sdSearchInput")?.addEventListener(
-    "input",
-    event => {
-
-      renderCourses(event.target.value);
-
-    }
-  );
-
-  /* ==========================================
-     ACTIVE SIDEBAR PAGE
-  ========================================== */
-
-  function updateActiveSidebar() {
-
-    const currentPage = decodeURIComponent(
-      window.location.pathname
-    ).split("/").pop().toLowerCase();
-
-    const currentHash = window.location.hash;
-
-    const links = Array.from(
-      document.querySelectorAll(
-        ".sd-side-nav .sd-side-link"
-      )
-    );
-
-    let activeLink = null;
-
-    // Find the current page
-    links.forEach(link => {
-
-      if (link.tagName !== "A") return;
-
-      const url = new URL(link.href);
-
-      const linkPage = decodeURIComponent(
-        url.pathname
-      ).split("/").pop().toLowerCase();
-
-      if (linkPage !== currentPage) return;
-
-      if (currentPage === "studentdashboard.html") {
-
-        const targetHash =
-          currentHash === "#progress"
-            ? "#progress"
-            : "#home";
-
-        if (url.hash === targetHash) {
-          activeLink = link;
+    /* DATA */
+
+    const data = {
+      courses: [
+        {
+          id: "neural-networks",
+          title: "Neural Networks",
+          category: "Artificial Intelligence",
+          description:
+            "Explore neural networks, deep learning and intelligent models.",
+          image:
+            "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=80",
+          progress: 68,
+          lessons: "8 of 12 lessons"
+        },
+        {
+          id: "operating-systems",
+          title: "Operating Systems",
+          category: "Computer Science",
+          description:
+            "Understand processes, memory management and modern operating systems.",
+          image:
+            "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=80",
+          progress: 42,
+          lessons: "5 of 12 lessons"
+        },
+        {
+          id: "data-structures",
+          title: "Data Structures",
+          category: "Programming",
+          description:
+            "Master arrays, linked lists, stacks, queues, trees and graphs.",
+          image:
+            "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80",
+          progress: 85,
+          lessons: "11 of 13 lessons"
         }
+      ],
 
-      } else if (!url.hash || url.hash === currentHash) {
+      plan: [
+        {
+          title: "Watch Lesson 9",
+          subtitle: "Neural Networks",
+          time: "30 min",
+          icon: "play-circle",
+          tone: "sd-blue"
+        },
+        {
+          title: "Take Quick Quiz",
+          subtitle: "Operating Systems",
+          time: "15 min",
+          icon: "clipboard-check",
+          tone: "sd-rose"
+        },
+        {
+          title: "Review Summary",
+          subtitle: "Data Structures",
+          time: "10 min",
+          icon: "book-open-check",
+          tone: "sd-mint"
+        }
+      ],
 
-        activeLink = link;
+      assessments: [
+        {
+          title: "Neural Networks Quiz",
+          course: "Neural Networks",
+          detail: "Score: 92%",
+          status: "Completed"
+        },
+        {
+          title: "OS Fundamentals Quiz",
+          course: "Operating Systems",
+          detail: "Not started",
+          status: "Upcoming"
+        },
+        {
+          title: "Data Structures Test",
+          course: "Data Structures",
+          detail: "Score: 88%",
+          status: "Completed"
+        }
+      ],
 
-      }
+      notifications: [
+        {
+          title: "New lesson available",
+          detail: "A new Neural Networks lesson is ready.",
+          time: "Today",
+          icon: "book-open",
+          read: false
+        },
+        {
+          title: "Assessment reminder",
+          detail: "Your Operating Systems quiz is coming up.",
+          time: "Yesterday",
+          icon: "clipboard-check",
+          read: false
+        },
+        {
+          title: "Great progress!",
+          detail: "You reached 85% in Data Structures.",
+          time: "2 days ago",
+          icon: "award",
+          read: true
+        }
+      ]
+    };
 
-    });
+    /* HELPERS */
 
-    // Keep the HTML active state if no URL matches
-    if (!activeLink) {
-      activeLink = links.find(link =>
-        link.tagName === "A" &&
-        link.classList.contains("active")
-      );
+    const $ = selector => document.querySelector(selector);
+
+    function make(tag, className = "", text = "") {
+      const element = document.createElement(tag);
+
+      element.className = className;
+      element.textContent = text;
+
+      return element;
     }
 
-    // Only one active link
-    links.forEach(link => {
+    function makeIcon(name) {
+      const element = document.createElement("i");
 
-      const isActive = link === activeLink;
+      element.setAttribute("data-lucide", name);
 
-      link.classList.toggle("active", isActive);
-
-      if (isActive) {
-        link.setAttribute("aria-current", "page");
-      } else {
-        link.removeAttribute("aria-current");
-      }
-
-    });
-
-  }
-
-  updateActiveSidebar();
-
-  window.addEventListener(
-    "hashchange",
-    updateActiveSidebar
-  );
-
-  window.addEventListener(
-    "pageshow",
-    updateActiveSidebar
-  );
-
-
-  /* SIDEBAR NAVIGATION */
-
-  document.querySelectorAll(
-    ".sd-side-nav a.sd-side-link"
-  ).forEach(link => {
-
-    link.addEventListener("click", () => {
-
-      setSidebar(false);
-
-      setNotifications(false);
-
-    });
-
-  });
-
-
-  /* STUDENT PROFILE */
-
-  const studentName = "Student";
-
-  const initials = studentName === "Student"
-    ? "ST"
-    : studentName
-      .split(/\s+/)
-      .slice(0, 2)
-      .map(part => part.charAt(0).toUpperCase())
-      .join("");
-
-  document.querySelectorAll(
-    "[data-sd-name]"
-  ).forEach(element => {
-
-    element.textContent = studentName;
-
-  });
-
-  document.querySelectorAll(
-    "[data-sd-avatar]"
-  ).forEach(element => {
-
-    element.textContent = initials;
-
-  });
-
-  setText(
-    "#sdFirstName",
-    studentName.split(/\s+/)[0]
-  );
-
-  /* CURRENT DATE */
-
-  setText(
-    "#sdTodayDate",
-    new Intl.DateTimeFormat("en", {
-      weekday: "short",
-      month: "short",
-      day: "numeric"
-    }).format(new Date())
-  );
-
-  /* LOG OUT */
-
-  $("#sdLogoutBtn")?.addEventListener(
-    "click",
-    () => {
-
-      const confirmed = window.confirm(
-        "Are you sure you want to log out?"
-      );
-
-      if (!confirmed) return;
-
-      window.alert(
-        "Demo mode: connect Log Out to your authentication system."
-      );
-
+      return element;
     }
-  );
 
+    function refreshIcons() {
+      if (window.lucide?.createIcons) {
+        window.lucide.createIcons();
+      }
+    }
 
+    function setText(selector, value) {
+      const element = $(selector);
 
-  /* ==========================================
-     EDUSAAS - RAG AI ASSISTANT
-     SINGLE PAGE
-  ========================================== */
+      if (element) {
+        element.textContent = value;
+      }
+    }
 
-  function initRagAssistant() {
+    function makeImage(course) {
+      const image = document.createElement("img");
 
-    /* PAGE ELEMENTS */
+      image.src = course.image;
+      image.alt = course.title;
+      image.loading = "lazy";
 
-    const coursesView = $("#ragCoursesView");
+      return image;
+    }
 
-    const chatView = $("#ragChatView");
+    function progressMeta(label, value) {
+      const wrapper = make("div", "sd-progress-meta");
 
-    const grid = $("#ragCourseGrid");
+      wrapper.append(
+        make("span", "", label),
+        make("strong", "", `${value}%`)
+      );
 
-    if (!coursesView || !chatView || !grid) return;
+      return wrapper;
+    }
 
+    function progressBar(value) {
+      const track = make("div", "sd-progress-track");
+      const fill = make("span", "sd-progress-fill");
 
-    /* CHAT ELEMENTS */
+      fill.style.width = `${value}%`;
 
-    const searchInput = $("#ragSearchInput");
+      track.append(fill);
 
-    const searchWrapper = $("#ragSearchWrapper");
+      return track;
+    }
 
-    const topbarTitle = $("#ragTopbarTitle");
+    /* ENROLLED COURSES */
 
-    const sidebarLink = $("#ragSidebarLink");
+    function renderCourses(search = "") {
 
-    const backBtn = $("#ragBackBtn");
+      const grid = $("#sdCourseGrid");
 
-    const newChatBtn = $("#ragNewChatBtn");
-
-    const courseTitle = $("#ragChatCourseTitle");
-
-    const courseId = $("#ragChatCourseId");
-
-    const form = $("#ragChatForm");
-
-    const messages = $("#ragChatMessages");
-
-    const welcome = $("#ragChatWelcome");
-
-    const messageInput = $("#ragMessageInput");
-
-    const uploadBtn = $("#ragUploadBtn");
-
-    const imageInput = $("#ragImageInput");
-
-    const imagePreview = $("#ragImagePreview");
-
-    const previewImage = $("#ragPreviewImage");
-
-    const imageName = $("#ragImageName");
-
-    const removeImageBtn = $("#ragRemoveImage");
-
-    const sendBtn = $("#ragSendBtn");
-
-    const errorMessage = $("#ragChatError");
-
-
-    /* RAG STATE */
-
-    let selectedCourse = null;
-
-    let selectedImage = null;
-
-    let imageData = null;
-
-    let imageLoading = false;
-
-    let imageVersion = 0;
-
-    let lastCourseButton = null;
-
-    let coursesScrollPosition = 0;
-
-
-    /* SEPARATE CHAT FOR EACH COURSE */
-
-    const conversations = new Map();
-
-
-    /* ==========================================
-       RENDER ENROLLED COURSES
-    ========================================== */
-
-    function renderRagCourses(search = "") {
+      if (!grid) return;
 
       grid.replaceChildren();
 
-      const enrolledCourses = data.courses;
-
-      const filteredCourses = enrolledCourses.filter(course =>
-
+      const filteredCourses = data.courses.filter(course =>
         `${course.title} ${course.category}`
           .toLowerCase()
           .includes(search.toLowerCase().trim())
-
       );
 
-      setText(
-        "#ragCourseCount",
-        `${filteredCourses.length} courses`
-      );
-
-      const empty = $("#ragSearchEmpty");
+      const empty = $("#sdSearchEmpty");
 
       if (empty) {
-
         empty.hidden = filteredCourses.length > 0;
-
-        empty.textContent = enrolledCourses.length === 0
-
-          ? "You have no enrolled courses yet."
-
-          : "No courses match your search.";
-
       }
 
       filteredCourses.forEach(course => {
 
-        /* COURSE CARD */
+        const card = make("article", "sd-course-card");
 
-        const card = make(
-          "article",
-          "rag-course-card"
+        const art = make("div", "sd-course-art");
+
+        art.append(makeImage(course));
+
+        const body = make("div", "sd-course-body");
+
+        const progress = make("div", "sd-course-progress");
+
+        progress.append(
+          progressMeta("Course Progress", course.progress),
+          progressBar(course.progress)
         );
 
+        const footer = make("div", "sd-course-footer");
 
-        /* COURSE IMAGE */
-
-        const art = make(
-          "div",
-          "rag-course-image"
-        );
-
-        art.append(
-          makeImage(course)
-        );
-
-
-        /* COURSE CONTENT */
-
-        const body = make(
-          "div",
-          "rag-course-body"
-        );
-
-        const category = make(
+        const lessons = make(
           "span",
-          "rag-course-category",
-          course.category
+          "sd-course-lessons",
+          course.lessons
         );
 
-        const title = make(
-          "h3",
-          "",
-          course.title
+        const button = make(
+          "a",
+          "sd-course-continue-btn",
+          "Continue Learning"
         );
 
-        const description = make(
-          "p",
-          "",
-          course.description
-        );
+        // Demo link until lesson pages are created
 
+        button.href = "StudentDashboard.html#progress";
 
-        /* START CHAT BUTTON */
+        button.append(makeIcon("arrow-right"));
 
-        const chatButton = make(
-          "button",
-          "rag-start-btn"
-        );
-
-        chatButton.type = "button";
-
-        chatButton.setAttribute(
-          "aria-label",
-          `Start chat for ${course.title}`
-        );
-
-        chatButton.append(
-          makeIcon("message-circle"),
-          make("span", "", "Start Chat"),
-          makeIcon("arrow-right")
-        );
-
-
-        /* OPEN CHAT IN SAME PAGE */
-
-        chatButton.addEventListener(
-          "click",
-          () => {
-
-            lastCourseButton = chatButton;
-
-            openChat(course);
-
-          }
-        );
-
-
-        /* APPEND CARD CONTENT */
+        footer.append(lessons, button);
 
         body.append(
-          category,
-          title,
-          description,
-          chatButton
+          make("span", "sd-course-category", course.category),
+          make("h3", "", course.title),
+          make("p", "", course.description),
+          progress,
+          footer
         );
 
-        card.append(
-          art,
-          body
-        );
+        card.append(art, body);
 
         grid.append(card);
 
       });
 
+      setText(
+        "#sdCourseCount",
+        `${filteredCourses.length} courses`
+      );
+
       refreshIcons();
-
     }
 
+    /* CONTINUE LEARNING */
 
-    /* ==========================================
-       SIDEBAR ACTIVE STATE
-    ========================================== */
-    function keepAssistantActive() {
-      updateActiveSidebar();
+    function renderFeatured() {
+
+      const container = $("#sdContinueCourse");
+
+      if (!container) return;
+
+      container.replaceChildren();
+
+      const course = data.courses[0];
+
+      if (!course) {
+        container.textContent = "No enrolled courses yet.";
+        return;
+      }
+
+      const wrapper = make("div", "sd-featured-course");
+
+      const art = make("div", "sd-featured-art");
+
+      art.append(makeImage(course));
+
+      const details = make("div", "sd-featured-details");
+
+      const button = make(
+        "a",
+        "sd-primary-btn",
+        "Continue Learning"
+      );
+
+      button.href = "StudentDashboard.html#progress";
+
+      button.append(makeIcon("arrow-right"));
+
+      details.append(
+        make("span", "sd-course-category", course.category),
+        make("h3", "", course.title),
+        make("p", "", course.lessons),
+        progressMeta("Progress", course.progress),
+        progressBar(course.progress),
+        button
+      );
+
+      wrapper.append(art, details);
+
+      container.append(wrapper);
     }
 
+    /* TODAY'S PLAN */
 
-    /* ==========================================
-       OPEN CHAT
-    ========================================== */
+    function renderPlan() {
 
-    function openChat(course) {
+      const container = $("#sdTodayPlan");
 
-      if (!course) return;
+      if (!container) return;
 
-      coursesScrollPosition = window.scrollY;
+      container.replaceChildren();
 
-      selectedCourse = course;
+      data.plan.forEach(item => {
 
+        const row = make("div", "sd-plan-item");
 
-      /* UPDATE COURSE HEADER */
+        const symbol = make(
+          "span",
+          `sd-mini-icon ${item.tone}`
+        );
 
-      courseTitle.textContent =
-        selectedCourse.title;
+        symbol.append(makeIcon(item.icon));
 
-      courseId.textContent =
-        `Course ID: ${selectedCourse.id}`;
+        const copy = make("div", "sd-plan-copy");
 
+        copy.append(
+          make("strong", "", item.title),
+          make("small", "", item.subtitle)
+        );
 
-      /* UPDATE PAGE TITLE */
+        row.append(
+          symbol,
+          copy,
+          make("span", "sd-plan-time", item.time)
+        );
 
-      document.title =
-        `${selectedCourse.title} | AI Assistant | EduSaaS`;
+        container.append(row);
 
+      });
+    }
 
-      /* SWITCH VIEWS */
+    /* PROGRESS */
 
-      coursesView.hidden = true;
+    function renderProgress() {
 
-      chatView.hidden = false;
+      const courses = data.courses;
 
+      const average = courses.length
+        ? Math.round(
+          courses.reduce(
+            (sum, course) => sum + course.progress,
+            0
+          ) / courses.length
+        )
+        : 0;
 
-      /* SWITCH TOPBAR CONTENT */
+      setText("#sdStatCourses", courses.length);
 
-      if (searchWrapper) {
+      setText("#sdStatProgress", `${average}%`);
 
-        searchWrapper.hidden = true;
+      setText("#sdProgressRingText", `${average}%`);
+
+      const ring = $("#sdProgressRing");
+
+      if (ring) {
+
+        ring.style.background =
+          `conic-gradient(
+          var(--color-mint) ${average}%,
+          var(--color-background) ${average}%
+        )`;
 
       }
 
-      if (topbarTitle) {
+      const container = $("#sdProgressBars");
 
-        topbarTitle.hidden = false;
+      if (!container) return;
 
+      container.replaceChildren();
+
+      courses.forEach(course => {
+
+        const item = make("div", "sd-progress-item");
+
+        item.append(
+          progressMeta(course.title, course.progress),
+          progressBar(course.progress)
+        );
+
+        container.append(item);
+
+      });
+    }
+
+    /* ASSESSMENTS */
+
+    function renderAssessments() {
+
+      const completed = data.assessments.filter(
+        assessment => assessment.status === "Completed"
+      ).length;
+
+      setText("#sdStatAssessments", completed);
+
+      const container = $("#sdAssessmentList");
+
+      if (!container) return;
+
+      container.replaceChildren();
+
+      data.assessments.forEach(assessment => {
+
+        const row = make("div", "sd-list-item");
+
+        const symbol = make(
+          "span",
+          "sd-mini-icon sd-blue"
+        );
+
+        symbol.append(makeIcon("clipboard-check"));
+
+        const copy = make("div", "sd-list-copy");
+
+        copy.append(
+          make("strong", "", assessment.title),
+          make(
+            "small",
+            "",
+            `${assessment.course} · ${assessment.detail}`
+          )
+        );
+
+        const status = make(
+          "span",
+          "sd-status-pill" +
+          (assessment.status === "Upcoming"
+            ? " upcoming"
+            : ""),
+          assessment.status
+        );
+
+        row.append(symbol, copy, status);
+
+        container.append(row);
+
+      });
+    }
+
+    /* NOTIFICATIONS */
+
+    function createNotification(notification) {
+
+      const row = make(
+        "div",
+        "sd-list-item" +
+        (!notification.read ? " unread" : "")
+      );
+
+      const symbol = make(
+        "span",
+        "sd-mini-icon sd-rose"
+      );
+
+      symbol.append(makeIcon(notification.icon));
+
+      const copy = make("div", "sd-list-copy");
+
+      copy.append(
+        make("strong", "", notification.title),
+        make("small", "", notification.detail),
+        make(
+          "span",
+          "sd-notification-time",
+          notification.time
+        )
+      );
+
+      row.append(symbol, copy);
+
+      if (!notification.read) {
+        row.append(make("span", "sd-unread-mark"));
       }
 
+      return row;
+    }
 
-      /* RESET COMPOSER */
+    function renderNotifications() {
 
-      messageInput.value = "";
+      const overview = $("#sdNotificationList");
 
-      clearImage();
+      const dropdown = $("#sdDropdownNotificationList");
 
-      clearError();
+      // Home Overview
 
-      resizeTextarea();
+      if (overview) {
 
+        overview.replaceChildren();
 
-      /* LOAD COURSE CONVERSATION */
+        data.notifications.slice(0, 3)
+          .forEach(notification => {
 
-      renderConversation();
+            overview.append(
+              createNotification(notification)
+            );
 
+          });
+      }
 
-      /* KEEP SIDEBAR ACTIVE */
+      // Header Dropdown
 
-      keepAssistantActive();
+      if (dropdown) {
 
+        dropdown.replaceChildren();
 
-      /* CLOSE MOBILE SIDEBAR */
+        data.notifications.forEach(notification => {
+
+          dropdown.append(
+            createNotification(notification)
+          );
+
+        });
+      }
+
+      // Unread Counter
+
+      const unread = data.notifications.filter(
+        notification => !notification.read
+      ).length;
+
+      setText("#sdStatUnread", unread);
+
+      setText("#sdNavUnread", unread);
+
+      const navUnread = $("#sdNavUnread");
+
+      const topDot = $("#sdTopDot");
+
+      if (navUnread) {
+        navUnread.hidden = unread === 0;
+      }
+
+      if (topDot) {
+        topDot.hidden = unread === 0;
+      }
+
+      setText(
+        "#sdDropdownUnread",
+        unread === 0
+          ? "You're all caught up!"
+          : `${unread} unread notification${unread === 1 ? "" : "s"}`
+      );
+
+      refreshIcons();
+    }
+
+    /* MOBILE SIDEBAR */
+
+    const sidebar = $("#sdSidebar");
+
+    const backdrop = $("#sdBackdrop");
+
+    const menuBtn = $("#sdMenuBtn");
+
+    function setSidebar(open) {
+
+      sidebar?.classList.toggle("open", open);
+
+      backdrop?.classList.toggle("open", open);
+
+      if (backdrop) {
+        backdrop.hidden = !open;
+      }
+
+      menuBtn?.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
+    }
+
+    menuBtn?.addEventListener("click", () => {
+
+      const isOpen = sidebar?.classList.contains("open");
+
+      setSidebar(!isOpen);
+
+    });
+
+    backdrop?.addEventListener("click", () => {
 
       setSidebar(false);
 
-      setNotifications(false);
+    });
 
+    /* NOTIFICATION DROPDOWN */
 
-      /* SCROLL TO TOP */
+    const notificationDropdown =
+      $("#sdNotificationDropdown");
 
-      window.scrollTo({
-        top: 0,
-        behavior: "instant"
-      });
+    const notificationBtn =
+      $("#sdNotificationBtn");
 
-      courseTitle.focus({
-        preventScroll: true
-      });
+    const sidebarNotificationBtn =
+      $("#sdSidebarNotificationBtn");
 
-      refreshIcons();
+    const viewNotificationsBtn =
+      $("#sdViewNotifications");
 
-      updateSendButton();
+    function setNotifications(open) {
 
+      if (!notificationDropdown) return;
+
+      notificationDropdown.hidden = !open;
+
+      notificationBtn?.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
+
+      sidebarNotificationBtn?.setAttribute(
+        "aria-expanded",
+        String(open)
+      );
     }
 
+    function toggleNotifications() {
 
-    /* ==========================================
-       BACK TO COURSES
-    ========================================== */
+      if (!notificationDropdown) return;
 
-    function showCourses() {
+      const shouldOpen = notificationDropdown.hidden;
 
-      const wasChatOpen = !chatView.hidden;
-
-
-      /* SWITCH VIEWS */
-
-      chatView.hidden = true;
-
-      coursesView.hidden = false;
-
-
-      /* RESTORE SEARCH */
-
-      if (searchWrapper) {
-
-        searchWrapper.hidden = false;
-
+      if (shouldOpen) {
+        setSidebar(false);
       }
 
-      if (topbarTitle) {
+      setNotifications(shouldOpen);
+    }
 
-        topbarTitle.hidden = true;
+    // Header Bell
 
-      }
+    if (
+      notificationBtn &&
+      notificationBtn.dataset.notificationInitialized !== "true"
+    ) {
+      notificationBtn.dataset.notificationInitialized = "true";
+      notificationBtn.addEventListener(
+        "click",
+        toggleNotifications
+      );
+    }
 
+    // Sidebar Notifications
 
-      /* RESET CURRENT COURSE */
+    if (
+      sidebarNotificationBtn &&
+      sidebarNotificationBtn.dataset.notificationInitialized !== "true"
+    ) {
+      sidebarNotificationBtn.dataset.notificationInitialized = "true";
+      sidebarNotificationBtn.addEventListener(
+        "click",
+        toggleNotifications
+      );
+    }
 
-      selectedCourse = null;
+    // Home Overview - View All
 
-      messageInput.value = "";
+    viewNotificationsBtn?.addEventListener(
+      "click",
+      () => {
 
-      clearImage();
-
-      clearError();
-
-
-      /* RESET PAGE TITLE */
-
-      document.title =
-        "AI Assistant | EduSaaS";
-
-
-      /* KEEP SIDEBAR ACTIVE */
-
-      keepAssistantActive();
-
-      setSidebar(false);
-
-      setNotifications(false);
-
-      refreshIcons();
-
-
-      /* RESTORE COURSE POSITION */
-
-      if (wasChatOpen) {
+        setSidebar(false);
 
         window.scrollTo({
-          top: coursesScrollPosition,
-          behavior: "instant"
+          top: 0,
+          behavior: "smooth"
         });
 
-        lastCourseButton?.focus({
-          preventScroll: true
-        });
+        setNotifications(true);
 
       }
+    );
+
+    // Close Button
+
+    const closeNotificationsButton =
+      $("#sdCloseNotifications");
+
+    if (
+      closeNotificationsButton &&
+      closeNotificationsButton.dataset.notificationInitialized !== "true"
+    ) {
+      closeNotificationsButton.dataset.notificationInitialized = "true";
+      closeNotificationsButton.addEventListener(
+        "click",
+        () => {
+
+          setNotifications(false);
+
+          notificationBtn?.focus();
+
+        }
+      );
+    }
+
+    // Close when clicking outside
+
+    if (
+      notificationDropdown &&
+      notificationDropdown.dataset.outsideDismissInitialized !== "true"
+    ) {
+      notificationDropdown.dataset.outsideDismissInitialized = "true";
+
+      document.addEventListener("click", event => {
+
+        if (notificationDropdown.hidden) return;
+
+        const clickedInside =
+          notificationDropdown.contains(event.target);
+
+        const clickedBell =
+          notificationBtn?.contains(event.target);
+
+        const clickedSidebar =
+          sidebarNotificationBtn?.contains(event.target);
+
+        const clickedViewAll =
+          viewNotificationsBtn?.contains(event.target);
+
+        if (
+          !clickedInside &&
+          !clickedBell &&
+          !clickedSidebar &&
+          !clickedViewAll
+        ) {
+
+          setNotifications(false);
+
+        }
+      });
+    }
+
+    // Escape Key
+
+    if (
+      notificationDropdown &&
+      notificationDropdown.dataset.escapeDismissInitialized !== "true"
+    ) {
+      notificationDropdown.dataset.escapeDismissInitialized = "true";
+
+      document.addEventListener("keydown", event => {
+
+        if (event.key !== "Escape") return;
+
+        if (!notificationDropdown.hidden) {
+
+          setNotifications(false);
+
+          notificationBtn?.focus();
+
+        }
+
+        setSidebar(false);
+
+      });
+    }
+
+    /* MARK ALL AS READ */
+
+    const markReadButton = $("#sdDropdownMarkRead");
+
+    if (
+      markReadButton &&
+      markReadButton.dataset.notificationInitialized !== "true"
+    ) {
+      markReadButton.dataset.notificationInitialized = "true";
+      markReadButton.addEventListener(
+        "click",
+        () => {
+
+          data.notifications.forEach(notification => {
+            notification.read = true;
+          });
+
+          renderNotifications();
+
+        }
+      );
+    }
+
+    /* SEARCH */
+
+    $("#sdSearchInput")?.addEventListener(
+      "input",
+      event => {
+
+        renderCourses(event.target.value);
+
+      }
+    );
+
+    /* ==========================================
+       ACTIVE SIDEBAR PAGE
+    ========================================== */
+
+    function updateActiveSidebar() {
+
+      const currentPage = decodeURIComponent(
+        window.location.pathname
+      ).split("/").pop().toLowerCase();
+
+      const currentHash = window.location.hash;
+
+      const links = Array.from(
+        document.querySelectorAll(
+          ".sd-side-nav .sd-side-link"
+        )
+      );
+
+      let activeLink = null;
+
+      // Find the current page
+      links.forEach(link => {
+
+        if (link.tagName !== "A") return;
+
+        const url = new URL(link.href);
+
+        const linkPage = decodeURIComponent(
+          url.pathname
+        ).split("/").pop().toLowerCase();
+
+        if (linkPage !== currentPage) return;
+
+        if (currentPage === "studentdashboard.html") {
+
+          const targetHash =
+            currentHash === "#progress"
+              ? "#progress"
+              : "#home";
+
+          if (url.hash === targetHash) {
+            activeLink = link;
+          }
+
+        } else if (!url.hash || url.hash === currentHash) {
+
+          activeLink = link;
+
+        }
+
+      });
+
+      // Keep the HTML active state if no URL matches
+      if (!activeLink) {
+        activeLink = links.find(link =>
+          link.tagName === "A" &&
+          link.classList.contains("active")
+        );
+      }
+
+      // Only one active link
+      links.forEach(link => {
+
+        const isActive = link === activeLink;
+
+        link.classList.toggle("active", isActive);
+
+        if (isActive) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+
+      });
 
     }
 
+    updateActiveSidebar();
 
-    /* BACK BUTTON */
+    window.addEventListener(
+      "hashchange",
+      updateActiveSidebar
+    );
 
-    backBtn.addEventListener(
-      "click",
-      showCourses
+    window.addEventListener(
+      "pageshow",
+      updateActiveSidebar
     );
 
 
-    /* AI ASSISTANT SIDEBAR LINK */
+    /* SIDEBAR NAVIGATION */
 
-    sidebarLink?.addEventListener("click", event => {
+    document.querySelectorAll(
+      ".sd-side-nav a.sd-side-link"
+    ).forEach(link => {
 
-      const currentPage =
-        window.location.pathname.split("/").pop();
+      link.addEventListener("click", () => {
 
-      if (currentPage !== "aitutor.html") return;
+        setSidebar(false);
 
-      event.preventDefault();
+        setNotifications(false);
 
-      showCourses();
+      });
 
     });
 
 
-    /* ==========================================
-       SEARCH COURSES
-    ========================================== */
+    /* STUDENT PROFILE */
 
-    searchInput?.addEventListener(
-      "input",
-      event => {
+    const studentName = "Student";
 
-        renderRagCourses(
-          event.target.value
+    const initials = studentName === "Student"
+      ? "ST"
+      : studentName
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(part => part.charAt(0).toUpperCase())
+        .join("");
+
+    document.querySelectorAll(
+      "[data-sd-name]"
+    ).forEach(element => {
+
+      element.textContent = studentName;
+
+    });
+
+    document.querySelectorAll(
+      "[data-sd-avatar]"
+    ).forEach(element => {
+
+      element.textContent = initials;
+
+    });
+
+    setText(
+      "#sdFirstName",
+      studentName.split(/\s+/)[0]
+    );
+
+    /* CURRENT DATE */
+
+    setText(
+      "#sdTodayDate",
+      new Intl.DateTimeFormat("en", {
+        weekday: "short",
+        month: "short",
+        day: "numeric"
+      }).format(new Date())
+    );
+
+    /* LOG OUT */
+
+    $("#sdLogoutBtn")?.addEventListener(
+      "click",
+      () => {
+
+        const confirmed = window.confirm(
+          "Are you sure you want to log out?"
+        );
+
+        if (!confirmed) return;
+
+        window.alert(
+          "Demo mode: connect Log Out to your authentication system."
         );
 
       }
     );
 
 
-    /* ==========================================
-       CHAT ERROR
-    ========================================== */
-
-    function showError(text) {
-
-      if (!errorMessage) return;
-
-      errorMessage.textContent = text;
-
-      errorMessage.hidden = false;
-
-    }
-
-
-    function clearError() {
-
-      if (!errorMessage) return;
-
-      errorMessage.textContent = "";
-
-      errorMessage.hidden = true;
-
-    }
-
 
     /* ==========================================
-       SEND BUTTON STATE
+       EDUSAAS - RAG AI ASSISTANT
+       SINGLE PAGE
     ========================================== */
 
-    function updateSendButton() {
+    function initRagAssistant() {
 
-      const hasText =
-        messageInput.value.trim().length > 0;
+      /* PAGE ELEMENTS */
 
-      const hasImage =
-        Boolean(selectedImage && imageData);
+      const coursesView = $("#ragCoursesView");
 
-      sendBtn.disabled =
+      const chatView = $("#ragChatView");
 
-        !selectedCourse ||
+      const grid = $("#ragCourseGrid");
 
-        imageLoading ||
-
-        (!hasText && !hasImage);
-
-    }
+      if (!coursesView || !chatView || !grid) return;
 
 
-    /* ==========================================
-       AUTO RESIZE TEXTAREA
-    ========================================== */
+      /* CHAT ELEMENTS */
 
-    function resizeTextarea() {
+      const searchInput = $("#ragSearchInput");
 
-      messageInput.style.height = "auto";
+      const searchWrapper = $("#ragSearchWrapper");
 
-      messageInput.style.height =
+      const topbarTitle = $("#ragTopbarTitle");
 
-        `${Math.min(messageInput.scrollHeight, 140)}px`;
+      const sidebarLink = $("#ragSidebarLink");
 
-    }
+      const backBtn = $("#ragBackBtn");
+
+      const newChatBtn = $("#ragNewChatBtn");
+
+      const courseTitle = $("#ragChatCourseTitle");
+
+      const courseId = $("#ragChatCourseId");
+
+      const form = $("#ragChatForm");
+
+      const messages = $("#ragChatMessages");
+
+      const welcome = $("#ragChatWelcome");
+
+      const messageInput = $("#ragMessageInput");
+
+      const uploadBtn = $("#ragUploadBtn");
+
+      const imageInput = $("#ragImageInput");
+
+      const imagePreview = $("#ragImagePreview");
+
+      const previewImage = $("#ragPreviewImage");
+
+      const imageName = $("#ragImageName");
+
+      const removeImageBtn = $("#ragRemoveImage");
+
+      const sendBtn = $("#ragSendBtn");
+
+      const errorMessage = $("#ragChatError");
 
 
-    messageInput.addEventListener(
-      "input",
-      () => {
+      /* RAG STATE */
+
+      let selectedCourse = null;
+
+      let selectedImage = null;
+
+      let imageData = null;
+
+      let imageLoading = false;
+
+      let imageVersion = 0;
+
+      let lastCourseButton = null;
+
+      let coursesScrollPosition = 0;
+
+
+      /* SEPARATE CHAT FOR EACH COURSE */
+
+      const conversations = new Map();
+
+
+      /* ==========================================
+         RENDER ENROLLED COURSES
+      ========================================== */
+
+      function renderRagCourses(search = "") {
+
+        grid.replaceChildren();
+
+        const enrolledCourses = data.courses;
+
+        const filteredCourses = enrolledCourses.filter(course =>
+
+          `${course.title} ${course.category}`
+            .toLowerCase()
+            .includes(search.toLowerCase().trim())
+
+        );
+
+        setText(
+          "#ragCourseCount",
+          `${filteredCourses.length} courses`
+        );
+
+        const empty = $("#ragSearchEmpty");
+
+        if (empty) {
+
+          empty.hidden = filteredCourses.length > 0;
+
+          empty.textContent = enrolledCourses.length === 0
+
+            ? "You have no enrolled courses yet."
+
+            : "No courses match your search.";
+
+        }
+
+        filteredCourses.forEach(course => {
+
+          /* COURSE CARD */
+
+          const card = make(
+            "article",
+            "rag-course-card"
+          );
+
+
+          /* COURSE IMAGE */
+
+          const art = make(
+            "div",
+            "rag-course-image"
+          );
+
+          art.append(
+            makeImage(course)
+          );
+
+
+          /* COURSE CONTENT */
+
+          const body = make(
+            "div",
+            "rag-course-body"
+          );
+
+          const category = make(
+            "span",
+            "rag-course-category",
+            course.category
+          );
+
+          const title = make(
+            "h3",
+            "",
+            course.title
+          );
+
+          const description = make(
+            "p",
+            "",
+            course.description
+          );
+
+
+          /* START CHAT BUTTON */
+
+          const chatButton = make(
+            "button",
+            "rag-start-btn"
+          );
+
+          chatButton.type = "button";
+
+          chatButton.setAttribute(
+            "aria-label",
+            `Start chat for ${course.title}`
+          );
+
+          chatButton.append(
+            makeIcon("message-circle"),
+            make("span", "", "Start Chat"),
+            makeIcon("arrow-right")
+          );
+
+
+          /* OPEN CHAT IN SAME PAGE */
+
+          chatButton.addEventListener(
+            "click",
+            () => {
+
+              lastCourseButton = chatButton;
+
+              openChat(course);
+
+            }
+          );
+
+
+          /* APPEND CARD CONTENT */
+
+          body.append(
+            category,
+            title,
+            description,
+            chatButton
+          );
+
+          card.append(
+            art,
+            body
+          );
+
+          grid.append(card);
+
+        });
+
+        refreshIcons();
+
+      }
+
+
+      /* ==========================================
+         SIDEBAR ACTIVE STATE
+      ========================================== */
+      function keepAssistantActive() {
+        updateActiveSidebar();
+      }
+
+
+      /* ==========================================
+         OPEN CHAT
+      ========================================== */
+
+      function openChat(course) {
+
+        if (!course) return;
+
+        coursesScrollPosition = window.scrollY;
+
+        selectedCourse = course;
+
+
+        /* UPDATE COURSE HEADER */
+
+        courseTitle.textContent =
+          selectedCourse.title;
+
+        courseId.textContent =
+          `Course ID: ${selectedCourse.id}`;
+
+
+        /* UPDATE PAGE TITLE */
+
+        document.title =
+          `${selectedCourse.title} | AI Assistant | EduSaaS`;
+
+
+        /* SWITCH VIEWS */
+
+        coursesView.hidden = true;
+
+        chatView.hidden = false;
+
+
+        /* SWITCH TOPBAR CONTENT */
+
+        if (searchWrapper) {
+
+          searchWrapper.hidden = true;
+
+        }
+
+        if (topbarTitle) {
+
+          topbarTitle.hidden = false;
+
+        }
+
+
+        /* RESET COMPOSER */
+
+        messageInput.value = "";
+
+        clearImage();
+
+        clearError();
 
         resizeTextarea();
+
+
+        /* LOAD COURSE CONVERSATION */
+
+        renderConversation();
+
+
+        /* KEEP SIDEBAR ACTIVE */
+
+        keepAssistantActive();
+
+
+        /* CLOSE MOBILE SIDEBAR */
+
+        setSidebar(false);
+
+        setNotifications(false);
+
+
+        /* SCROLL TO TOP */
+
+        window.scrollTo({
+          top: 0,
+          behavior: "instant"
+        });
+
+        courseTitle.focus({
+          preventScroll: true
+        });
+
+        refreshIcons();
 
         updateSendButton();
 
       }
-    );
 
 
-    /* ==========================================
-       SCROLL CHAT
-    ========================================== */
+      /* ==========================================
+         BACK TO COURSES
+      ========================================== */
 
-    function scrollToBottom() {
+      function showCourses() {
 
-      messages.scrollTop =
-        messages.scrollHeight;
-
-    }
+        const wasChatOpen = !chatView.hidden;
 
 
-    /* ==========================================
-       IMAGE UPLOAD
-    ========================================== */
+        /* SWITCH VIEWS */
 
-    uploadBtn.addEventListener(
-      "click",
-      () => {
+        chatView.hidden = true;
 
-        imageInput.click();
-
-      }
-    );
+        coursesView.hidden = false;
 
 
-    /* CLEAR SELECTED IMAGE */
+        /* RESTORE SEARCH */
 
-    function clearImage() {
+        if (searchWrapper) {
 
-      imageVersion++;
+          searchWrapper.hidden = false;
 
-      selectedImage = null;
+        }
 
-      imageData = null;
+        if (topbarTitle) {
 
-      imageLoading = false;
+          topbarTitle.hidden = true;
 
-      imageInput.value = "";
-
-      previewImage.removeAttribute("src");
-
-      imageName.textContent = "";
-
-      imagePreview.hidden = true;
-
-      updateSendButton();
-
-    }
+        }
 
 
-    /* SELECT IMAGE */
+        /* RESET CURRENT COURSE */
 
-    imageInput.addEventListener(
-      "change",
-      () => {
+        selectedCourse = null;
 
-        const file = imageInput.files[0];
+        messageInput.value = "";
 
-        if (!file || !selectedCourse) return;
+        clearImage();
 
         clearError();
 
-        const allowedTypes = [
 
-          "image/jpeg",
+        /* RESET PAGE TITLE */
 
-          "image/png",
-
-          "image/webp"
-
-        ];
+        document.title =
+          "AI Assistant | EduSaaS";
 
 
-        /* VALIDATE FILE TYPE */
+        /* KEEP SIDEBAR ACTIVE */
 
-        if (!allowedTypes.includes(file.type)) {
+        keepAssistantActive();
 
-          clearImage();
+        setSidebar(false);
 
-          showError(
-            "Please select a JPG, PNG or WEBP image."
-          );
+        setNotifications(false);
 
-          return;
-
-        }
+        refreshIcons();
 
 
-        /* VALIDATE FILE SIZE */
+        /* RESTORE COURSE POSITION */
 
-        if (file.size > 10 * 1024 * 1024) {
+        if (wasChatOpen) {
 
-          clearImage();
+          window.scrollTo({
+            top: coursesScrollPosition,
+            behavior: "instant"
+          });
 
-          showError(
-            "Image size must not exceed 10 MB."
-          );
-
-          return;
+          lastCourseButton?.focus({
+            preventScroll: true
+          });
 
         }
 
+      }
 
-        /* IMAGE STATE */
 
-        const version = ++imageVersion;
+      /* BACK BUTTON */
 
-        selectedImage = file;
+      backBtn.addEventListener(
+        "click",
+        showCourses
+      );
+
+
+      /* AI ASSISTANT SIDEBAR LINK */
+
+      sidebarLink?.addEventListener("click", event => {
+
+        const currentPage =
+          window.location.pathname.split("/").pop();
+
+        if (currentPage !== "aitutor.html") return;
+
+        event.preventDefault();
+
+        showCourses();
+
+      });
+
+
+      /* ==========================================
+         SEARCH COURSES
+      ========================================== */
+
+      searchInput?.addEventListener(
+        "input",
+        event => {
+
+          renderRagCourses(
+            event.target.value
+          );
+
+        }
+      );
+
+
+      /* ==========================================
+         CHAT ERROR
+      ========================================== */
+
+      function showError(text) {
+
+        if (!errorMessage) return;
+
+        errorMessage.textContent = text;
+
+        errorMessage.hidden = false;
+
+      }
+
+
+      function clearError() {
+
+        if (!errorMessage) return;
+
+        errorMessage.textContent = "";
+
+        errorMessage.hidden = true;
+
+      }
+
+
+      /* ==========================================
+         SEND BUTTON STATE
+      ========================================== */
+
+      function updateSendButton() {
+
+        const hasText =
+          messageInput.value.trim().length > 0;
+
+        const hasImage =
+          Boolean(selectedImage && imageData);
+
+        sendBtn.disabled =
+
+          !selectedCourse ||
+
+          imageLoading ||
+
+          (!hasText && !hasImage);
+
+      }
+
+
+      /* ==========================================
+         AUTO RESIZE TEXTAREA
+      ========================================== */
+
+      function resizeTextarea() {
+
+        messageInput.style.height = "auto";
+
+        messageInput.style.height =
+
+          `${Math.min(messageInput.scrollHeight, 140)}px`;
+
+      }
+
+
+      messageInput.addEventListener(
+        "input",
+        () => {
+
+          resizeTextarea();
+
+          updateSendButton();
+
+        }
+      );
+
+
+      /* ==========================================
+         SCROLL CHAT
+      ========================================== */
+
+      function scrollToBottom() {
+
+        messages.scrollTop =
+          messages.scrollHeight;
+
+      }
+
+
+      /* ==========================================
+         IMAGE UPLOAD
+      ========================================== */
+
+      uploadBtn.addEventListener(
+        "click",
+        () => {
+
+          imageInput.click();
+
+        }
+      );
+
+
+      /* CLEAR SELECTED IMAGE */
+
+      function clearImage() {
+
+        imageVersion++;
+
+        selectedImage = null;
 
         imageData = null;
 
-        imageLoading = true;
+        imageLoading = false;
+
+        imageInput.value = "";
+
+        previewImage.removeAttribute("src");
+
+        imageName.textContent = "";
 
         imagePreview.hidden = true;
 
         updateSendButton();
 
+      }
 
-        /* READ IMAGE */
 
-        const reader = new FileReader();
+      /* SELECT IMAGE */
 
-        reader.onload = () => {
+      imageInput.addEventListener(
+        "change",
+        () => {
 
-          if (version !== imageVersion) return;
+          const file = imageInput.files[0];
 
-          const imageCheck = new Image();
+          if (!file || !selectedCourse) return;
 
-          imageCheck.onload = () => {
+          clearError();
+
+          const allowedTypes = [
+
+            "image/jpeg",
+
+            "image/png",
+
+            "image/webp"
+
+          ];
+
+
+          /* VALIDATE FILE TYPE */
+
+          if (!allowedTypes.includes(file.type)) {
+
+            clearImage();
+
+            showError(
+              "Please select a JPG, PNG or WEBP image."
+            );
+
+            return;
+
+          }
+
+
+          /* VALIDATE FILE SIZE */
+
+          if (file.size > 10 * 1024 * 1024) {
+
+            clearImage();
+
+            showError(
+              "Image size must not exceed 10 MB."
+            );
+
+            return;
+
+          }
+
+
+          /* IMAGE STATE */
+
+          const version = ++imageVersion;
+
+          selectedImage = file;
+
+          imageData = null;
+
+          imageLoading = true;
+
+          imagePreview.hidden = true;
+
+          updateSendButton();
+
+
+          /* READ IMAGE */
+
+          const reader = new FileReader();
+
+          reader.onload = () => {
 
             if (version !== imageVersion) return;
 
-            imageData = reader.result;
+            const imageCheck = new Image();
 
-            previewImage.src = imageData;
+            imageCheck.onload = () => {
 
-            imageName.textContent = file.name;
+              if (version !== imageVersion) return;
 
-            imagePreview.hidden = false;
+              imageData = reader.result;
 
-            imageLoading = false;
+              previewImage.src = imageData;
 
-            updateSendButton();
+              imageName.textContent = file.name;
+
+              imagePreview.hidden = false;
+
+              imageLoading = false;
+
+              updateSendButton();
+
+            };
+
+            imageCheck.onerror = () => {
+
+              if (version !== imageVersion) return;
+
+              clearImage();
+
+              showError(
+                "This image could not be opened."
+              );
+
+            };
+
+            imageCheck.src = reader.result;
 
           };
 
-          imageCheck.onerror = () => {
+
+          reader.onerror = () => {
 
             if (version !== imageVersion) return;
 
             clearImage();
 
             showError(
-              "This image could not be opened."
+              "Unable to open this image. Please try again."
             );
 
           };
 
-          imageCheck.src = reader.result;
+          reader.readAsDataURL(file);
 
-        };
-
-
-        reader.onerror = () => {
-
-          if (version !== imageVersion) return;
-
-          clearImage();
-
-          showError(
-            "Unable to open this image. Please try again."
-          );
-
-        };
-
-        reader.readAsDataURL(file);
-
-      }
-    );
+        }
+      );
 
 
-    /* REMOVE IMAGE */
+      /* REMOVE IMAGE */
 
-    removeImageBtn.addEventListener(
-      "click",
-      () => {
-
-        clearImage();
-
-        clearError();
-
-        messageInput.focus();
-
-      }
-    );
-
-
-    /* ==========================================
-       SUGGESTED QUESTIONS
-    ========================================== */
-
-    chatView.querySelectorAll(
-      "[data-rag-prompt]"
-    ).forEach(button => {
-
-      button.addEventListener(
+      removeImageBtn.addEventListener(
         "click",
         () => {
 
-          messageInput.value =
-            button.dataset.ragPrompt;
+          clearImage();
+
+          clearError();
+
+          messageInput.focus();
+
+        }
+      );
+
+
+      /* ==========================================
+         SUGGESTED QUESTIONS
+      ========================================== */
+
+      chatView.querySelectorAll(
+        "[data-rag-prompt]"
+      ).forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            messageInput.value =
+              button.dataset.ragPrompt;
+
+            resizeTextarea();
+
+            updateSendButton();
+
+            messageInput.focus();
+
+          }
+        );
+
+      });
+
+
+      /* ==========================================
+         GET COURSE CONVERSATION
+      ========================================== */
+
+      function getConversation() {
+
+        if (!selectedCourse) return [];
+
+        if (!conversations.has(selectedCourse.id)) {
+
+          conversations.set(
+            selectedCourse.id,
+            []
+          );
+
+        }
+
+        return conversations.get(
+          selectedCourse.id
+        );
+
+      }
+
+
+      /* ==========================================
+         CREATE MESSAGE ELEMENT
+      ========================================== */
+
+      function createMessageElement(message) {
+
+        const row = make(
+          "div",
+          `rag-message-row ${message.role}`
+        );
+
+
+        /* ASSISTANT AVATAR */
+
+        if (message.role === "assistant") {
+
+          const avatar = make(
+            "span",
+            "rag-message-avatar"
+          );
+
+          avatar.append(
+            makeIcon("bot")
+          );
+
+          row.append(avatar);
+
+        }
+
+
+        /* MESSAGE BUBBLE */
+
+        const bubble = make(
+          "div",
+          "rag-message-bubble"
+        );
+
+        bubble.setAttribute(
+          "aria-label",
+          message.role === "user"
+            ? "Your message"
+            : "Assistant message"
+        );
+
+
+        /* MESSAGE IMAGE */
+
+        if (message.image) {
+
+          const image = document.createElement("img");
+
+          image.alt = "Uploaded course question";
+
+          image.addEventListener(
+            "load",
+            scrollToBottom
+          );
+
+          image.src = message.image;
+
+          bubble.append(image);
+
+        }
+
+
+        /* MESSAGE TEXT */
+
+        if (message.text) {
+
+          const paragraph = make(
+            "p",
+            "",
+            message.text
+          );
+
+          bubble.append(paragraph);
+
+        }
+
+
+        /* MESSAGE TIME */
+
+        const time = make(
+          "span",
+          "rag-message-time",
+          message.time
+        );
+
+        bubble.append(time);
+
+        row.append(bubble);
+
+        return row;
+
+      }
+
+
+      /* ==========================================
+         ADD MESSAGE
+      ========================================== */
+
+      function addMessage(role, text, image = null) {
+
+        if (!selectedCourse) return;
+
+        const message = {
+
+          role,
+
+          text,
+
+          image,
+
+          time: new Intl.DateTimeFormat(
+            "en",
+            {
+              hour: "numeric",
+              minute: "2-digit"
+            }
+          ).format(new Date())
+
+        };
+
+
+        /* SAVE IN CURRENT COURSE CHAT */
+
+        getConversation().push(message);
+
+
+        /* HIDE WELCOME SCREEN */
+
+        welcome.hidden = true;
+
+
+        /* DISPLAY MESSAGE */
+
+        messages.append(
+          createMessageElement(message)
+        );
+
+        refreshIcons();
+
+        scrollToBottom();
+
+      }
+
+
+      /* ==========================================
+         RENDER COURSE CONVERSATION
+      ========================================== */
+
+      function renderConversation() {
+
+        messages.querySelectorAll(
+          ".rag-message-row"
+        ).forEach(message => {
+
+          message.remove();
+
+        });
+
+        const conversation = getConversation();
+
+        welcome.hidden =
+          conversation.length > 0;
+
+        conversation.forEach(message => {
+
+          messages.append(
+            createMessageElement(message)
+          );
+
+        });
+
+        refreshIcons();
+
+        scrollToBottom();
+
+      }
+
+
+      /* ==========================================
+         DEMO ASSISTANT MESSAGE
+      ========================================== */
+
+      function getDemoReply(hasImage) {
+
+        if (hasImage) {
+
+          return "Your image has been added to the conversation. This is a preview of the image chat experience.";
+
+        }
+
+        return `Welcome to your ${selectedCourse.title} learning space! Your message has been added to this demo conversation.`;
+
+      }
+
+
+      /* ==========================================
+         SEND MESSAGE
+      ========================================== */
+
+      form.addEventListener(
+        "submit",
+        event => {
+
+          event.preventDefault();
+
+          if (!selectedCourse || imageLoading) return;
+
+          const text =
+            messageInput.value.trim();
+
+          const image = imageData;
+
+          if (!text && !image) return;
+
+          clearError();
+
+
+          /* USER MESSAGE */
+
+          addMessage(
+            "user",
+            text,
+            image
+          );
+
+
+          /* RESET INPUT */
+
+          messageInput.value = "";
+
+          clearImage();
 
           resizeTextarea();
+
+          updateSendButton();
+
+
+          /* ASSISTANT DEMO MESSAGE */
+
+          addMessage(
+            "assistant",
+            getDemoReply(Boolean(image))
+          );
+
+          messageInput.focus();
+
+        }
+      );
+
+
+      /* ==========================================
+         ENTER TO SEND
+      ========================================== */
+
+      messageInput.addEventListener(
+        "keydown",
+        event => {
+
+          if (
+
+            event.key === "Enter" &&
+
+            !event.shiftKey &&
+
+            !event.isComposing
+
+          ) {
+
+            event.preventDefault();
+
+            if (!sendBtn.disabled) {
+
+              form.requestSubmit();
+
+            }
+
+          }
+
+        }
+      );
+
+
+      /* ==========================================
+         NEW CHAT
+      ========================================== */
+
+      newChatBtn.addEventListener(
+        "click",
+        () => {
+
+          if (!selectedCourse) return;
+
+          const conversation = getConversation();
+
+          if (conversation.length > 0) {
+
+            const confirmed = window.confirm(
+              "Start a new conversation?"
+            );
+
+            if (!confirmed) return;
+
+          }
+
+
+          /* CLEAR CURRENT COURSE CONVERSATION */
+
+          conversations.set(
+            selectedCourse.id,
+            []
+          );
+
+
+          /* RESET CHAT */
+
+          messageInput.value = "";
+
+          clearImage();
+
+          clearError();
+
+          resizeTextarea();
+
+          renderConversation();
 
           updateSendButton();
 
@@ -3642,405 +4004,43 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
 
-    });
 
+      /* ==========================================
+         INITIAL RAG STATE
+      ========================================== */
 
-    /* ==========================================
-       GET COURSE CONVERSATION
-    ========================================== */
+      renderRagCourses();
 
-    function getConversation() {
+      showCourses();
 
-      if (!selectedCourse) return [];
-
-      if (!conversations.has(selectedCourse.id)) {
-
-        conversations.set(
-          selectedCourse.id,
-          []
-        );
-
-      }
-
-      return conversations.get(
-        selectedCourse.id
-      );
-
-    }
-
-
-    /* ==========================================
-       CREATE MESSAGE ELEMENT
-    ========================================== */
-
-    function createMessageElement(message) {
-
-      const row = make(
-        "div",
-        `rag-message-row ${message.role}`
-      );
-
-
-      /* ASSISTANT AVATAR */
-
-      if (message.role === "assistant") {
-
-        const avatar = make(
-          "span",
-          "rag-message-avatar"
-        );
-
-        avatar.append(
-          makeIcon("bot")
-        );
-
-        row.append(avatar);
-
-      }
-
-
-      /* MESSAGE BUBBLE */
-
-      const bubble = make(
-        "div",
-        "rag-message-bubble"
-      );
-
-      bubble.setAttribute(
-        "aria-label",
-        message.role === "user"
-          ? "Your message"
-          : "Assistant message"
-      );
-
-
-      /* MESSAGE IMAGE */
-
-      if (message.image) {
-
-        const image = document.createElement("img");
-
-        image.alt = "Uploaded course question";
-
-        image.addEventListener(
-          "load",
-          scrollToBottom
-        );
-
-        image.src = message.image;
-
-        bubble.append(image);
-
-      }
-
-
-      /* MESSAGE TEXT */
-
-      if (message.text) {
-
-        const paragraph = make(
-          "p",
-          "",
-          message.text
-        );
-
-        bubble.append(paragraph);
-
-      }
-
-
-      /* MESSAGE TIME */
-
-      const time = make(
-        "span",
-        "rag-message-time",
-        message.time
-      );
-
-      bubble.append(time);
-
-      row.append(bubble);
-
-      return row;
-
-    }
-
-
-    /* ==========================================
-       ADD MESSAGE
-    ========================================== */
-
-    function addMessage(role, text, image = null) {
-
-      if (!selectedCourse) return;
-
-      const message = {
-
-        role,
-
-        text,
-
-        image,
-
-        time: new Intl.DateTimeFormat(
-          "en",
-          {
-            hour: "numeric",
-            minute: "2-digit"
-          }
-        ).format(new Date())
-
-      };
-
-
-      /* SAVE IN CURRENT COURSE CHAT */
-
-      getConversation().push(message);
-
-
-      /* HIDE WELCOME SCREEN */
-
-      welcome.hidden = true;
-
-
-      /* DISPLAY MESSAGE */
-
-      messages.append(
-        createMessageElement(message)
-      );
+      updateSendButton();
 
       refreshIcons();
 
-      scrollToBottom();
-
     }
 
 
     /* ==========================================
-       RENDER COURSE CONVERSATION
+       INITIAL RENDER
     ========================================== */
-
-    function renderConversation() {
-
-      messages.querySelectorAll(
-        ".rag-message-row"
-      ).forEach(message => {
-
-        message.remove();
-
-      });
-
-      const conversation = getConversation();
-
-      welcome.hidden =
-        conversation.length > 0;
-
-      conversation.forEach(message => {
-
-        messages.append(
-          createMessageElement(message)
-        );
-
-      });
-
-      refreshIcons();
-
-      scrollToBottom();
-
-    }
-
-
-    /* ==========================================
-       DEMO ASSISTANT MESSAGE
-    ========================================== */
-
-    function getDemoReply(hasImage) {
-
-      if (hasImage) {
-
-        return "Your image has been added to the conversation. This is a preview of the image chat experience.";
-
-      }
-
-      return `Welcome to your ${selectedCourse.title} learning space! Your message has been added to this demo conversation.`;
-
-    }
-
-
-    /* ==========================================
-       SEND MESSAGE
-    ========================================== */
-
-    form.addEventListener(
-      "submit",
-      event => {
-
-        event.preventDefault();
-
-        if (!selectedCourse || imageLoading) return;
-
-        const text =
-          messageInput.value.trim();
-
-        const image = imageData;
-
-        if (!text && !image) return;
-
-        clearError();
-
-
-        /* USER MESSAGE */
-
-        addMessage(
-          "user",
-          text,
-          image
-        );
-
-
-        /* RESET INPUT */
-
-        messageInput.value = "";
-
-        clearImage();
-
-        resizeTextarea();
-
-        updateSendButton();
-
-
-        /* ASSISTANT DEMO MESSAGE */
-
-        addMessage(
-          "assistant",
-          getDemoReply(Boolean(image))
-        );
-
-        messageInput.focus();
-
-      }
-    );
-
-
-    /* ==========================================
-       ENTER TO SEND
-    ========================================== */
-
-    messageInput.addEventListener(
-      "keydown",
-      event => {
-
-        if (
-
-          event.key === "Enter" &&
-
-          !event.shiftKey &&
-
-          !event.isComposing
-
-        ) {
-
-          event.preventDefault();
-
-          if (!sendBtn.disabled) {
-
-            form.requestSubmit();
-
-          }
-
-        }
-
-      }
-    );
-
-
-    /* ==========================================
-       NEW CHAT
-    ========================================== */
-
-    newChatBtn.addEventListener(
-      "click",
-      () => {
-
-        if (!selectedCourse) return;
-
-        const conversation = getConversation();
-
-        if (conversation.length > 0) {
-
-          const confirmed = window.confirm(
-            "Start a new conversation?"
-          );
-
-          if (!confirmed) return;
-
-        }
-
-
-        /* CLEAR CURRENT COURSE CONVERSATION */
-
-        conversations.set(
-          selectedCourse.id,
-          []
-        );
-
-
-        /* RESET CHAT */
-
-        messageInput.value = "";
-
-        clearImage();
-
-        clearError();
-
-        resizeTextarea();
-
-        renderConversation();
-
-        updateSendButton();
-
-        messageInput.focus();
-
-      }
-    );
-
-
-    /* ==========================================
-       INITIAL RAG STATE
-    ========================================== */
-
-    renderRagCourses();
-
-    showCourses();
-
-    updateSendButton();
 
     refreshIcons();
 
-  }
+    renderFeatured();
 
+    renderPlan();
 
-  /* ==========================================
-     INITIAL RENDER
-  ========================================== */
+    renderCourses();
 
-  refreshIcons();
+    renderProgress();
 
-  renderFeatured();
+    renderAssessments();
 
-  renderPlan();
+    renderNotifications();
 
-  renderCourses();
+    initRagAssistant();
 
-  renderProgress();
-
-  renderAssessments();
-
-  renderNotifications();
-
-  initRagAssistant();
-
-  refreshIcons();
+    refreshIcons();
 
   }).catch((error) => {
     console.error("Unable to initialize the student dashboard layouts:", error);
@@ -4195,3 +4195,2072 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
+(() => {
+  "use strict";
+
+  const mathLiveVersion = "0.111.4";
+  const mathLiveScript = `https://unpkg.com/mathlive@${mathLiveVersion}/mathlive.min.js`;
+  const mathLiveStyles = `https://unpkg.com/mathlive@${mathLiveVersion}/mathlive-static.css`;
+  let mathLivePromise;
+  let mathLiveStylePromise;
+  let mathDialog;
+  let mathBackdrop;
+  let mathField;
+  let fallbackInput;
+  let mathStatus;
+  let removeEquationButton;
+  let activeTarget;
+  let activeRange;
+  let keyboardGeometryInitialized = false;
+  let mathInitializationSettled = false;
+  let mathInitializationError = null;
+  const savedSelections = new WeakMap();
+
+  function loadMathLive() {
+    if (mathLivePromise) return mathLivePromise;
+    mathLivePromise = Promise.all([
+      loadMathLiveStyles(),
+      new Promise((resolve, reject) => {
+        if (customElements.get("math-field")) {
+          resolve();
+          return;
+        }
+        const existingScript = document.querySelector(`script[src="${mathLiveScript}"]`);
+        if (existingScript) {
+          existingScript.addEventListener("load", resolve, { once: true });
+          existingScript.addEventListener("error", () => reject(new Error("MathLive could not be loaded.")), { once: true });
+          return;
+        }
+        const script = document.createElement("script");
+        script.src = mathLiveScript;
+        script.async = true;
+        script.onload = resolve;
+        script.onerror = () => {
+          script.remove();
+          reject(new Error("MathLive could not be loaded."));
+        };
+        document.head.append(script);
+      })
+    ]).then(() => customElements.whenDefined("math-field")).catch((error) => {
+      mathLivePromise = null;
+      throw error;
+    });
+    return mathLivePromise;
+  }
+
+  function loadMathLiveStyles() {
+    if (mathLiveStylePromise) return mathLiveStylePromise;
+    const existing = document.querySelector(`link[href="${mathLiveStyles}"]`);
+    if (existing?.sheet) {
+      mathLiveStylePromise = Promise.resolve();
+      return mathLiveStylePromise;
+    }
+    mathLiveStylePromise = new Promise((resolve, reject) => {
+      const stylesheet = existing || document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = mathLiveStyles;
+      stylesheet.addEventListener("load", resolve, { once: true });
+      stylesheet.addEventListener("error", () => reject(new Error("MathLive styles could not be loaded.")), { once: true });
+      if (!existing) document.head.append(stylesheet);
+    }).catch((error) => {
+      mathLiveStylePromise = null;
+      throw error;
+    });
+    return mathLiveStylePromise;
+  }
+
+  function closeMathEditor() {
+    hideMathMenu();
+    window.mathVirtualKeyboard?.hide();
+    mathDialog?.close();
+  }
+
+  function getOpenMathMenu() {
+    const menu = mathField?.shadowRoot?.querySelector('[part~="ui-menu-container"]');
+    return menu?.matches(":popover-open") ? menu : null;
+  }
+
+  function hideMathMenu() {
+    if (!getOpenMathMenu()) return;
+    const menuController = mathField?._mathfield?._menu;
+    if (typeof menuController?.hide !== "function") {
+      throw new Error("MathLive's menu controller is unavailable.");
+    }
+    // The pinned MathLive controller owns popover and shared-scrim cleanup.
+    menuController.hide();
+  }
+
+  function getActionAtPoint(x, y) {
+    return [...(mathDialog?.querySelectorAll(".edu-math-actions button:not([hidden])") || [])]
+      .find((button) => {
+        const rect = button.getBoundingClientRect();
+        return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+      });
+  }
+
+  function getMathFieldControlAtPoint(x, y) {
+    return [...(mathField?.shadowRoot?.querySelectorAll('[part~="menu-toggle"], [part~="virtual-keyboard-toggle"]') || [])]
+      .find((control) => {
+        const rect = control.getBoundingClientRect();
+        return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+      });
+  }
+
+  function dismissMathMenuForAction(event) {
+    if (!mathDialog?.open) return;
+    const control = getMathFieldControlAtPoint(event.clientX, event.clientY);
+    if (
+      window.mathVirtualKeyboard?.visible &&
+      control?.getAttribute("part")?.includes("menu-toggle")
+    ) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.mathVirtualKeyboard.hide();
+      mathField.focus();
+      mathField.showMenu();
+      return;
+    }
+    const menu = getOpenMathMenu();
+    if (!menu || !event.composedPath().includes(mathField)) return;
+    const clickedMenuItem = event.composedPath().some(
+      (target) => target instanceof Element && target.getAttribute("role")?.startsWith("menuitem")
+    );
+    if (clickedMenuItem) return;
+    const action = getActionAtPoint(event.clientX, event.clientY);
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    hideMathMenu();
+    if (control?.getAttribute("part")?.includes("virtual-keyboard-toggle")) {
+      mathField.focus();
+      if (window.mathVirtualKeyboard.visible) window.mathVirtualKeyboard.hide();
+      else window.mathVirtualKeyboard.show();
+    } else if (control) {
+      mathField.focus();
+    } else if (action) {
+      action.click();
+    } else if (!control) {
+      const dialogRect = mathDialog.getBoundingClientRect();
+      if (
+        event.clientX < dialogRect.left ||
+        event.clientX > dialogRect.right ||
+        event.clientY < dialogRect.top ||
+        event.clientY > dialogRect.bottom
+      ) {
+        closeMathEditor();
+      } else {
+        mathField.focus();
+      }
+    }
+  }
+
+  function updateKeyboardGeometry() {
+    if (!window.mathVirtualKeyboard) return;
+    const height = window.mathVirtualKeyboard.visible
+      ? window.mathVirtualKeyboard.boundingRect.height
+      : 0;
+    document.documentElement.style.setProperty("--edu-math-keyboard-height", `${height}px`);
+  }
+
+  function getDialog() {
+    if (mathDialog) return mathDialog;
+    mathBackdrop = document.createElement("div");
+    mathBackdrop.className = "edu-math-backdrop";
+    mathBackdrop.hidden = true;
+    mathBackdrop.setAttribute("aria-hidden", "true");
+    mathBackdrop.addEventListener("click", closeMathEditor);
+    mathDialog = document.createElement("dialog");
+    mathDialog.className = "edu-math-editor";
+    mathDialog.setAttribute("aria-labelledby", "eduMathEditorTitle");
+    mathDialog.setAttribute("aria-modal", "true");
+    const heading = document.createElement("h2");
+    heading.id = "eduMathEditorTitle";
+    heading.textContent = "Insert mathematical equation";
+    const description = document.createElement("p");
+    description.textContent = "Use the math keyboard to write an equation. This tool does not calculate or solve it.";
+    mathField = document.createElement("math-field");
+    mathField.className = "edu-math-editor-field";
+    mathField.setAttribute("virtual-keyboard-mode", "onfocus");
+    mathField.setAttribute("aria-label", "Mathematical equation");
+    fallbackInput = document.createElement("textarea");
+    fallbackInput.className = "form-control edu-math-fallback";
+    fallbackInput.setAttribute("aria-label", "Equation LaTeX source");
+    fallbackInput.placeholder = "Enter equation in LaTeX, for example: \\frac{a}{b}";
+    fallbackInput.hidden = true;
+    mathStatus = document.createElement("p");
+    mathStatus.className = "edu-math-status";
+    mathStatus.setAttribute("role", "status");
+    const actions = document.createElement("div");
+    actions.className = "edu-math-actions";
+    const cancel = document.createElement("button");
+    cancel.type = "button";
+    cancel.className = "btn btn-secondary";
+    cancel.textContent = "Cancel";
+    cancel.addEventListener("click", closeMathEditor);
+    removeEquationButton = document.createElement("button");
+    removeEquationButton.type = "button";
+    removeEquationButton.className = "btn btn-secondary";
+    removeEquationButton.textContent = "Remove equation";
+    removeEquationButton.hidden = true;
+    removeEquationButton.addEventListener("click", deleteActiveEquation);
+    const insert = document.createElement("button");
+    insert.type = "button";
+    insert.className = "btn btn-primary";
+    insert.textContent = "Insert equation";
+    insert.addEventListener("click", insertEquation);
+    actions.append(removeEquationButton, cancel, insert);
+    mathDialog.append(heading, description, mathField, fallbackInput, mathStatus, actions);
+    mathField.setAttribute("virtual-keyboard-mode", "manual");
+    mathDialog.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeMathEditor();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = [...mathDialog.querySelectorAll("button:not([disabled]), textarea:not([hidden]), math-field:not([hidden])")];
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    mathDialog.addEventListener("close", () => {
+      window.mathVirtualKeyboard?.hide();
+      mathBackdrop.hidden = true;
+      activeTarget?.focus();
+    });
+    document.addEventListener("pointerdown", dismissMathMenuForAction, true);
+    document.body.append(mathBackdrop, mathDialog);
+    return mathDialog;
+  }
+
+  function getMathAtomLatex(atom) {
+    return atom.dataset.latex || atom.value || atom.textContent || "";
+  }
+
+  function createMathAtom(latex) {
+    const atom = document.createElement(customElements.get("math-field") ? "math-field" : "span");
+    atom.className = customElements.get("math-field") ? "edu-math-inline" : "edu-math-inline-fallback";
+    atom.dataset.eduMathAtom = "true";
+    atom.dataset.latex = latex;
+    atom.setAttribute("contenteditable", "false");
+    atom.tabIndex = 0;
+    atom.setAttribute("aria-label", "Mathematical expression");
+    if (atom.localName === "math-field") {
+      atom.setAttribute("read-only", "");
+      atom.setAttribute("virtual-keyboard-mode", "off");
+      atom.value = latex;
+    } else {
+      atom.textContent = "Mathematical expression";
+      atom.title = "Mathematical expression";
+    }
+    return atom;
+  }
+
+  function upgradeMathAtoms() {
+    if (!customElements.get("math-field")) return;
+    document.querySelectorAll(".edu-math-inline-fallback[data-edu-math-atom]").forEach((fallback) => {
+      fallback.replaceWith(createMathAtom(getMathAtomLatex(fallback)));
+    });
+  }
+
+  function initializeInlineMathFields() {
+    document.querySelectorAll("math-field.edu-math-preview:not([data-math-initialized])").forEach((field) => {
+      const latex = field.textContent || "";
+      field.value = latex;
+      field.replaceChildren();
+      field.dataset.mathInitialized = "true";
+    });
+  }
+
+  function appendTextWithBreaks(container, text) {
+    String(text).replace(/\r\n?/g, "\n").split("\n").forEach((line, index) => {
+      if (index) container.append(document.createElement("br"));
+      if (line) container.append(document.createTextNode(line));
+    });
+  }
+
+  function renderEditableField(field, value) {
+    field.replaceChildren();
+    const source = String(value ?? "");
+    const pattern = /\\\(([\s\S]+?)\\\)/g;
+    let offset = 0;
+    let match;
+    while ((match = pattern.exec(source))) {
+      appendTextWithBreaks(field, source.slice(offset, match.index));
+      field.append(createMathAtom(match[1]));
+      offset = pattern.lastIndex;
+    }
+    appendTextWithBreaks(field, source.slice(offset));
+  }
+
+  function insertPlainTextAtSelection(field, text) {
+    const selection = window.getSelection();
+    if (!selection?.rangeCount || !field.contains(selection.anchorNode)) return;
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+    const fragment = document.createDocumentFragment();
+    appendTextWithBreaks(fragment, text);
+    const lastNode = fragment.lastChild;
+    range.insertNode(fragment);
+    if (lastNode) range.setStartAfter(lastNode);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    field.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+
+  function serializeEditableField(field) {
+    function serialize(node) {
+      if (node.nodeType === Node.TEXT_NODE) return node.nodeValue || "";
+      if (node.nodeType !== Node.ELEMENT_NODE) return "";
+      if (node.matches("[data-edu-math-atom]")) return `\\(${getMathAtomLatex(node)}\\)`;
+      if (node.tagName === "BR") return "\n";
+      return [...node.childNodes].map(serialize).join("");
+    }
+    return [...field.childNodes].map(serialize).join("");
+  }
+
+  function createEditableField(value, attrs = {}) {
+    const field = document.createElement("div");
+    field.className = "form-control edu-math-rich-editor";
+    field.contentEditable = "true";
+    field.setAttribute("role", "textbox");
+    field.setAttribute("spellcheck", "true");
+    Object.entries(attrs).forEach(([name, attrValue]) => field.setAttribute(name, attrValue));
+    renderEditableField(field, value);
+
+    const captureSelection = () => {
+      const selection = window.getSelection();
+      if (selection?.rangeCount && field.contains(selection.anchorNode)) {
+        savedSelections.set(field, selection.getRangeAt(0).cloneRange());
+      }
+    };
+    field.addEventListener("mouseup", captureSelection);
+    field.addEventListener("keyup", captureSelection);
+    field.addEventListener("blur", captureSelection);
+    field.addEventListener("pointerdown", (event) => {
+      const atom = event.target.closest?.("[data-edu-math-atom]");
+      if (atom && field.contains(atom)) event.preventDefault();
+    }, true);
+    field.addEventListener("click", (event) => {
+      const atom = event.target.closest?.("[data-edu-math-atom]");
+      if (atom && field.contains(atom)) openMathEditor(field, { atom, latex: getMathAtomLatex(atom) });
+    }, true);
+    field.addEventListener("keydown", (event) => {
+      const atom = event.target.closest?.("[data-edu-math-atom]");
+      if (atom && (event.key === "Enter" || event.key === " ")) {
+        event.preventDefault();
+        openMathEditor(field, { atom, latex: getMathAtomLatex(atom) });
+        return;
+      }
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      const selection = window.getSelection();
+      if (!selection?.rangeCount) return;
+      const range = selection.getRangeAt(0);
+      if (!field.contains(range.startContainer)) return;
+      range.deleteContents();
+      const lineBreak = document.createElement("br");
+      range.insertNode(lineBreak);
+      range.setStartAfter(lineBreak);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    field.addEventListener("paste", (event) => {
+      event.preventDefault();
+      const text = event.clipboardData?.getData("text/plain") || "";
+      insertPlainTextAtSelection(field, text);
+    });
+    field.addEventListener("drop", (event) => {
+      event.preventDefault();
+      insertPlainTextAtSelection(field, event.dataTransfer?.getData("text/plain") || "");
+    });
+    return field;
+  }
+
+  function getInsertionRange(target) {
+    const selection = window.getSelection();
+    if (selection?.rangeCount && target.contains(selection.anchorNode)) {
+      return selection.getRangeAt(0).cloneRange();
+    }
+    const saved = savedSelections.get(target);
+    if (saved && target.contains(saved.startContainer)) return saved.cloneRange();
+    const range = document.createRange();
+    range.selectNodeContents(target);
+    range.collapse(false);
+    return range;
+  }
+
+  function openMathEditor(target, range) {
+    activeTarget = target;
+    activeRange = range;
+    hideMathMenu();
+    window.mathVirtualKeyboard?.hide();
+    const dialog = getDialog();
+    removeEquationButton.hidden = !range.atom;
+    fallbackInput.hidden = true;
+    mathField.hidden = false;
+    mathStatus.textContent = "Preparing mathematical input…";
+    if (!dialog.open) {
+      mathBackdrop.hidden = false;
+      dialog.show();
+    }
+    if (mathInitializationError) {
+      mathField.hidden = true;
+      fallbackInput.hidden = false;
+      fallbackInput.value = range.latex || "";
+      mathStatus.textContent = `${mathInitializationError.message} Enter LaTeX below or cancel to continue editing normally.`;
+      fallbackInput.focus();
+      return;
+    }
+    if (mathInitializationSettled) {
+      document.body.style.setProperty("--keyboard-zindex", "10002");
+      window.mathVirtualKeyboard.container = document.body;
+      if (!keyboardGeometryInitialized) {
+        window.mathVirtualKeyboard.addEventListener("geometrychange", updateKeyboardGeometry);
+        keyboardGeometryInitialized = true;
+      }
+      mathField.setAttribute("virtual-keyboard-mode", "manual");
+      mathField.value = range.latex || "";
+      mathStatus.textContent = "Equation editor ready.";
+      mathField.focus();
+    }
+  }
+
+  function prepare() {
+    getDialog();
+    return loadMathLive().then(async () => {
+      upgradeMathAtoms();
+      initializeInlineMathFields();
+      if (mathField.updateComplete) await mathField.updateComplete;
+      return mathDialog;
+    });
+  }
+
+  function settleInitialization(error = null) {
+    mathInitializationError = error;
+    mathInitializationSettled = true;
+    document.querySelectorAll(".edu-math-trigger").forEach((button) => {
+      button.disabled = false;
+    });
+  }
+
+  function insertEquation() {
+    if (!activeTarget || !activeRange) return;
+    const latex = fallbackInput.hidden ? mathField.value : fallbackInput.value;
+    if (!latex.trim()) {
+      mathStatus.textContent = "Enter an equation before inserting.";
+      return;
+    }
+    const atom = createMathAtom(latex);
+    if (activeRange.atom?.isConnected) {
+      activeRange.atom.replaceWith(atom);
+    } else {
+      const range = activeRange.range.cloneRange();
+      range.deleteContents();
+      range.insertNode(atom);
+      range.setStartAfter(atom);
+      range.collapse(true);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      savedSelections.set(activeTarget, range.cloneRange());
+    }
+    activeTarget.dispatchEvent(new Event("input", { bubbles: true }));
+    closeMathEditor();
+  }
+
+  function deleteActiveEquation() {
+    if (!activeRange?.atom?.isConnected) return;
+    activeRange.atom.remove();
+    activeTarget.dispatchEvent(new Event("input", { bubbles: true }));
+    closeMathEditor();
+  }
+
+  function createButton(target, label) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "edu-math-trigger";
+    button.disabled = !mathInitializationSettled;
+    button.setAttribute("aria-label", `Insert a mathematical equation in ${label}`);
+    button.title = "Insert mathematical equation";
+    const mathIcon = document.createElement("i");
+    mathIcon.setAttribute("data-lucide", "calculator");
+    mathIcon.setAttribute("aria-hidden", "true");
+    button.append(mathIcon);
+    button.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      savedSelections.set(target, getInsertionRange(target));
+    });
+    button.addEventListener("click", () => {
+      openMathEditor(target, { range: getInsertionRange(target), latex: "" });
+    });
+    return button;
+  }
+
+  function renderInlineMath(container, value) {
+    const text = String(value ?? "");
+    const pattern = /\\\(([\s\S]+?)\\\)/g;
+    let offset = 0;
+    let match;
+    while ((match = pattern.exec(text))) {
+      if (match.index > offset) container.append(document.createTextNode(text.slice(offset, match.index)));
+      const fallbackContent = match[1];
+      const math = document.createElement("math-field");
+      math.className = "edu-math-preview";
+      math.setAttribute("read-only", "");
+      math.setAttribute("virtual-keyboard-mode", "off");
+      math.setAttribute("contenteditable", "false");
+      if (customElements.get("math-field")) {
+        math.value = fallbackContent;
+        math.dataset.mathInitialized = "true";
+      } else {
+        math.textContent = fallbackContent;
+      }
+      container.append(math);
+      offset = pattern.lastIndex;
+      if (!customElements.get("math-field")) {
+        void loadMathLive().then(initializeInlineMathFields).catch(() => {
+          const fallback = document.createElement("span");
+          fallback.className = "edu-math-preview-fallback";
+          fallback.textContent = "Mathematical expression unavailable";
+          math.replaceWith(fallback);
+        });
+      }
+    }
+    if (offset < text.length) container.append(document.createTextNode(text.slice(offset)));
+  }
+
+  window.eduMathInput = Object.freeze({
+    load: loadMathLive,
+    prepare,
+    settleInitialization,
+    createField: createEditableField,
+    serializeField: serializeEditableField,
+    createButton,
+    renderInline: renderInlineMath
+  });
+})();
+
+/* =========================================
+   Teacher Assessment Workspace
+========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!document.body.classList.contains("assessment-page")) return;
+
+  void window.eduMathInput.prepare().then(() => {
+    window.eduMathInput.settleInitialization();
+  }).catch((error) => {
+    window.eduMathInput.settleInitialization(error);
+    console.warn("MathLive could not be prepared; equation fields will remain editable as text.", error);
+  });
+  const ready = window.eduLayouts?.ready || Promise.resolve();
+  ready.then(initTeacherAssessment).catch((error) => {
+    console.error("Unable to initialize the teacher assessment page:", error);
+    const feedback = document.getElementById("assessmentFeedback");
+    if (feedback) feedback.textContent = "The shared layout could not be initialized. Refresh the page and try again.";
+  });
+});
+
+function initTeacherAssessment() {
+  if (document.body.dataset.assessmentInitialized === "true") return;
+  document.body.dataset.assessmentInitialized = "true";
+
+  const api = window.eduApi?.assessment;
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const byId = (id) => document.getElementById(id);
+  const el = (tag, attrs = {}, children = []) => {
+    const node = document.createElement(tag);
+    Object.entries(attrs).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
+      if (key === "text") node.textContent = value;
+      else if (key === "className") node.className = value;
+      else if (key === "value") node.value = value;
+      else if (key === "checked" || key === "disabled" || key === "required" || key === "open") node[key] = value;
+      else if (key.startsWith("on")) return;
+      else node.setAttribute(key, String(value));
+    });
+    (Array.isArray(children) ? children : [children]).forEach((child) => {
+      if (child instanceof Node) node.append(child);
+      else if (child !== null && child !== undefined) node.append(document.createTextNode(String(child)));
+    });
+    return node;
+  };
+  const icon = (name) => {
+    const item = el("i", { "data-lucide": name, "aria-hidden": "true" });
+    return item;
+  };
+  const button = (label, action, iconName, className = "btn btn-secondary") =>
+    el("button", { type: "button", className, "data-action": action },
+      [icon(iconName), document.createTextNode(` ${label}`)]);
+  const labelField = (label, control, hint) => {
+    const isMathField = control.classList.contains("edu-math-input");
+
+    const wrap = el(isMathField ? "div" : "label", {
+      className: "as-field"
+    });
+
+    wrap.append(
+      el("span", {
+        className: "as-field-label",
+        text: label
+      }),
+      control
+    );
+
+    if (hint) {
+      wrap.append(
+        el("small", {
+          className: "as-field-hint",
+          text: hint
+        })
+      );
+    }
+
+    return wrap;
+  };
+  const input = (label, value, attrs = {}) => labelField(label, el("input", {
+    className: "form-control",
+    value: value ?? "",
+    ...attrs
+  }));
+  const select = (label, value, choices, attrs = {}) => {
+    const control = el("select", { className: "form-control", ...attrs });
+    choices.forEach(([optionValue, optionLabel]) => {
+      const option = el("option", { value: optionValue, text: optionLabel });
+      option.selected = String(value) === String(optionValue);
+      control.append(option);
+    });
+    return labelField(label, control);
+  };
+  const textarea = (label, value, attrs = {}) => {
+    const control = el("textarea", { className: "form-control", ...attrs });
+    control.value = value ?? "";
+    return labelField(label, control);
+  };
+  const refreshIcons = () => window.lucide?.createIcons?.();
+  const localId = (prefix) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const setFeedback = (message = "", type = "info") => {
+    const region = byId("assessmentFeedback");
+    region.textContent = message;
+    region.dataset.type = type;
+  };
+  const humanSize = (size) => {
+    if (!size) return "0 B";
+    const units = ["B", "KB", "MB", "GB"];
+    const index = Math.min(Math.floor(Math.log(size) / Math.log(1024)), units.length - 1);
+    return `${(size / (1024 ** index)).toFixed(index ? 1 : 0)} ${units[index]}`;
+  };
+  const defaultAssessment = (method) => ({
+    id: null,
+    title: "",
+    courseId: "",
+    method,
+    questionType: "mcq",
+    questionCount: 5,
+    mcqCount: 3,
+    essayCount: 2,
+    difficulty: "Medium",
+    mcqMarks: 1,
+    essayMarks: 5,
+    marksPerQuestion: 1,
+    instructions: "",
+    pastedText: "",
+    lectureIds: [],
+    materials: [],
+    questions: [],
+    showRubricToStudents: false,
+    status: "draft"
+  });
+
+  let courses = [];
+  let lectures = [];
+  let assessment = null;
+  let originalFile = null;
+  let builderVisible = false;
+  let saving = false;
+  let searchTerm = "";
+  const expandedQuestions = new Set();
+  const workspace = byId("assessmentWorkspace");
+  const workspaceContent = byId("workspaceContent");
+  const questionList = byId("assessmentQuestionList");
+  const summary = byId("assessmentSummary");
+  const savedList = byId("savedAssessmentList");
+  const previewDialog = byId("assessmentPreview");
+  const previewContent = byId("previewContent");
+
+  function ensureEditable() {
+    if (!assessment) return false;
+    if (assessment.status === "published") {
+      setFeedback("Published assessments are read-only. Duplicate one to make changes.", "error");
+      return false;
+    }
+    return true;
+  }
+
+  function questionTemplate(type, origin = "manual") {
+    const question = {
+      id: localId("question"),
+      type,
+      text: "",
+      topic: "",
+      difficulty: assessment?.difficulty || "Medium",
+      marks: Number(type === "mcq" ? assessment?.mcqMarks : assessment?.essayMarks) || 1,
+      options: type === "mcq" ? ["", "", "", ""].map((text) => ({ id: localId("option"), text })) : [],
+      correctIndex: null,
+      explanation: "",
+      modelAnswer: "",
+      rubric: type === "essay" ? [{
+        id: localId("criterion"),
+        name: "",
+        evaluates: "",
+        marks: Number(assessment?.essayMarks) || 1,
+        keyPoints: "",
+        fullCredit: "",
+        partialCredit: "",
+        noCredit: ""
+      }] : [],
+      origin,
+      needsReview: origin !== "manual"
+    };
+    return question;
+  }
+
+  function captureForm(form) {
+    const data = new FormData(form);
+    for (const [key, value] of data.entries()) {
+      if (key === "lectureIds") continue;
+      if (key.endsWith("Count") || key.endsWith("Marks") || key === "questionCount" || key === "marksPerQuestion") {
+        assessment[key] = Number(value);
+      } else {
+        assessment[key] = value;
+      }
+    }
+    const selected = form.querySelectorAll('input[name="lectureIds"]:checked');
+    assessment.lectureIds = Array.from(selected, (item) => item.value);
+    if (assessment.questionType !== "mixed") {
+      assessment.mcqCount = assessment.questionType === "mcq" ? Number(assessment.questionCount) : 0;
+      assessment.essayCount = assessment.questionType === "essay" ? Number(assessment.questionCount) : 0;
+    }
+  }
+
+  function fillCourseOptions(control) {
+    const placeholder = el("option", { value: "", text: "Select a course" });
+    control.append(placeholder);
+    courses.forEach((course) => control.append(el("option", {
+      value: course.id,
+      text: course.name
+    })));
+  }
+
+  function renderMethodForm() {
+    workspaceContent.replaceChildren();
+    workspaceContent.hidden = false;
+    questionList.replaceChildren();
+    questionList.hidden = true;
+    summary.hidden = true;
+    builderVisible = false;
+    workspace.hidden = false;
+    byId("assessmentCreation").hidden = true;
+    updateActionVisibility();
+    const methodNames = { upload: "Upload Existing Assessment", manual: "Create Manually", ai: "Generate with AI" };
+    byId("workspaceTitle").textContent = methodNames[assessment.method];
+    byId("workspaceDescription").textContent = assessment.method === "ai"
+      ? "AI generation is simulated. Review generated content before use."
+      : assessment.method === "upload"
+        ? "Upload a document to create editable sample questions for teacher review."
+        : "Configure your assessment, then build and edit its questions.";
+    const form = el("form", { className: "as-config-form", "data-config-form": "true" });
+    form.addEventListener("submit", (event) => event.preventDefault());
+    form.append(input("Assessment title", assessment.title, {
+      name: "title", required: true, placeholder: "e.g. Unit 1 Review"
+    }));
+    const courseControl = el("select", { className: "form-control", name: "courseId", required: true });
+    fillCourseOptions(courseControl);
+    courseControl.value = assessment.courseId;
+    form.append(labelField("Course", courseControl));
+
+    if (assessment.method === "upload") {
+      form.append(input("Approximate sample question count", assessment.questionCount, {
+        type: "number", name: "questionCount", min: "1", max: "5", value: assessment.questionCount
+      }));
+      form.append(uploadZone("assessment"));
+      form.append(el("p", {
+        className: "as-note",
+        text: `Mock extraction only. Supported: ${api.config.supportedAssessmentFormats.join(", ").toUpperCase()}. No document contents are extracted.`
+      }));
+      form.append(el("div", { className: "as-actions" }, [
+        button("Extract Questions", "extract-questions", "scan-text", "btn btn-primary"),
+        button("Cancel", "cancel-workflow", "x")
+      ]));
+    } else {
+      const type = el("select", { className: "form-control", name: "questionType" });
+      [["mcq", "MCQ"], ["essay", "Essay"], ["mixed", "Mixed"]].forEach(([value, name]) =>
+        type.append(el("option", { value, text: name })));
+      type.value = assessment.questionType;
+      form.append(labelField("Question type", type));
+      form.append(select("Difficulty", assessment.difficulty, [
+        ["Easy", "Easy"], ["Medium", "Medium"], ["Hard", "Hard"]
+      ], { name: "difficulty" }));
+      if (assessment.questionType === "mixed") {
+        form.append(input("MCQ question count", assessment.mcqCount, {
+          type: "number", name: "mcqCount", min: "0", max: assessment.method === "ai" ? "10" : undefined
+        }));
+        form.append(input("MCQ marks per question", assessment.mcqMarks, {
+          type: "number", name: "mcqMarks", min: "1", step: "1"
+        }));
+        form.append(input("Essay question count", assessment.essayCount, {
+          type: "number", name: "essayCount", min: "0", max: assessment.method === "ai" ? "10" : undefined
+        }));
+        form.append(input("Essay marks per question", assessment.essayMarks, {
+          type: "number", name: "essayMarks", min: "1", step: "1"
+        }));
+      } else {
+        form.append(input("Number of questions", assessment.questionCount, {
+          type: "number", name: "questionCount", min: "1", max: assessment.method === "ai" ? "10" : undefined
+        }));
+        const marksName = assessment.questionType === "mcq" ? "mcqMarks" : "essayMarks";
+        const marksValue = assessment.questionType === "mcq" ? assessment.mcqMarks : assessment.essayMarks;
+        form.append(input("Marks per question", marksValue, {
+          type: "number", name: marksName, min: "1", step: "1"
+        }));
+      }
+
+      if (assessment.method === "ai") {
+        form.append(el("h3", { className: "as-subheading", text: "Lecture source materials" }));
+        const lectureGroup = el("fieldset", { className: "as-lecture-list" });
+        lectureGroup.append(el("legend", { text: "Select available lectures" }));
+        lectures.filter((lecture) => !assessment.courseId || lecture.courseId === assessment.courseId)
+          .forEach((lecture) => {
+            const checkbox = el("input", { type: "checkbox", name: "lectureIds", value: lecture.id });
+            checkbox.checked = assessment.lectureIds.includes(lecture.id);
+            lectureGroup.append(el("label", { className: "as-check-row" }, [
+              checkbox, document.createTextNode(` ${lecture.title}`)
+            ]));
+          });
+        form.append(lectureGroup);
+        form.append(uploadZone("lecture"));
+        form.append(textarea("Paste lecture text", assessment.pastedText, {
+          name: "pastedText", rows: "5", placeholder: "Paste source material for simulated generation..."
+        }));
+        form.append(el("div", { className: "as-material-list", "data-material-list": "true" }));
+        form.append(textarea("Additional instructions", assessment.instructions, {
+          name: "instructions", rows: "3", placeholder: "Optional instructions for the simulated generator"
+        }));
+        form.append(el("p", { className: "as-note", text: "Simulated AI generation: no real AI provider or external generation service is used." }));
+      }
+
+      const total = assessment.questionType === "mixed"
+        ? Number(assessment.mcqCount) + Number(assessment.essayCount)
+        : Number(assessment.questionCount);
+      const totalMarks = assessment.questionType === "mixed"
+        ? Number(assessment.mcqCount) * Number(assessment.mcqMarks) +
+        Number(assessment.essayCount) * Number(assessment.essayMarks)
+        : total * Number(assessment.questionType === "mcq" ? assessment.mcqMarks : assessment.essayMarks);
+      form.append(el("p", {
+        className: "as-total-line",
+        "data-config-total": "true",
+        text: `Total questions: ${total} · Total marks: ${totalMarks || 0}${assessment.method === "ai" ? ` · AI maximum: ${api.config.maxAiQuestions}` : ""}`
+      }));
+      form.append(el("div", { className: "as-actions" }, [
+        button(assessment.method === "ai" ? "Generate Questions" : "Build Question Set",
+          assessment.method === "ai" ? "generate-questions" : "build-manual",
+          assessment.method === "ai" ? "sparkles" : "file-plus-2",
+          "btn btn-primary"),
+        button("Cancel", "cancel-workflow", "x")
+      ]));
+    }
+    workspaceContent.append(form);
+    if (assessment.method === "ai" && assessment.materials.length) renderMaterialChips();
+    workspace.hidden = false;
+    updateActionVisibility();
+    refreshIcons();
+    byId("workspaceTitle").focus?.();
+  }
+
+  function uploadZone(kind) {
+    const isAssessment = kind === "assessment";
+    const field = el("div", { className: "as-upload-field" });
+    const drop = el("div", {
+      className: "as-dropzone",
+      role: "button",
+      tabindex: "0",
+      "data-dropzone": kind,
+      "aria-label": isAssessment ? "Choose assessment file" : "Choose lecture material"
+    }, [
+      icon("upload-cloud"),
+      el("strong", { text: isAssessment ? "Drop your assessment here" : "Drop lecture materials here" }),
+      el("span", { text: "or" }),
+      button("Browse files", `browse-${kind}`, "folder-open")
+    ]);
+    const fileInput = el("input", {
+      className: "as-file-input",
+      type: "file",
+      accept: (isAssessment ? api.config.supportedAssessmentFormats : api.config.supportedLectureFormats)
+        .map((extension) => `.${extension}`).join(","),
+      "data-file-input": kind,
+      tabindex: "-1",
+      "aria-label": isAssessment ? "Assessment file" : "Lecture material file"
+    });
+    field.append(drop, fileInput);
+    if (isAssessment && originalFile) {
+      field.append(el("div", { className: "as-file-chip" }, [
+        el("span", { text: `${originalFile.name} · ${humanSize(originalFile.size)}` }),
+        button("Remove", "remove-assessment-file", "trash-2")
+      ]));
+    }
+    return field;
+  }
+
+  function renderMaterialChips() {
+    const container = $("[data-material-list]", workspaceContent);
+    if (!container) return;
+    container.replaceChildren();
+    assessment.materials.forEach((material, index) => {
+      container.append(el("div", { className: "as-file-chip" }, [
+        el("span", { text: `${material.name} · ${humanSize(material.size)}` }),
+        el("button", { type: "button", className: "btn btn-secondary", "data-action": "remove-material", "data-index": index },
+          [icon("x"), document.createTextNode(" Remove")])
+      ]));
+    });
+  }
+
+  function updateActionVisibility() {
+    const actions = byId("workspaceActions");
+    actions.hidden = !builderVisible;
+    const toolbar = $(".as-question-toolbar", workspace);
+    if (toolbar) toolbar.hidden = !builderVisible;
+  }
+
+  function showBuilder(questions) {
+    assessment.questions = questions;
+    builderVisible = true;
+    workspaceContent.hidden = true;
+    questionList.hidden = false;
+    summary.hidden = false;
+    renderQuestions();
+    renderSummary();
+    updateActionVisibility();
+    renderMethodControls();
+    byId("assessmentSummary").scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+
+  function renderMethodControls() {
+    const toolbar = el("div", { className: "as-question-toolbar" });
+    const addSelect = el("select", { className: "form-control", "data-add-type": "true", "aria-label": "Question type to add" });
+    addSelect.append(el("option", { value: "mcq", text: "Add MCQ" }));
+    addSelect.append(el("option", { value: "essay", text: "Add Essay" }));
+    toolbar.append(addSelect, button("Add Question", "add-question", "plus", "btn btn-primary"));
+    const old = $(".as-question-toolbar", workspace);
+    old?.remove();
+    workspaceContent.after(toolbar);
+    toolbar.hidden = !builderVisible;
+  }
+
+  function getCourseName(courseId) {
+    return courses.find((course) => course.id === courseId)?.name || "Not selected";
+  }
+
+  function getAssessmentErrors() {
+    const errors = [];
+    if (!assessment?.title?.trim()) errors.push("Add an assessment title.");
+    if (!assessment?.courseId) errors.push("Select a course.");
+    if (!assessment?.questions?.length) errors.push("Add at least one question.");
+    assessment?.questions?.forEach((question, index) => {
+      errors.push(...api.validateQuestion(question, index));
+    });
+    return errors;
+  }
+
+  function renderSummary() {
+    if (!assessment) return;
+    const questions = assessment.questions || [];
+    const mcqCount = questions.filter((question) => question.type === "mcq").length;
+    const essayCount = questions.length - mcqCount;
+    const totalMarks = questions.reduce((sum, question) => sum + (Number(question.marks) || 0), 0);
+    const difficulties = [...new Set(questions.map((question) => question.difficulty).filter(Boolean))].join(", ") || "Not set";
+    const errors = getAssessmentErrors();
+    const methodName = { upload: "Upload (mock extraction)", manual: "Manual", ai: "AI (simulated)" }[assessment.method];
+    summary.replaceChildren(
+      el("div", { className: "as-summary-heading" }, [
+        el("div", {}, [
+          el("h3", { text: assessment.title || "Untitled assessment" }),
+          el("p", { text: `${getCourseName(assessment.courseId)} · ${methodName}` })
+        ]),
+        el("span", {
+          className: `as-validation-status ${errors.length ? "invalid" : "valid"}`,
+          text: errors.length ? `${errors.length} item(s) need attention` : "Ready to publish"
+        })
+      ]),
+      el("div", { className: "as-summary-stats" }, [
+        el("span", { text: `Questions: ${questions.length}` }),
+        el("span", { text: `MCQ: ${mcqCount}` }),
+        el("span", { text: `Essay: ${essayCount}` }),
+        el("span", { text: `Total marks: ${totalMarks}` }),
+        el("span", { text: `Difficulty: ${difficulties}` })
+      ])
+    );
+    const metadata = el("div", { className: "as-field-grid as-summary-fields" });
+    const titleInput = el("input", {
+      className: "form-control",
+      value: assessment.title,
+      required: true,
+      "data-assessment-field": "title"
+    });
+    metadata.append(labelField("Assessment title", titleInput));
+    const courseSelect = el("select", {
+      className: "form-control",
+      "data-assessment-field": "courseId",
+      required: true
+    });
+    fillCourseOptions(courseSelect);
+    courseSelect.value = assessment.courseId;
+    metadata.append(labelField("Course", courseSelect));
+    summary.insertBefore(metadata, summary.children[1]);
+    if (errors.length) summary.append(el("ul", { className: "as-validation-list" },
+      errors.slice(0, 5).map((error) => el("li", { text: error }))));
+    const hasEssay = assessment.questions.some((question) => question.type === "essay");
+    if (hasEssay) {
+      summary.append(el("label", { className: "as-check-row as-rubric-toggle" }, [
+        el("input", { type: "checkbox", "data-assessment-field": "showRubricToStudents", checked: assessment.showRubricToStudents }),
+        document.createTextNode(" Show rubric to students before submission")
+      ]));
+    } else {
+      assessment.showRubricToStudents = false;
+    }
+  }
+
+  function questionInput(question, field, label, value, attrs = {}) {
+    const { multiline, math, ...controlAttrs } = attrs;
+    const controlAttrsForField = {
+      "data-question-field": field,
+      "data-question-id": question.id
+    };
+    const control = math
+      ? window.eduMathInput.createField(value, {
+        ...controlAttrsForField,
+        "aria-label": label,
+        "aria-multiline": String(Boolean(multiline)),
+        ...(multiline ? { "data-rows": String(controlAttrs.rows || 3) } : {})
+      })
+      : multiline
+        ? el("textarea", { className: "form-control", ...controlAttrsForField, rows: controlAttrs.rows || 3 })
+        : el("input", { className: "form-control", ...controlAttrsForField, value, ...controlAttrs });
+    const fieldControl = math
+      ? el("div", { className: "edu-math-input" }, [control, window.eduMathInput.createButton(control, label)])
+      : control;
+    const fieldElement = labelField(label, fieldControl);
+    if (field.startsWith("rubric.")) fieldElement.dataset.rubricField = field.split(".").pop();
+    return fieldElement;
+  }
+
+  function renderQuestions() {
+    questionList.replaceChildren();
+    assessment.questions.forEach((question, index) => {
+      const details = el("details", { className: "as-question-card", "data-question-card": question.id });
+      details.open = expandedQuestions.has(question.id) || index === 0;
+      details.addEventListener("toggle", () => {
+        if (details.open) expandedQuestions.add(question.id);
+        else expandedQuestions.delete(question.id);
+      });
+      const prompt = el("span", { className: "as-question-prompt" });
+      window.eduMathInput.renderInline(prompt, question.text || "Untitled question");
+      const summaryRow = el("summary", { className: "as-question-summary" }, [
+        el("span", { className: "as-question-number", text: `Question ${index + 1}` }),
+        el("span", { className: "as-question-type", text: question.type.toUpperCase() }),
+        prompt,
+        el("span", { className: "as-question-marks", text: `${Number(question.marks) || 0} marks` })
+      ]);
+      details.append(summaryRow);
+      const actions = el("div", { className: "as-question-actions", "data-no-toggle": "true" });
+      actions.append(button("Duplicate", "duplicate-question", "copy"));
+      if (question.origin === "ai") actions.append(button("Regenerate", "regenerate-question", "refresh-cw"));
+      actions.append(button("Delete", "delete-question", "trash-2"));
+      actions.querySelectorAll("[data-action]").forEach((control) => {
+        control.dataset.questionId = question.id;
+      });
+      details.append(actions);
+      const body = el("div", { className: "as-question-body" });
+      body.append(questionInput(question, "text", "Question text", question.text, {
+        multiline: true, rows: 3, required: true, math: true
+      }));
+      const common = el("div", { className: "as-field-grid" }, [
+        questionInput(question, "topic", "Topic", question.topic),
+        select("Difficulty", question.difficulty, [["Easy", "Easy"], ["Medium", "Medium"], ["Hard", "Hard"]], {
+          "data-question-field": "difficulty", "data-question-id": question.id
+        }),
+        questionInput(question, "marks", "Total marks", question.marks, {
+          type: "number", min: "1", step: "1"
+        })
+      ]);
+      body.append(common);
+      if (question.needsReview) body.append(el("p", {
+        className: "as-review-flag",
+        text: "Teacher review required: this is mock sample content and may be missing answers, marks, model answers, or rubric details."
+      }));
+
+      if (question.type === "mcq") {
+        body.append(el("h4", { className: "as-subheading", text: "Answer options — choose the correct answer" }));
+        question.options.forEach((option, optionIndex) => {
+          const optionText = window.eduMathInput.createField(option.text, {
+            "data-option-field": "text",
+            "data-question-id": question.id,
+            "data-option-id": option.id,
+            "aria-label": `Question ${index + 1}, option ${optionIndex + 1}`,
+            "aria-multiline": "false"
+          });
+          const optionEditor = el("div", { className: "edu-math-input" }, [
+            optionText,
+            window.eduMathInput.createButton(optionText, `Question ${index + 1}, option ${optionIndex + 1}`)
+          ]);
+          const correct = el("input", {
+            type: "radio",
+            name: `correct-${question.id}`,
+            value: option.id,
+            checked: question.options[question.correctIndex]?.id === option.id,
+            "data-correct-option": "true",
+            "data-question-id": question.id
+          });
+          const optionRow = el("div", { className: "as-option-row" }, [
+            el("label", { className: "as-correct-choice", "aria-label": `Mark option ${optionIndex + 1} correct` }, [correct]),
+            optionEditor,
+            el("span", { className: "as-option-letter", text: String.fromCharCode(65 + optionIndex) })
+          ]);
+          if (question.options.length > 2) optionRow.append(
+            el("button", { type: "button", className: "btn btn-secondary", "data-action": "remove-option", "data-question-id": question.id, "data-option-id": option.id, "aria-label": `Remove option ${optionIndex + 1}` }, icon("x"))
+          );
+          body.append(optionRow);
+        });
+        const addOptionButton = button("Add option", "add-option", "plus");
+        addOptionButton.dataset.questionId = question.id;
+        body.append(addOptionButton);
+        body.append(questionInput(question, "explanation", "Optional answer explanation (teacher only)", question.explanation, {
+          multiline: true, rows: 2, math: true
+        }));
+      } else {
+        body.append(questionInput(question, "modelAnswer", "Expected / model answer (teacher only)", question.modelAnswer, {
+          multiline: true, rows: 3, math: true
+        }));
+        body.append(el("div", { className: "as-rubric-heading" }, [
+          el("h4", { className: "as-subheading", text: "Grading rubric" }),
+          el("span", {
+            className: `as-rubric-total ${rubricTotal(question) === Number(question.marks) ? "valid" : "invalid"}`,
+            text: `Rubric total: ${rubricTotal(question)} / ${Number(question.marks) || 0} marks`
+          })
+        ]));
+        question.rubric.forEach((criterion, criterionIndex) => {
+          const rubric = el("fieldset", { className: "as-rubric-criterion" });
+          rubric.append(el("legend", { text: `Criterion ${criterionIndex + 1}` }));
+          const grid = el("div", { className: "as-rubric-grid" });
+          ["name", "marks", "evaluates", "keyPoints", "fullCredit", "partialCredit", "noCredit"].forEach((field) => {
+            const labels = {
+              name: "Criterion name",
+              evaluates: "What it evaluates",
+              marks: "Maximum marks",
+              keyPoints: "Expected key points (one per line)",
+              fullCredit: "Full credit description",
+              partialCredit: "Partial credit description",
+              noCredit: "No credit description"
+            };
+            const isText = !["name", "marks"].includes(field);
+            grid.append(questionInput(question, `rubric.${criterion.id}.${field}`, labels[field],
+              criterion[field], isText ? { multiline: true, rows: field === "keyPoints" ? 3 : 2 } : {
+                ...(field === "marks" ? { type: "number", min: "1", step: "1" } : {}),
+                value: criterion[field]
+              }));
+          });
+          rubric.append(grid);
+          if (question.rubric.length > 1) {
+            const removeCriterionButton = button("Remove criterion", "remove-criterion", "trash-2");
+            removeCriterionButton.dataset.questionId = question.id;
+            rubric.append(removeCriterionButton);
+          }
+          body.append(rubric);
+        });
+        const addCriterionButton = button("Add rubric criterion", "add-criterion", "plus");
+        addCriterionButton.dataset.questionId = question.id;
+        body.append(addCriterionButton);
+      }
+      details.append(body);
+      questionList.append(details);
+    });
+    refreshIcons();
+  }
+
+  function rubricTotal(question) {
+    return (question.rubric || []).reduce((total, criterion) => total + (Number(criterion.marks) || 0), 0);
+  }
+
+  function updateQuestion(questionId, field, value) {
+    const question = assessment.questions.find((item) => item.id === questionId);
+    if (!question) return;
+    if (field.startsWith("rubric.")) {
+      const [, criterionId, key] = field.split(".");
+      const criterion = question.rubric.find((item) => item.id === criterionId);
+      if (criterion) criterion[key] = key === "marks" ? Number(value) : value;
+    } else if (field === "marks") question.marks = Number(value);
+    else question[field] = value;
+    updateQuestionSummary(questionId);
+    renderSummary();
+  }
+
+  function updateQuestionSummary(questionId) {
+    const question = assessment.questions.find((item) => item.id === questionId);
+    const card = $(`[data-question-card="${CSS.escape(questionId)}"]`);
+    if (!question || !card) return;
+    const prompt = $(".as-question-prompt", card);
+    const marks = $(".as-question-marks", card);
+    if (prompt) {
+      prompt.replaceChildren();
+      window.eduMathInput.renderInline(prompt, question.text || "Untitled question");
+    }
+    if (marks) marks.textContent = `${Number(question.marks) || 0} marks`;
+    const rubricStatus = $(".as-rubric-total", card);
+    if (rubricStatus) {
+      rubricStatus.textContent = `Rubric total: ${rubricTotal(question)} / ${Number(question.marks) || 0} marks`;
+      const balanced = Math.abs(rubricTotal(question) - Number(question.marks)) <= 0.001;
+      rubricStatus.classList.toggle("valid", balanced);
+      rubricStatus.classList.toggle("invalid", !balanced);
+    }
+  }
+
+  function validateAndShow() {
+    const errors = getAssessmentErrors();
+    renderSummary();
+    if (errors.length) {
+      setFeedback(`Please fix the following before publishing:\n${errors.join("\n")}`, "error");
+      summary.scrollIntoView({ block: "center", behavior: "smooth" });
+      return false;
+    }
+    return true;
+  }
+
+  function renderSavedAssessments(items) {
+    const statusFilter = byId("savedStatusFilter").value;
+    const methodFilter = byId("savedMethodFilter").value;
+    const query = searchTerm.trim().toLowerCase();
+    const filtered = items.filter((item) => {
+      const courseName = getCourseName(item.courseId);
+      return (statusFilter === "all" || item.status === statusFilter) &&
+        (methodFilter === "all" || item.method === methodFilter) &&
+        (!query || `${item.title} ${courseName}`.toLowerCase().includes(query));
+    });
+    savedList.replaceChildren();
+    if (!filtered.length) {
+      savedList.append(el("div", { className: "as-empty-state" }, [
+        icon("clipboard-list"),
+        el("h3", { text: items.length ? "No matching assessments" : "No assessments yet" }),
+        el("p", { text: items.length ? "Try changing the search or filters." : "Create your first assessment to get started." })
+      ]));
+      refreshIcons();
+      return;
+    }
+    const grid = el("div", { className: "as-saved-grid" });
+    filtered.forEach((item) => {
+      const totalMarks = (item.questions || []).reduce((sum, question) => sum + (Number(question.marks) || 0), 0);
+      const card = el("article", { className: "as-saved-card" }, [
+        el("div", { className: "as-saved-card-heading" }, [
+          el("h3", { text: item.title || "Untitled assessment" }),
+          el("span", { className: `as-status-badge ${item.status}`, text: item.status })
+        ]),
+        el("p", { text: `${getCourseName(item.courseId)} · ${item.method === "ai" ? "AI (simulated)" : item.method}` }),
+        el("p", { text: `${item.questions?.length || 0} questions · ${totalMarks} marks` }),
+        el("small", { text: `Updated ${new Date(item.updatedAt).toLocaleString()}` })
+      ]);
+      const actions = el("div", { className: "as-saved-actions" });
+      if (item.status === "draft") actions.append(
+        button("Edit Draft", "edit-saved", "file-pen-line")
+      );
+      actions.append(
+        button("Preview", "preview-saved", "eye"),
+        button("Duplicate", "duplicate-saved", "copy"),
+        button("Delete", "delete-saved", "trash-2")
+      );
+      if (item.status === "draft") actions.append(
+        button("Publish Draft", "publish-saved", "send", "btn btn-primary")
+      );
+      [...actions.querySelectorAll("[data-action]")].forEach((control) => {
+        control.dataset.assessmentId = item.id;
+      });
+      card.append(actions);
+      grid.append(card);
+    });
+    savedList.append(grid);
+    refreshIcons();
+  }
+
+  async function loadSaved() {
+    try {
+      const result = await api.getSavedAssessments();
+      renderSavedAssessments(result.data);
+    } catch (error) {
+      setFeedback(error.message, "error");
+    }
+  }
+
+  function makePreview(item) {
+    const previewQuestions = item.questions || [];
+    const hasEssay = previewQuestions.some((question) => question.type === "essay");
+    const preview = el("div", { className: "as-student-preview" }, [
+      el("h3", { text: item.title || "Untitled assessment" }),
+      el("p", { text: `${getCourseName(item.courseId)} · ${previewQuestions.length} questions` })
+    ]);
+    previewQuestions.forEach((question, index) => {
+      const block = el("section", { className: "as-preview-question" }, [
+        el("h4", { text: `Question ${index + 1} · ${Number(question.marks) || 0} marks` })
+      ]);
+      const questionText = el("p");
+      window.eduMathInput.renderInline(questionText, question.text || "Question text not provided.");
+      block.append(questionText);
+      if (question.type === "mcq") {
+        const options = el("ol", { type: "A" });
+        question.options.filter((option) => option.text?.trim()).forEach((option) => {
+          const optionElement = el("li");
+          window.eduMathInput.renderInline(optionElement, option.text);
+          options.append(optionElement);
+        });
+        block.append(options);
+      } else {
+        block.append(el("div", { className: "as-answer-space", text: "Write your answer here." }));
+        if (item.showRubricToStudents && hasEssay) {
+          const visibleRubric = el("ul", { className: "as-preview-rubric", "aria-label": "Grading criteria" });
+          (question.rubric || []).forEach((criterion) => {
+            visibleRubric.append(el("li", {
+              text: `Criterion ${visibleRubric.childElementCount + 1} (${Number(criterion.marks) || 0} marks)`
+            }));
+          });
+          if (question.rubric?.length) block.append(visibleRubric);
+        }
+      }
+      preview.append(block);
+    });
+    previewContent.replaceChildren(preview);
+    if (typeof previewDialog.showModal === "function") previewDialog.showModal();
+    else previewDialog.setAttribute("open", "");
+    refreshIcons();
+    $("button[data-action='close-preview']", previewDialog)?.focus();
+  }
+
+  async function saveDraft() {
+    if (!assessment || saving) return;
+    captureCurrentForm();
+    saving = true;
+    try {
+      const saved = await api.saveDraft(assessment);
+      assessment = saved.data;
+      setFeedback("Draft saved in this browser (mock API).", "success");
+      await loadSaved();
+    } catch (error) {
+      setFeedback(error.message, "error");
+    } finally {
+      saving = false;
+    }
+  }
+
+  function captureCurrentForm() {
+    const form = $("[data-config-form]", workspaceContent);
+    if (form) captureForm(form);
+    if (assessment && !assessment.id) assessment.status = "draft";
+  }
+
+  async function doPublish(item = assessment) {
+    if (!item || saving) return;
+    if (item === assessment) captureCurrentForm();
+    const errors = api.validatePublish(item);
+    if (errors.length) {
+      setFeedback(`Cannot publish yet:\n${errors.join("\n")}`, "error");
+      if (item === assessment && builderVisible) renderSummary();
+      return;
+    }
+    if (!window.confirm("Publish this assessment? This is a simulation and will not deliver it to students.")) return;
+    saving = true;
+    try {
+      const result = await api.publishAssessment(item);
+      setFeedback("Published in mock mode only. No students received this assessment.", "success");
+      if (item === assessment) {
+        assessment = result.data;
+        workspace.hidden = true;
+        byId("assessmentCreation").hidden = false;
+        assessment = null;
+      }
+      await loadSaved();
+    } catch (error) {
+      setFeedback(error.message, "error");
+    } finally {
+      saving = false;
+    }
+  }
+
+  function resetWorkspace() {
+    workspace.hidden = true;
+    byId("assessmentCreation").hidden = false;
+    workspaceContent.replaceChildren();
+    workspaceContent.hidden = false;
+    questionList.replaceChildren();
+    questionList.hidden = true;
+    $(".as-question-toolbar", workspace)?.remove();
+    summary.hidden = true;
+    summary.replaceChildren();
+    assessment = null;
+    originalFile = null;
+    builderVisible = false;
+    expandedQuestions.clear();
+    setFeedback("");
+    updateActionVisibility();
+  }
+
+  function hasUnsavedWork() {
+    if (!assessment) return false;
+    const defaults = defaultAssessment(assessment.method);
+    const configurationChanged = assessment.questionType !== defaults.questionType ||
+      assessment.questionCount !== defaults.questionCount ||
+      assessment.difficulty !== defaults.difficulty ||
+      assessment.mcqMarks !== defaults.mcqMarks ||
+      assessment.essayMarks !== defaults.essayMarks ||
+      (assessment.questionType === "mixed" &&
+        (assessment.mcqCount !== defaults.mcqCount || assessment.essayCount !== defaults.essayCount));
+    return Boolean(
+      assessment.title.trim() ||
+      assessment.courseId ||
+      originalFile ||
+      assessment.questions.length ||
+      assessment.pastedText.trim() ||
+      assessment.instructions.trim() ||
+      assessment.lectureIds.length ||
+      assessment.materials.length ||
+      assessment.showRubricToStudents ||
+      configurationChanged
+    );
+  }
+
+  function confirmDiscard() {
+    captureCurrentForm();
+    if (!hasUnsavedWork()) {
+      resetWorkspace();
+      return true;
+    }
+    if (!window.confirm("Discard the current unsaved assessment edits? Saved drafts will remain available.")) return false;
+    resetWorkspace();
+    return true;
+  }
+
+  async function selectFile(file, kind) {
+    if (!file) return;
+    if (kind === "assessment" && originalFile &&
+      originalFile.name !== file.name &&
+      !window.confirm("Replace the currently selected assessment file?")) return;
+    const allowed = kind === "assessment"
+      ? api.config.supportedAssessmentFormats
+      : api.config.supportedLectureFormats;
+    const extension = file.name.split(".").pop().toLowerCase();
+    if (!allowed.includes(extension)) {
+      setFeedback(`Unsupported file type. Supported formats: ${allowed.join(", ").toUpperCase()}.`, "error");
+      return;
+    }
+    if (!file.size) {
+      setFeedback("The selected file is empty. Choose a non-empty file.", "error");
+      return;
+    }
+    setFeedback("Uploading file metadata…", "info");
+    try {
+      if (kind === "assessment") {
+        originalFile = file;
+        renderMethodForm();
+        setFeedback(`${file.name} selected (${humanSize(file.size)}). File contents are not stored.`, "success");
+      } else {
+        const result = await api.uploadLectureMaterial({ name: file.name, size: file.size }, assessment.courseId);
+        assessment.materials.push(result.data);
+        renderMaterialChips();
+        setFeedback(`${file.name} added as a lecture source. Upload is simulated.`, "success");
+      }
+    } catch (error) {
+      setFeedback(error.message, "error");
+    }
+  }
+
+  async function handleClick(event) {
+    const control = event.target.closest("[data-action], [data-method]");
+    if (!control) return;
+    if (control.dataset.method) {
+      const radio = control.querySelector('input[type="radio"]');
+      if (radio) {
+        if (assessment && assessment.method !== radio.value && !confirmDiscard()) {
+          event.preventDefault();
+          return;
+        }
+        byId("assessmentContinue").disabled = false;
+      }
+      return;
+    }
+    const action = control.dataset.action;
+    if (control.dataset.noToggle) return;
+    if (action?.startsWith("browse-")) {
+      $(`[data-file-input="${action.replace("browse-", "")}"]`, workspaceContent)?.click();
+      return;
+    }
+    if (action === "continue") {
+      const selected = $("input[name='assessmentMethod']:checked");
+      if (!selected) return;
+      if (assessment && assessment.method !== selected.value) {
+        if (!confirmDiscard()) return;
+      }
+      if (!assessment) assessment = defaultAssessment(selected.value);
+      workspace.hidden = false;
+      renderMethodForm();
+      return;
+    }
+    if (action === "cancel-workflow") {
+      confirmDiscard();
+      return;
+    }
+    if (action === "back-to-methods") {
+      if (builderVisible) {
+        captureCurrentForm();
+        builderVisible = false;
+        workspaceContent.hidden = false;
+        questionList.hidden = true;
+        summary.hidden = true;
+        updateActionVisibility();
+        if (!$("[data-config-form]", workspaceContent)) renderMethodForm();
+        return;
+      }
+      workspace.hidden = true;
+      byId("assessmentCreation").hidden = false;
+      setFeedback("Your entries are kept while you choose a creation method.", "info");
+      return;
+    }
+    if (action === "extract-questions") {
+      captureCurrentForm();
+      if (!assessment.title.trim() || !assessment.courseId) {
+        setFeedback("Enter an assessment title and select a course first.", "error");
+        return;
+      }
+      if (assessment.questions.length) {
+        showBuilder(assessment.questions);
+        setFeedback("Your existing question edits have been preserved.", "success");
+        return;
+      }
+      if (!originalFile) {
+        setFeedback("Choose a PDF or DOCX assessment file first.", "error");
+        return;
+      }
+      control.disabled = true;
+      setFeedback("Creating mock editable sample questions…", "info");
+      try {
+        const result = await api.extractAssessmentQuestions({
+          name: originalFile.name, size: originalFile.size
+        }, assessment);
+        assessment.questions = result.data.questions;
+        showBuilder(result.data.questions);
+        setFeedback(result.data.message, "success");
+      } catch (error) {
+        setFeedback(error.message, "error");
+      } finally {
+        control.disabled = false;
+      }
+      return;
+    }
+    if (action === "build-manual") {
+      captureCurrentForm();
+      const count = assessment.questionType === "mixed"
+        ? Number(assessment.mcqCount) + Number(assessment.essayCount)
+        : Number(assessment.questionCount);
+      const countsValid = assessment.questionType === "mixed"
+        ? Number.isInteger(Number(assessment.mcqCount)) && Number(assessment.mcqCount) >= 0 &&
+        Number.isInteger(Number(assessment.essayCount)) && Number(assessment.essayCount) >= 0 &&
+        (Number(assessment.mcqCount) + Number(assessment.essayCount) > 0)
+        : Number.isInteger(Number(assessment.questionCount)) && Number(assessment.questionCount) >= 1;
+      const marksValid = Number(assessment.mcqMarks) > 0 && Number(assessment.essayMarks) > 0;
+      if (!assessment.title.trim() || !assessment.courseId || !countsValid || !marksValid) {
+        setFeedback("Enter a title, select a course, and configure at least one question.", "error");
+        return;
+      }
+      if (assessment.questions.length) {
+        showBuilder(assessment.questions);
+        setFeedback("Your existing question edits have been preserved.", "success");
+        return;
+      }
+      assessment.questions = assessment.questionType === "mixed"
+        ? [
+          ...Array(Number(assessment.mcqCount)).fill("mcq"),
+          ...Array(Number(assessment.essayCount)).fill("essay")
+        ].map((type) => questionTemplate(type))
+        : Array.from({ length: count }, () =>
+          questionTemplate(assessment.questionType));
+      showBuilder(assessment.questions);
+      setFeedback("Blank editable question cards are ready.", "success");
+      return;
+    }
+    if (action === "generate-questions") {
+      captureCurrentForm();
+      const total = assessment.questionType === "mixed"
+        ? Number(assessment.mcqCount) + Number(assessment.essayCount)
+        : Number(assessment.questionCount);
+      if (!assessment.title.trim() || !assessment.courseId) {
+        setFeedback("Enter a title and select a course.", "error");
+        return;
+      }
+      if (total < 1 || total > api.config.maxAiQuestions) {
+        setFeedback(`Simulated AI generation supports 1–${api.config.maxAiQuestions} questions total. Add remaining questions manually after generation.`, "error");
+        return;
+      }
+      const configValid = assessment.questionType === "mixed"
+        ? Number.isInteger(Number(assessment.mcqCount)) && Number(assessment.mcqCount) >= 0 &&
+        Number.isInteger(Number(assessment.essayCount)) && Number(assessment.essayCount) >= 0
+        : Number.isInteger(Number(assessment.questionCount)) && Number(assessment.questionCount) >= 1;
+      if (!configValid || Number(assessment.mcqMarks) <= 0 || Number(assessment.essayMarks) <= 0) {
+        setFeedback("Question counts must be whole non-negative numbers and marks must be positive.", "error");
+        return;
+      }
+      if (assessment.questions.length) {
+        showBuilder(assessment.questions);
+        setFeedback("Your existing question edits have been preserved.", "success");
+        return;
+      }
+      const sourceMaterials = [
+        ...assessment.lectureIds.map((id) => lectures.find((item) => item.id === id)).filter(Boolean),
+        ...assessment.materials
+      ];
+      if (!sourceMaterials.length && !assessment.pastedText.trim()) {
+        setFeedback("Select at least one lecture, upload source material, or paste lecture text.", "error");
+        return;
+      }
+      control.disabled = true;
+      setFeedback("Generating simulated questions… Please review all generated content.", "info");
+      try {
+        const result = await api.generateAssessmentQuestions(assessment, sourceMaterials);
+        showBuilder(result.data.questions);
+        setFeedback(result.data.message, "success");
+      } catch (error) {
+        setFeedback(error.message, "error");
+      } finally {
+        control.disabled = false;
+      }
+      return;
+    }
+    if (action === "remove-assessment-file") {
+      if (window.confirm("Remove the selected assessment file?")) {
+        originalFile = null;
+        renderMethodForm();
+        setFeedback("Selected file removed.", "info");
+      }
+      return;
+    }
+    if (action === "remove-material") {
+      const index = Number(control.dataset.index);
+      if (window.confirm("Remove this lecture source from the current assessment?")) {
+        assessment.materials.splice(index, 1);
+        renderMaterialChips();
+      }
+      return;
+    }
+    if (action === "add-question") {
+      if (!ensureEditable()) return;
+      const type = $("[data-add-type]", workspace).value;
+      const question = questionTemplate(type);
+      assessment.questions.push(question);
+      expandedQuestions.add(question.id);
+      renderQuestions();
+      renderSummary();
+      return;
+    }
+    const questionId = control.dataset.questionId;
+    if (action === "duplicate-question") {
+      if (!ensureEditable()) return;
+      const source = assessment.questions.find((item) => item.id === questionId);
+      if (!source) return;
+      const duplicate = JSON.parse(JSON.stringify(source));
+      duplicate.id = localId("question");
+      duplicate.origin = "manual";
+      duplicate.needsReview = false;
+      duplicate.options = duplicate.options.map((option) => ({
+        ...option, id: localId("option")
+      }));
+      duplicate.rubric = duplicate.rubric.map((criterion) => ({
+        ...criterion, id: localId("criterion")
+      }));
+      assessment.questions.splice(assessment.questions.indexOf(source) + 1, 0, duplicate);
+      expandedQuestions.add(duplicate.id);
+      renderQuestions();
+      renderSummary();
+      return;
+    }
+    if (action === "delete-question") {
+      if (!ensureEditable()) return;
+      if (!window.confirm("Delete this question and its current edits?")) return;
+      assessment.questions = assessment.questions.filter((item) => item.id !== questionId);
+      expandedQuestions.delete(questionId);
+      renderQuestions();
+      renderSummary();
+      return;
+    }
+    if (action === "regenerate-question") {
+      if (!ensureEditable()) return;
+      const source = assessment.questions.find((item) => item.id === questionId);
+      if (!source) return;
+      if (!window.confirm("Replace this question and discard its current edits?")) return;
+      const sources = [...assessment.materials,
+      ...assessment.lectureIds.map((id) => lectures.find((item) => item.id === id)).filter(Boolean)];
+      control.disabled = true;
+      try {
+        const result = await api.regenerateQuestion(source, assessment, sources);
+        assessment.questions[assessment.questions.indexOf(source)] = {
+          ...result.data, id: source.id, marks: source.marks
+        };
+        renderQuestions();
+        renderSummary();
+        setFeedback("Question replaced with simulated content.", "success");
+      } catch (error) {
+        setFeedback(error.message, "error");
+      } finally {
+        control.disabled = false;
+      }
+      return;
+    }
+    if (action === "add-option") {
+      const question = assessment.questions.find((item) => item.id === questionId);
+      if (!question) return;
+      question.options.push({ id: localId("option"), text: "" });
+      renderQuestions();
+      return;
+    }
+    if (action === "remove-option") {
+      const question = assessment.questions.find((item) => item.id === questionId);
+      if (!question || question.options.length <= 2) return;
+      const optionIndex = question.options.findIndex((option) => option.id === control.dataset.optionId);
+      if (optionIndex < 0) return;
+      if (question.options[optionIndex].text &&
+        !window.confirm("Remove this answer option and its current text?")) return;
+      question.options.splice(optionIndex, 1);
+      if (question.correctIndex === optionIndex) question.correctIndex = null;
+      else if (question.correctIndex > optionIndex) question.correctIndex--;
+      renderQuestions();
+      renderSummary();
+      return;
+    }
+    if (action === "add-criterion") {
+      const question = assessment.questions.find((item) => item.id === questionId);
+      if (!question) return;
+      question.rubric.push({
+        id: localId("criterion"),
+        name: "", evaluates: "", marks: 1, keyPoints: "",
+        fullCredit: "", partialCredit: "", noCredit: ""
+      });
+      renderQuestions();
+      renderSummary();
+      return;
+    }
+    if (action === "remove-criterion") {
+      const question = assessment.questions.find((item) => item.id === questionId);
+      if (!question || question.rubric.length <= 1) return;
+      const rubric = control.closest(".as-rubric-criterion");
+      if (!window.confirm("Remove this rubric criterion?")) return;
+      const index = Array.from(rubric.parentElement.querySelectorAll(".as-rubric-criterion")).indexOf(rubric);
+      question.rubric.splice(index, 1);
+      renderQuestions();
+      renderSummary();
+      return;
+    }
+    if (action === "save-draft") {
+      await saveDraft();
+      return;
+    }
+    if (action === "preview") {
+      captureCurrentForm();
+      makePreview(assessment);
+      return;
+    }
+    if (action === "publish") {
+      await doPublish();
+      return;
+    }
+    if (action === "close-preview") {
+      previewDialog.close?.();
+      return;
+    }
+    if (action === "refresh-saved") {
+      await loadSaved();
+      return;
+    }
+    if (action === "edit-saved") {
+      try {
+        const result = await api.getAssessmentById(control.dataset.assessmentId);
+        assessment = result.data;
+        originalFile = null;
+        builderVisible = true;
+        workspace.hidden = false;
+        byId("assessmentCreation").hidden = true;
+        byId("workspaceTitle").textContent = `Edit draft: ${assessment.title}`;
+        byId("workspaceDescription").textContent = "Edit this saved draft. Published assessments are read-only.";
+        workspaceContent.replaceChildren();
+        workspaceContent.hidden = true;
+        showBuilder(assessment.questions || []);
+        setFeedback("Draft restored from local storage.", "success");
+      } catch (error) {
+        setFeedback(error.message, "error");
+      }
+      return;
+    }
+    if (action === "preview-saved") {
+      try {
+        const result = await api.getAssessmentById(control.dataset.assessmentId);
+        makePreview(result.data);
+      } catch (error) {
+        setFeedback(error.message, "error");
+      }
+      return;
+    }
+    if (action === "duplicate-saved") {
+      try {
+        const result = await api.duplicateAssessment(control.dataset.assessmentId);
+        await loadSaved();
+        setFeedback("Assessment duplicated as a new draft.", "success");
+        assessment = result.data;
+        workspace.hidden = false;
+        byId("assessmentCreation").hidden = true;
+        builderVisible = true;
+        byId("workspaceTitle").textContent = `Edit draft: ${assessment.title}`;
+        byId("workspaceDescription").textContent = "Duplicated assessments are editable drafts.";
+        workspaceContent.replaceChildren();
+        workspaceContent.hidden = true;
+        showBuilder(assessment.questions);
+      } catch (error) {
+        setFeedback(error.message, "error");
+      }
+      return;
+    }
+    if (action === "delete-saved") {
+      if (!window.confirm("Delete this saved assessment permanently from this browser?")) return;
+      try {
+        await api.deleteAssessment(control.dataset.assessmentId);
+        await loadSaved();
+        setFeedback("Assessment deleted.", "success");
+      } catch (error) {
+        setFeedback(error.message, "error");
+      }
+      return;
+    }
+    if (action === "publish-saved") {
+      try {
+        const result = await api.getAssessmentById(control.dataset.assessmentId);
+        await doPublish(result.data);
+      } catch (error) {
+        setFeedback(error.message, "error");
+      }
+    }
+  }
+
+  document.addEventListener("click", (event) => {
+    void handleClick(event);
+  });
+
+  document.addEventListener("input", (event) => {
+    const target = event.target;
+    if (target.id === "teacherSearchInput" || target.id === "savedAssessmentSearch") {
+      searchTerm = target.value;
+      loadSaved();
+      return;
+    }
+    if (target.matches("[data-question-field]")) {
+      const value = target.matches(".edu-math-rich-editor")
+        ? window.eduMathInput.serializeField(target)
+        : target.value;
+      updateQuestion(target.dataset.questionId, target.dataset.questionField, value);
+    } else if (target.matches("[data-option-field]")) {
+      const question = assessment?.questions.find((item) => item.id === target.dataset.questionId);
+      const option = question?.options.find((item) => item.id === target.dataset.optionId);
+      if (option) option.text = target.matches(".edu-math-rich-editor")
+        ? window.eduMathInput.serializeField(target)
+        : target.value;
+      renderSummary();
+    } else if (target.matches("[data-config-form] input, [data-config-form] textarea")) {
+      captureCurrentForm();
+      const totalLine = $("[data-config-total]", workspaceContent);
+      if (totalLine) {
+        const count = assessment.questionType === "mixed"
+          ? Number(assessment.mcqCount) + Number(assessment.essayCount)
+          : Number(assessment.questionCount);
+        const marks = assessment.questionType === "mixed"
+          ? Number(assessment.mcqCount) * Number(assessment.mcqMarks) +
+          Number(assessment.essayCount) * Number(assessment.essayMarks)
+          : count * Number(assessment.questionType === "mcq" ? assessment.mcqMarks : assessment.essayMarks);
+        totalLine.textContent = `Total questions: ${count} · Total marks: ${marks || 0}${assessment.method === "ai" ? ` · AI maximum: ${api.config.maxAiQuestions}` : ""}`;
+      }
+    }
+  });
+
+  document.addEventListener("change", (event) => {
+    const target = event.target;
+    if (target.matches("[data-question-field]")) {
+      const value = target.matches(".edu-math-rich-editor")
+        ? window.eduMathInput.serializeField(target)
+        : target.value;
+      updateQuestion(target.dataset.questionId, target.dataset.questionField, value);
+    } else if (target.matches("[data-option-field]")) {
+      const question = assessment?.questions.find((item) => item.id === target.dataset.questionId);
+      const option = question?.options.find((item) => item.id === target.dataset.optionId);
+      if (option) option.text = target.matches(".edu-math-rich-editor")
+        ? window.eduMathInput.serializeField(target)
+        : target.value;
+      renderSummary();
+    } else if (target.matches("[data-correct-option]")) {
+      const question = assessment?.questions.find((item) => item.id === target.dataset.questionId);
+      const index = question?.options.findIndex((option) => option.id === target.value);
+      if (question && index >= 0) question.correctIndex = index;
+      renderSummary();
+    } else if (target.matches("[data-assessment-field]")) {
+      if (target.dataset.assessmentField === "showRubricToStudents") {
+        assessment.showRubricToStudents = target.checked;
+      } else {
+        assessment[target.dataset.assessmentField] = target.value;
+        const heading = $(".as-summary h3");
+        const details = $(".as-summary-heading p");
+        if (heading) heading.textContent = assessment.title || "Untitled assessment";
+        if (details) {
+          const methodName = { upload: "Upload (mock extraction)", manual: "Manual", ai: "AI (simulated)" }[assessment.method];
+          details.textContent = `${getCourseName(assessment.courseId)} · ${methodName}`;
+        }
+      }
+    } else if (target.matches("[data-file-input]")) {
+      void selectFile(target.files?.[0], target.dataset.fileInput);
+      target.value = "";
+    } else if (target.matches("[data-config-form] select, [data-config-form] input")) {
+      if (target.name === "questionType") {
+        captureCurrentForm();
+        renderMethodForm();
+        return;
+      }
+      if (target.name === "courseId" && assessment.method === "ai") {
+        captureCurrentForm();
+        api.getAvailableLectures(assessment.courseId).then((result) => {
+          lectures = result.data;
+          renderMethodForm();
+        }).catch((error) => setFeedback(error.message, "error"));
+      } else captureCurrentForm();
+    } else if (target.id === "savedStatusFilter" || target.id === "savedMethodFilter") {
+      loadSaved();
+    }
+  });
+
+  document.addEventListener("dragover", (event) => {
+    const zone = event.target.closest("[data-dropzone]");
+    if (!zone) return;
+    event.preventDefault();
+    zone.classList.add("drag-over");
+  });
+  document.addEventListener("dragleave", (event) => {
+    const zone = event.target.closest("[data-dropzone]");
+    if (zone && !zone.contains(event.relatedTarget)) zone.classList.remove("drag-over");
+  });
+  document.addEventListener("drop", (event) => {
+    const zone = event.target.closest("[data-dropzone]");
+    if (!zone) return;
+    event.preventDefault();
+    zone.classList.remove("drag-over");
+    void selectFile(event.dataTransfer?.files?.[0], zone.dataset.dropzone);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const zone = event.target.closest?.("[data-dropzone]");
+    if (zone && (event.key === "Enter" || event.key === " ")) {
+      event.preventDefault();
+      $(`[data-file-input="${zone.dataset.dropzone}"]`, workspaceContent)?.click();
+    }
+    if (event.key === "Escape") closeTeacherSidebar();
+  });
+
+  function closeTeacherSidebar() {
+    const sidebar = byId("teacherSidebar");
+    const backdrop = byId("teacherBackdrop");
+    const menuButton = byId("teacherMenuBtn");
+    sidebar?.classList.remove("open");
+    backdrop?.classList.remove("open");
+    if (backdrop) backdrop.hidden = true;
+    menuButton?.setAttribute("aria-expanded", "false");
+    menuButton?.setAttribute("aria-label", "Open sidebar");
+  }
+  function openTeacherSidebar() {
+    const sidebar = byId("teacherSidebar");
+    const backdrop = byId("teacherBackdrop");
+    const menuButton = byId("teacherMenuBtn");
+    sidebar?.classList.add("open");
+    if (backdrop) {
+      backdrop.hidden = false;
+      backdrop.classList.add("open");
+    }
+    menuButton?.setAttribute("aria-expanded", "true");
+    menuButton?.setAttribute("aria-label", "Close sidebar");
+  }
+
+  document.addEventListener("click", (event) => {
+    if (event.target.closest("#teacherMenuBtn")) {
+      if (byId("teacherMenuBtn")?.getAttribute("aria-expanded") === "true") closeTeacherSidebar();
+      else openTeacherSidebar();
+    }
+    if (event.target.closest("#teacherBackdrop")) closeTeacherSidebar();
+    const comingSoon = event.target.closest("[data-coming-soon]");
+    if (comingSoon) {
+      event.preventDefault();
+      setFeedback(`${comingSoon.textContent.trim()} is coming soon. This destination is not available yet.`, "info");
+      closeTeacherSidebar();
+    }
+    if (event.target.closest("#teacherLogoutBtn")) {
+      setFeedback("Sign-out is not connected for the teacher demo, so no account state was changed.", "info");
+    }
+    if (event.target.closest("#teacherNotificationBtn, #teacherSidebarNotificationBtn")) {
+      setFeedback("Teacher notifications are a mock panel. No notifications are connected yet.", "info");
+      const current = $("#teacherNotificationBtn");
+      const sidebarNotification = $("#teacherSidebarNotificationBtn");
+      const panel = $("#teacherMockNotifications");
+      const expanded = !panel;
+      if (panel) panel.remove();
+      else {
+        const popover = el("section", {
+          id: "teacherMockNotifications",
+          className: "as-notification-popover",
+          role: "status",
+          text: "Mock notifications: teacher notifications are not connected yet."
+        });
+        current.closest(".sd-topbar")?.append(popover);
+      }
+      current?.setAttribute("aria-expanded", String(expanded));
+      sidebarNotification?.setAttribute("aria-expanded", String(expanded));
+    }
+  });
+
+  document.addEventListener("change", (event) => {
+    if (event.target.matches("[data-method]")) {
+      byId("assessmentContinue").disabled = false;
+    }
+  });
+
+  async function start() {
+    try {
+      const result = await api.getCourses();
+      courses = result.data;
+      lectures = (await api.getAvailableLectures()).data;
+      const continueButton = byId("assessmentContinue");
+      continueButton.dataset.action = "continue";
+      continueButton.disabled = true;
+      document.querySelectorAll('input[name="assessmentMethod"]').forEach((radio) => {
+        radio.dataset.method = radio.value;
+      });
+      await loadSaved();
+      refreshIcons();
+    } catch (error) {
+      setFeedback(`Could not load assessment data: ${error.message}`, "error");
+    }
+  }
+
+  void start();
+}

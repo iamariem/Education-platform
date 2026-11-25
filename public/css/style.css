@@ -5221,7 +5221,7 @@ html[dir="rtl"] .about-content {
 ========================================== */
 
 
-.student-dashboard {
+:is(.student-dashboard, .teacher-dashboard) {
   --sd-primary: var(--color-primary);
   --sd-mint: var(--color-mint);
   --sd-navy: var(--color-navy);
@@ -5242,44 +5242,44 @@ html[dir="rtl"] .about-content {
 }
 
 
-.student-dashboard *,
-.student-dashboard *::before,
-.student-dashboard *::after {
+:is(.student-dashboard, .teacher-dashboard) *,
+:is(.student-dashboard, .teacher-dashboard) *::before,
+:is(.student-dashboard, .teacher-dashboard) *::after {
   box-sizing: border-box;
 }
 
-.student-dashboard a {
+:is(.student-dashboard, .teacher-dashboard) a {
   color: inherit;
   text-decoration: none;
 }
 
-.student-dashboard button,
-.student-dashboard input {
+:is(.student-dashboard, .teacher-dashboard) button,
+:is(.student-dashboard, .teacher-dashboard) input {
   font: inherit;
 }
 
-.student-dashboard button {
+:is(.student-dashboard, .teacher-dashboard) button {
   cursor: pointer;
 }
 
-.student-dashboard [hidden] {
+:is(.student-dashboard, .teacher-dashboard) [hidden] {
   display: none !important;
 }
 
-.student-dashboard a:focus-visible,
-.student-dashboard button:focus-visible,
-.student-dashboard input:focus-visible {
+:is(.student-dashboard, .teacher-dashboard) a:focus-visible,
+:is(.student-dashboard, .teacher-dashboard) button:focus-visible,
+:is(.student-dashboard, .teacher-dashboard) input:focus-visible {
   outline: 3px solid rgba(98,196,181,.5);
   outline-offset: 3px;
 }
 
-.student-dashboard svg {
+:is(.student-dashboard, .teacher-dashboard) svg {
   width: 19px;
   height: 19px;
   stroke-width: 1.9;
 }
 
-.student-dashboard .sd-app {
+:is(.student-dashboard, .teacher-dashboard) .sd-app {
   display: grid;
   grid-template-columns: 240px minmax(0,1fr);
   min-height: 100vh;
@@ -5287,7 +5287,7 @@ html[dir="rtl"] .about-content {
 
 /* SIDEBAR */
 
-.student-dashboard .sd-sidebar {
+:is(.student-dashboard, .teacher-dashboard) .sd-sidebar {
   position: sticky;
   top: 0;
   z-index: 50;
@@ -5299,7 +5299,7 @@ html[dir="rtl"] .about-content {
   border-right: 1px solid var(--sd-border);
 }
 
-.student-dashboard .sd-brand {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand {
   display: flex;
   align-items: center;
   gap: 9px;
@@ -5309,7 +5309,7 @@ html[dir="rtl"] .about-content {
   letter-spacing: -.7px;
 }
 
-.student-dashboard .sd-brand-icon {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-icon {
   display: grid;
   place-items: center;
   width: 39px;
@@ -5319,17 +5319,17 @@ html[dir="rtl"] .about-content {
   color: var(--sd-primary);
 }
 
-.student-dashboard .sd-brand-icon svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-icon svg {
   width: 24px;
   height: 24px;
 }
 
-.student-dashboard .sd-brand-accent,
-.student-dashboard .sd-mobile-brand span {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-accent,
+:is(.student-dashboard, .teacher-dashboard) .sd-mobile-brand span {
   color: var(--sd-primary);
 }
 
-.student-dashboard .sd-nav-caption {
+:is(.student-dashboard, .teacher-dashboard) .sd-nav-caption {
   margin: 0 14px 15px;
   color: #a3aebb;
   font-size: 10px;
@@ -5337,12 +5337,12 @@ html[dir="rtl"] .about-content {
   letter-spacing: 1.6px;
 }
 
-.student-dashboard .sd-side-nav {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav {
   display: grid;
   gap: 5px;
 }
 
-.student-dashboard .sd-side-link {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link {
   display: flex;
   align-items: center;
   gap: 13px;
@@ -5359,24 +5359,24 @@ html[dir="rtl"] .about-content {
   transition: background .2s, color .2s;
 }
 
-.student-dashboard .sd-side-link:hover {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link:hover {
   background: #f5f8fa;
   color: var(--sd-navy);
 }
 
-.student-dashboard .sd-side-link.active {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link.active {
   background: #fff0f1;
   color: #db6570;
   font-weight: 600;
 }
 
-.student-dashboard .sd-side-link svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link svg {
   flex-shrink: 0;
   width: 19px;
   height: 19px;
 }
 
-.student-dashboard .sd-nav-badge {
+:is(.student-dashboard, .teacher-dashboard) .sd-nav-badge {
   margin-left: auto;
   padding: 2px 7px;
   border-radius: 20px;
@@ -5385,22 +5385,22 @@ html[dir="rtl"] .about-content {
   font-size: 10px;
 }
 
-.student-dashboard .sd-sidebar-footer {
+:is(.student-dashboard, .teacher-dashboard) .sd-sidebar-footer {
   margin-top: auto;
   padding-top: 13px;
   border-top: 1px solid var(--sd-border);
 }
 
-.student-dashboard .sd-logout {
+:is(.student-dashboard, .teacher-dashboard) .sd-logout {
   color: #cf5661;
 }
 
-.student-dashboard .sd-logout:hover {
+:is(.student-dashboard, .teacher-dashboard) .sd-logout:hover {
   background: #fff0f1;
   color: #c34754;
 }
 
-.student-dashboard .sd-side-user {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-user {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -5409,25 +5409,25 @@ html[dir="rtl"] .about-content {
   border-top: 1px solid var(--sd-border);
 }
 
-.student-dashboard .sd-side-user strong,
-.student-dashboard .sd-side-user small,
-.student-dashboard .sd-top-user strong,
-.student-dashboard .sd-top-user small {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-user strong,
+:is(.student-dashboard, .teacher-dashboard) .sd-side-user small,
+:is(.student-dashboard, .teacher-dashboard) .sd-top-user strong,
+:is(.student-dashboard, .teacher-dashboard) .sd-top-user small {
   display: block;
 }
 
-.student-dashboard .sd-side-user strong,
-.student-dashboard .sd-top-user strong {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-user strong,
+:is(.student-dashboard, .teacher-dashboard) .sd-top-user strong {
   font-size: 11px;
 }
 
-.student-dashboard .sd-side-user small,
-.student-dashboard .sd-top-user small {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-user small,
+:is(.student-dashboard, .teacher-dashboard) .sd-top-user small {
   color: var(--sd-muted);
   font-size: 10px;
 }
 
-.student-dashboard .sd-avatar {
+:is(.student-dashboard, .teacher-dashboard) .sd-avatar {
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -5442,11 +5442,11 @@ html[dir="rtl"] .about-content {
 
 /* NAVBAR */
 
-.student-dashboard .sd-page {
+:is(.student-dashboard, .teacher-dashboard) .sd-page {
   min-width: 0;
 }
 
-.student-dashboard .sd-topbar {
+:is(.student-dashboard, .teacher-dashboard) .sd-topbar {
   position: sticky;
   top: 0;
   z-index: 30;
@@ -5462,15 +5462,15 @@ html[dir="rtl"] .about-content {
   -webkit-backdrop-filter: blur(16px);
 }
 
-.student-dashboard .sd-top-left,
-.student-dashboard .sd-top-actions,
-.student-dashboard .sd-top-user {
+:is(.student-dashboard, .teacher-dashboard) .sd-top-left,
+:is(.student-dashboard, .teacher-dashboard) .sd-top-actions,
+:is(.student-dashboard, .teacher-dashboard) .sd-top-user {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.student-dashboard .sd-search {
+:is(.student-dashboard, .teacher-dashboard) .sd-search {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -5483,11 +5483,11 @@ html[dir="rtl"] .about-content {
   color: #98a5b4;
 }
 
-.student-dashboard .sd-search svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-search svg {
   width: 17px;
 }
 
-.student-dashboard .sd-search input {
+:is(.student-dashboard, .teacher-dashboard) .sd-search input {
   width: 100%;
   border: 0;
   outline: 0;
@@ -5496,11 +5496,11 @@ html[dir="rtl"] .about-content {
   font-size: 11px;
 }
 
-.student-dashboard .sd-search input::placeholder {
+:is(.student-dashboard, .teacher-dashboard) .sd-search input::placeholder {
   color: #9da9b7;
 }
 
-.student-dashboard .sd-icon-btn {
+:is(.student-dashboard, .teacher-dashboard) .sd-icon-btn {
   position: relative;
   display: grid;
   place-items: center;
@@ -5512,11 +5512,11 @@ html[dir="rtl"] .about-content {
   color: var(--sd-navy);
 }
 
-.student-dashboard .sd-icon-btn:hover {
+:is(.student-dashboard, .teacher-dashboard) .sd-icon-btn:hover {
   background: #f3f7f9;
 }
 
-.student-dashboard .sd-notification-dot {
+:is(.student-dashboard, .teacher-dashboard) .sd-notification-dot {
   position: absolute;
   top: 5px;
   right: 6px;
@@ -5526,23 +5526,23 @@ html[dir="rtl"] .about-content {
   background: var(--sd-primary);
 }
 
-.student-dashboard .sd-top-user {
+:is(.student-dashboard, .teacher-dashboard) .sd-top-user {
   gap: 9px;
 }
 
-.student-dashboard .sd-top-user > svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-top-user > svg {
   width: 15px;
   height: 15px;
 }
 
-.student-dashboard .sd-menu-btn,
-.student-dashboard .sd-mobile-brand {
+:is(.student-dashboard, .teacher-dashboard) .sd-menu-btn,
+:is(.student-dashboard, .teacher-dashboard) .sd-mobile-brand {
   display: none;
 }
 
 /* MAIN */
 
-.student-dashboard .sd-main {
+:is(.student-dashboard, .teacher-dashboard) .sd-main {
   max-width: 1440px;
   margin: 0 auto;
   padding: 30px 4% 20px;
@@ -6093,7 +6093,7 @@ html[dir="rtl"] .about-content {
   font-size: 10px;
 }
 
-.student-dashboard .sd-backdrop {
+:is(.student-dashboard, .teacher-dashboard) .sd-backdrop {
   display: none;
 }
 
@@ -6110,11 +6110,11 @@ html[dir="rtl"] .about-content {
 }
 
 @media (max-width: 980px) {
-  .student-dashboard .sd-app {
+  :is(.student-dashboard, .teacher-dashboard) .sd-app {
     grid-template-columns: 1fr;
   }
 
-  .student-dashboard .sd-sidebar {
+  :is(.student-dashboard, .teacher-dashboard) .sd-sidebar {
     position: fixed;
     left: 0;
     width: 240px;
@@ -6122,11 +6122,11 @@ html[dir="rtl"] .about-content {
     transition: transform .25s;
   }
 
-  .student-dashboard .sd-sidebar.open {
+  :is(.student-dashboard, .teacher-dashboard) .sd-sidebar.open {
     transform: translateX(0);
   }
 
-  .student-dashboard .sd-backdrop.open {
+  :is(.student-dashboard, .teacher-dashboard) .sd-backdrop.open {
     position: fixed;
     inset: 0;
     z-index: 40;
@@ -6134,36 +6134,36 @@ html[dir="rtl"] .about-content {
     background: rgba(31,45,61,.35);
   }
 
-  .student-dashboard .sd-menu-btn {
+  :is(.student-dashboard, .teacher-dashboard) .sd-menu-btn {
     display: grid;
   }
 
-  .student-dashboard .sd-mobile-brand {
+  :is(.student-dashboard, .teacher-dashboard) .sd-mobile-brand {
     display: inline;
     font-size: 18px;
     font-weight: 700;
   }
 
-  .student-dashboard .sd-top-left {
+  :is(.student-dashboard, .teacher-dashboard) .sd-top-left {
     gap: 10px;
   }
 
-  .student-dashboard .sd-search {
+  :is(.student-dashboard, .teacher-dashboard) .sd-search {
     width: min(300px,40vw);
   }
 }
 
 @media (max-width: 720px) {
-  .student-dashboard .sd-main {
+  :is(.student-dashboard, .teacher-dashboard) .sd-main {
     padding: 22px 16px;
   }
 
-  .student-dashboard .sd-topbar {
+  :is(.student-dashboard, .teacher-dashboard) .sd-topbar {
     height: 66px;
     padding: 0 16px;
   }
 
-  .student-dashboard .sd-search {
+  :is(.student-dashboard, .teacher-dashboard) .sd-search {
     width: min(230px,37vw);
   }
 
@@ -6176,14 +6176,14 @@ html[dir="rtl"] .about-content {
     display: none;
   }
 
-  .student-dashboard .sd-top-user-text,
-  .student-dashboard .sd-top-user > svg {
+  :is(.student-dashboard, .teacher-dashboard) .sd-top-user-text,
+  :is(.student-dashboard, .teacher-dashboard) .sd-top-user > svg {
     display: none;
   }
 }
 
 @media (max-width: 520px) {
-  .student-dashboard .sd-search {
+  :is(.student-dashboard, .teacher-dashboard) .sd-search {
     display: none;
   }
 
@@ -6272,7 +6272,7 @@ html[dir="rtl"] .about-content {
 
 /* EduSaaS Logo - Student Dashboard Only */
 
-.student-dashboard .sd-brand {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand {
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -6281,7 +6281,7 @@ html[dir="rtl"] .about-content {
   text-decoration: none;
 }
 
-.student-dashboard .sd-brand-icon {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6293,14 +6293,14 @@ html[dir="rtl"] .about-content {
   color: #ffffff;
 }
 
-.student-dashboard .sd-brand-icon svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-icon svg {
   width: 29px;
   height: 29px;
   stroke: #ffffff;
   stroke-width: 2.3;
 }
 
-.student-dashboard .sd-brand-name {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-name {
   color: #1f2d3d;
   font-family: "Poppins", sans-serif;
   font-size: 25px;
@@ -6311,10 +6311,10 @@ html[dir="rtl"] .about-content {
 
 /* EduSaaS Logo - Navy Color */
 
-.student-dashboard .sd-brand-name,
-.student-dashboard .sd-brand-accent,
-.student-dashboard .sd-mobile-brand,
-.student-dashboard .sd-mobile-brand span {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-name,
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-accent,
+:is(.student-dashboard, .teacher-dashboard) .sd-mobile-brand,
+:is(.student-dashboard, .teacher-dashboard) .sd-mobile-brand span {
   color: #1F2D3D !important;
 }
 
@@ -6484,11 +6484,11 @@ html[dir="rtl"] .about-content {
 
 /* Sidebar */
 
-.student-dashboard .sd-sidebar {
+:is(.student-dashboard, .teacher-dashboard) .sd-sidebar {
   overflow-y: auto;
 }
 
-.student-dashboard .sd-side-link[aria-expanded="true"] {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link[aria-expanded="true"] {
   background: var(--color-pale-aqua);
   color: var(--color-navy);
 }
@@ -6501,19 +6501,19 @@ html[dir="rtl"] .about-content {
 
 /* Brand Colors */
 
-.student-dashboard .sd-brand-icon {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-icon {
   background: var(--color-primary);
   color: var(--color-white);
 }
 
-.student-dashboard .sd-brand-icon svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-icon svg {
   stroke: var(--color-white);
 }
 
-.student-dashboard .sd-brand-accent,
-.student-dashboard .sd-brand-name,
-.student-dashboard .sd-mobile-brand,
-.student-dashboard .sd-mobile-brand span {
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-accent,
+:is(.student-dashboard, .teacher-dashboard) .sd-brand-name,
+:is(.student-dashboard, .teacher-dashboard) .sd-mobile-brand,
+:is(.student-dashboard, .teacher-dashboard) .sd-mobile-brand span {
   color: var(--color-navy);
 }
 
@@ -6578,7 +6578,7 @@ html[dir="rtl"] .about-content {
    STUDENT DASHBOARD - SIDEBAR HOVER
 ========================================== */
 
-.student-dashboard .sd-side-link {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link {
   color: var(--color-text-muted);
   border-radius: var(--radius-md);
 
@@ -6589,23 +6589,23 @@ html[dir="rtl"] .about-content {
 
 /* Hover */
 
-.student-dashboard .sd-side-link:hover {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link:hover {
   background-color: var(--color-pale-aqua);
   color: var(--color-navy);
 }
 
 /* Active Page */
 
-.student-dashboard .sd-side-link.active,
-.student-dashboard .sd-side-link.active:hover,
-.student-dashboard .sd-side-link[aria-expanded="true"] {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link.active,
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link.active:hover,
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link[aria-expanded="true"] {
   background-color: var(--color-primary);
   color: var(--color-white);
 }
 
 /* Icons */
 
-.student-dashboard .sd-side-link svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-link svg {
   color: inherit;
   stroke: currentColor;
   transition: color 0.25s ease;
@@ -6613,11 +6613,11 @@ html[dir="rtl"] .about-content {
 
 /* Log Out */
 
-.student-dashboard .sd-logout {
+:is(.student-dashboard, .teacher-dashboard) .sd-logout {
   color: var(--color-primary);
 }
 
-.student-dashboard .sd-logout:hover {
+:is(.student-dashboard, .teacher-dashboard) .sd-logout:hover {
   background-color: var(--color-pale-aqua);
   color: var(--color-navy);
 }
@@ -6669,35 +6669,35 @@ html[dir="rtl"] .about-content {
 
 /* SIDEBAR ACTIVE & HOVER */
 
-.student-dashboard .sd-side-nav .sd-side-link {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link {
   transition:
     background-color 0.25s ease,
     color 0.25s ease;
 }
 
-.student-dashboard .sd-side-nav .sd-side-link:hover {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link:hover {
   background-color: var(--color-pale-aqua);
   color: var(--color-navy);
 }
 
-.student-dashboard .sd-side-nav .sd-side-link:hover svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link:hover svg {
   color: var(--color-navy);
   stroke: currentColor;
 }
 
-.student-dashboard .sd-side-nav a.sd-side-link.active,
-.student-dashboard .sd-side-nav a.sd-side-link.active:hover {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav a.sd-side-link.active,
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav a.sd-side-link.active:hover {
   background-color: var(--color-primary);
   color: var(--color-white);
 }
 
-.student-dashboard .sd-side-nav a.sd-side-link.active svg,
-.student-dashboard .sd-side-nav a.sd-side-link.active:hover svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav a.sd-side-link.active svg,
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav a.sd-side-link.active:hover svg {
   color: var(--color-white);
   stroke: currentColor;
 }
 
-.student-dashboard .sd-side-nav button.sd-side-link[aria-expanded="true"],
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav button.sd-side-link[aria-expanded="true"],
 .student-dashboard .sd-bell-btn[aria-expanded="true"] {
   background-color: var(--color-pale-aqua);
   color: var(--color-navy);
@@ -7768,30 +7768,30 @@ html[dir="rtl"] .about-content {
 }
 /* SIDEBAR HOVER */
 
-.student-dashboard .sd-side-nav .sd-side-link:hover {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link:hover {
   background-color: var(--color-pale-aqua);
   color: var(--color-navy);
 }
 
-.student-dashboard .sd-side-nav .sd-side-link:hover svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link:hover svg {
   color: var(--color-navy);
   stroke: currentColor;
 }
 
 /* SIDEBAR ACTIVE - FIXED PINK */
 
-.student-dashboard .sd-side-nav .sd-side-link.active,
-.student-dashboard .sd-side-nav .sd-side-link.active:hover {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link.active,
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link.active:hover {
   background-color: var(--color-primary);
   color: var(--color-white);
 }
 
-.student-dashboard .sd-side-nav .sd-side-link.active span,
-.student-dashboard .sd-side-nav .sd-side-link.active svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link.active span,
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link.active svg {
   color: var(--color-white);
 }
 
-.student-dashboard .sd-side-nav .sd-side-link.active svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link.active svg {
   stroke: currentColor;
 }
 /* =========================================
@@ -7836,4 +7836,849 @@ html[dir="rtl"] .about-content {
     max-width: 100%;
   }
 
+}
+
+/* ========================================
+   Teacher Assessment Page
+   ======================================== */
+
+.assessment-page .as-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.assessment-page [hidden] {
+  display: none !important;
+}
+
+/* Page Header */
+
+.assessment-page .as-page-header {
+  margin-bottom: 4px;
+}
+
+.assessment-page .as-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 12px;
+}
+
+.assessment-page .as-breadcrumb svg {
+  width: 14px;
+  height: 14px;
+}
+
+.assessment-page .as-page-header h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-navy);
+  margin: 0 0 8px;
+}
+
+.assessment-page .as-page-header p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Assessment Panels */
+
+.assessment-page .as-panel {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  min-width: 0;
+}
+
+.assessment-page .as-section-header {
+  margin-bottom: 24px;
+}
+
+.assessment-page .as-section-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-navy);
+  margin: 0 0 6px;
+}
+
+.assessment-page .as-section-header p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Creation Methods */
+
+.assessment-page .as-methods {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.assessment-page .as-method-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  min-height: 220px;
+  padding: 24px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.assessment-page .as-method-card:hover {
+  border-color: var(--color-mint);
+  background: #f8fcfb;
+}
+
+.assessment-page .as-method-card:has(input:checked) {
+  border-color: var(--color-primary);
+  background: #fff7f7;
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.assessment-page .as-method-card:has(input:focus-visible) {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 4px;
+}
+
+.assessment-page .as-method-card input,
+.assessment-page .as-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Method Icons */
+
+.assessment-page .as-method-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.assessment-page .as-method-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.assessment-page .as-icon-upload {
+  background: var(--color-pale-aqua);
+  color: #287f74;
+}
+
+.assessment-page .as-icon-manual {
+  background: #edf2f7;
+  color: var(--color-navy);
+}
+
+.assessment-page .as-icon-ai {
+  background: #fce8e9;
+  color: #c95760;
+}
+
+/* Method Content */
+
+.assessment-page .as-method-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-navy);
+  line-height: 1.5;
+}
+
+.assessment-page .as-method-description {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+/* Custom Radio Indicator */
+
+.assessment-page .as-radio-indicator {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assessment-page input:checked ~ .as-radio-indicator {
+  border-color: var(--color-primary);
+}
+
+.assessment-page input:checked ~ .as-radio-indicator::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: var(--color-primary);
+  border-radius: 50%;
+}
+
+/* Actions */
+
+.assessment-page .as-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.assessment-page .as-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+}
+
+.assessment-page .as-actions .btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.assessment-page .as-actions .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Empty State */
+
+.assessment-page .as-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 190px;
+  padding: 32px 16px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: #fafbfc;
+}
+
+.assessment-page .as-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-pale-aqua);
+  color: #287f74;
+  margin-bottom: 16px;
+}
+
+.assessment-page .as-empty-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.assessment-page .as-empty-state h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-navy);
+  margin: 0 0 8px;
+}
+
+.assessment-page .as-empty-state p {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Unavailable Teacher Navigation */
+
+.teacher-dashboard .sd-side-link:disabled,
+.teacher-dashboard .sd-icon-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Assessment workflow */
+
+.assessment-page .as-feedback {
+  min-height: 0;
+  margin: 0;
+  color: var(--color-navy);
+  font-size: 13px;
+  white-space: pre-line;
+}
+
+.assessment-page .as-feedback:not(:empty) {
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+}
+
+.assessment-page .as-feedback[data-type="error"] {
+  color: #a7353c;
+  border-color: #efb6ba;
+  background: #fff7f7;
+}
+
+.assessment-page .as-feedback[data-type="success"] {
+  color: #287f74;
+  border-color: #b6ded8;
+  background: #f5fbfa;
+}
+
+.assessment-page .as-config-form,
+.assessment-page .as-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 16px;
+  min-width: 0;
+}
+
+.assessment-page .as-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  color: var(--color-navy);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.assessment-page .as-field-label {
+  font-weight: 600;
+}
+
+.assessment-page .as-field-hint,
+.assessment-page .as-note {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.assessment-page .as-config-form > .as-upload-field,
+.assessment-page .as-config-form > .as-note,
+.assessment-page .as-config-form > .as-subheading,
+.assessment-page .as-config-form > .as-lecture-list,
+.assessment-page .as-config-form > .as-material-list,
+.assessment-page .as-config-form > .as-total-line,
+.assessment-page .as-config-form > .as-actions {
+  grid-column: 1 / -1;
+}
+
+.assessment-page .as-config-form .as-actions {
+  margin-top: 4px;
+}
+
+.assessment-page .as-subheading {
+  margin: 8px 0 0;
+  color: var(--color-navy);
+  font-size: 15px;
+}
+
+.assessment-page .as-total-line {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: #f5f9fa;
+  color: var(--color-navy);
+  font-weight: 600;
+}
+
+.assessment-page .as-upload-field {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.assessment-page .as-dropzone {
+  display: flex;
+  min-height: 180px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px;
+  border: 1px dashed var(--color-mint);
+  border-radius: var(--radius-lg);
+  background: #f8fcfb;
+  color: var(--color-navy);
+  text-align: center;
+  cursor: pointer;
+}
+
+.assessment-page .as-dropzone > svg {
+  width: 30px;
+  height: 30px;
+  color: #287f74;
+}
+
+.assessment-page .as-dropzone.drag-over {
+  border-color: var(--color-primary);
+  background: #fff7f7;
+}
+
+.assessment-page .as-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.assessment-page .as-file-chip,
+.assessment-page .as-material-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.assessment-page .as-file-chip {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-navy);
+}
+
+.assessment-page .as-file-chip .btn {
+  min-height: 36px;
+  padding: 7px 12px;
+}
+
+.assessment-page .as-lecture-list {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.assessment-page .as-check-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--color-navy);
+  font-size: 13px;
+}
+
+.assessment-page .as-check-row input {
+  accent-color: var(--color-primary);
+}
+
+.assessment-page .as-question-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-top: -8px;
+}
+
+.assessment-page .as-question-toolbar .form-control {
+  width: auto;
+  min-width: 150px;
+}
+
+.assessment-page .as-summary {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: #fbfdfd;
+}
+
+.assessment-page .as-summary-heading,
+.assessment-page .as-saved-card-heading,
+.assessment-page .as-rubric-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.assessment-page .as-summary h3,
+.assessment-page .as-saved-card h3 {
+  margin: 0 0 5px;
+  color: var(--color-navy);
+  font-size: 16px;
+}
+
+.assessment-page .as-summary p,
+.assessment-page .as-saved-card p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.assessment-page .as-validation-status,
+.assessment-page .as-status-badge {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.assessment-page .as-validation-status.valid,
+.assessment-page .as-status-badge.published {
+  color: #287f74;
+  background: var(--color-pale-aqua);
+}
+
+.assessment-page .as-validation-status.invalid,
+.assessment-page .as-status-badge.draft {
+  color: #a14d53;
+  background: #fff0f1;
+}
+
+.assessment-page .as-summary-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.assessment-page .as-summary-stats span {
+  padding: 7px 10px;
+  border-radius: var(--radius-md);
+  background: #f0f4f6;
+  color: var(--color-navy);
+  font-size: 12px;
+}
+
+.assessment-page .as-validation-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #a7353c;
+  font-size: 12px;
+}
+
+.assessment-page .as-rubric-toggle {
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+}
+
+.assessment-page .as-question-list,
+.assessment-page .as-saved-grid {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.assessment-page .as-question-card,
+.assessment-page .as-saved-card {
+  min-width: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+}
+
+.assessment-page .as-question-summary {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  color: var(--color-navy);
+  cursor: pointer;
+  list-style: none;
+}
+
+.assessment-page .as-question-summary::-webkit-details-marker {
+  display: none;
+}
+
+.assessment-page .as-question-number,
+.assessment-page .as-question-type,
+.assessment-page .as-question-marks {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.assessment-page .as-question-type {
+  color: #287f74;
+}
+
+.assessment-page .as-question-prompt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.assessment-page .as-question-actions,
+.assessment-page .as-saved-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 16px 14px;
+}
+
+.assessment-page .as-question-actions .btn,
+.assessment-page .as-saved-actions .btn {
+  min-height: 36px;
+  padding: 7px 11px;
+  font-size: 12px;
+}
+
+.assessment-page .as-question-body {
+  display: grid;
+  gap: 14px;
+  padding: 0 16px 18px;
+}
+
+.assessment-page .as-question-body > .as-field,
+.assessment-page .as-question-body > .as-field-grid,
+.assessment-page .as-question-body > .as-subheading,
+.assessment-page .as-question-body > .as-review-flag,
+.assessment-page .as-question-body > .as-rubric-heading {
+  grid-column: 1 / -1;
+}
+
+.assessment-page .as-option-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.assessment-page .as-correct-choice {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.assessment-page .as-correct-choice input {
+  accent-color: var(--color-primary);
+}
+
+.assessment-page .as-option-letter {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.assessment-page .as-rubric-criterion {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.assessment-page .as-rubric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  min-width: 0;
+}
+
+.assessment-page .as-rubric-grid > .as-field {
+  align-content: start;
+  min-width: 0;
+}
+
+.assessment-page .as-rubric-grid > [data-rubric-field="name"] {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.assessment-page .as-rubric-grid > [data-rubric-field="marks"] {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.assessment-page .as-rubric-grid > [data-rubric-field="evaluates"] {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.assessment-page .as-rubric-grid > [data-rubric-field="keyPoints"] {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.assessment-page .as-rubric-grid > [data-rubric-field="fullCredit"] {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.assessment-page .as-rubric-grid > [data-rubric-field="partialCredit"] {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.assessment-page .as-rubric-grid > [data-rubric-field="noCredit"] {
+  grid-column: 1 / -1;
+  grid-row: 4;
+}
+
+.assessment-page .as-rubric-grid > [data-rubric-field="name"] .form-control,
+.assessment-page .as-rubric-grid > [data-rubric-field="marks"] .form-control {
+  min-height: 44px;
+  height: 44px;
+}
+
+.assessment-page .as-rubric-grid > [data-rubric-field="evaluates"] .form-control,
+.assessment-page .as-rubric-grid > [data-rubric-field="keyPoints"] .form-control,
+.assessment-page .as-rubric-grid > [data-rubric-field="fullCredit"] .form-control,
+.assessment-page .as-rubric-grid > [data-rubric-field="partialCredit"] .form-control,
+.assessment-page .as-rubric-grid > [data-rubric-field="noCredit"] .form-control {
+  min-height: 92px;
+  height: 92px;
+  resize: vertical;
+}
+
+.assessment-page .as-rubric-criterion legend {
+  padding: 0 6px;
+  color: var(--color-navy);
+  font-weight: 600;
+}
+
+.assessment-page .as-rubric-total.valid {
+  color: #287f74;
+}
+
+.assessment-page .as-rubric-total.invalid,
+.assessment-page .as-review-flag {
+  color: #a7353c;
+}
+
+.assessment-page .as-review-flag {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: #fff7f1;
+  font-size: 12px;
+}
+
+.assessment-page .as-saved-controls {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) repeat(2, minmax(140px, 190px)) auto;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.assessment-page .as-saved-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+
+.assessment-page .as-saved-card small {
+  color: var(--color-text-muted);
+}
+
+.assessment-page .as-dialog {
+  width: min(760px, calc(100vw - 32px));
+  max-width: 760px;
+  max-height: min(88vh, 900px);
+  padding: 22px;
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-navy);
+  box-shadow: var(--shadow-modal);
+}
+
+.assessment-page .as-dialog::backdrop {
+  background: rgba(31, 45, 61, 0.48);
+  backdrop-filter: blur(2px);
+}
+
+.assessment-page .as-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.assessment-page .as-dialog-header h2 {
+  margin: 0 0 5px;
+  font-size: 20px;
+}
+
+.assessment-page .as-dialog-header p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.assessment-page .as-preview-question {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.assessment-page .as-preview-question h4 {
+  margin: 0 0 10px;
+}
+
+.assessment-page .as-preview-question p,
+.assessment-page .as-preview-question li {
+  overflow-wrap: anywhere;
+}
+
+.assessment-page .as-answer-space {
+  min-height: 100px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+}
+
+.assessment-page .as-notification-popover {
+  position: absolute;
+  z-index: 80;
+  top: 66px;
+  right: 4%;
+  max-width: min(320px, calc(100vw - 32px));
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  box-shadow: var(--shadow-card);
+  color: var(--color-navy);
 }

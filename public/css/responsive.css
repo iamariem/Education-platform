@@ -607,3 +607,155 @@ img {
   }
 
 }
+
+/* ========================================
+   Teacher Assessment Responsive
+   ======================================== */
+
+@media (max-width: 1200px) {
+  .assessment-page .as-method-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 980px) {
+  .assessment-page .as-methods {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .assessment-page .as-method-card {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 720px) {
+  .assessment-page .as-methods {
+    grid-template-columns: 1fr;
+  }
+
+  .assessment-page .as-method-card {
+    min-height: auto;
+    padding: 20px;
+  }
+
+  .assessment-page .as-panel {
+    padding: 20px;
+  }
+
+  .assessment-page .as-page-header h1 {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 520px) {
+  .assessment-page .as-content {
+    gap: 16px;
+  }
+
+  .assessment-page .as-panel {
+    padding: 16px;
+  }
+
+  .assessment-page .as-section-header h2 {
+    font-size: 18px;
+  }
+
+  .assessment-page .as-actions .btn {
+    width: 100%;
+  }
+
+  .assessment-page .as-method-title {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 720px) {
+  .assessment-page .as-config-form,
+  .assessment-page .as-field-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .assessment-page .as-rubric-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .assessment-page .as-rubric-grid > [data-rubric-field] {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .assessment-page .as-saved-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .assessment-page .as-question-summary {
+    grid-template-columns: auto auto minmax(0, 1fr);
+  }
+
+  .assessment-page .as-question-marks {
+    grid-column: 3;
+  }
+
+  .assessment-page .as-summary-heading {
+    flex-direction: column;
+  }
+
+  .assessment-page .as-workspace-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .assessment-page .as-workspace-actions .btn {
+    width: 100%;
+  }
+
+  .assessment-page .as-dialog {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 520px) {
+  .edu-math-editor {
+    top: 8px;
+    width: calc(100vw - 16px);
+    padding: 14px;
+  }
+
+  .edu-math-actions .btn {
+    flex: 1 1 140px;
+  }
+
+  .assessment-page .as-question-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .assessment-page .as-question-toolbar .form-control,
+  .assessment-page .as-question-toolbar .btn {
+    width: 100%;
+  }
+
+  .assessment-page .as-workspace-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .assessment-page .as-question-actions,
+  .assessment-page .as-saved-actions {
+    padding-inline: 12px;
+  }
+
+  .assessment-page .as-question-summary {
+    gap: 7px;
+    padding: 12px;
+  }
+
+  .assessment-page .as-question-prompt {
+    grid-column: 1 / -1;
+    white-space: normal;
+  }
+
+  .assessment-page .as-question-marks {
+    grid-column: auto;
+  }
+}

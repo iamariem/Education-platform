@@ -179,5 +179,86 @@
   </header>
 </template>
 
+<!-- ========================================
+     Teacher Shared Topbar
+     ======================================== -->
+
+<template id="teacher-topbar-template">
+
+  <header class="sd-topbar">
+
+    <div class="sd-top-left">
+
+      <button class="sd-icon-btn sd-menu-btn"
+              id="teacherMenuBtn"
+              type="button"
+              aria-label="Open sidebar"
+              aria-expanded="false"
+              aria-controls="teacherSidebar">
+
+        <i data-lucide="menu"></i>
+
+      </button>
+
+      <a class="sd-mobile-brand"
+         href="Assessment.html">
+
+        Edu<span>SaaS</span>
+
+      </a>
+
+      <label class="sd-search">
+
+        <i data-lucide="search"></i>
+
+        <input type="search"
+               id="teacherSearchInput"
+               placeholder="Search assessments..."
+               aria-label="Search assessments">
+
+      </label>
+
+    </div>
+
+    <div class="sd-top-actions">
+
+      <div class="sd-notification-wrapper">
+
+        <button class="sd-icon-btn sd-bell-btn"
+                id="teacherNotificationBtn"
+                type="button"
+                aria-label="Mock notifications"
+                aria-expanded="false"
+                aria-controls="teacherMockNotifications"
+                data-teacher-notifications>
+
+          <i data-lucide="bell"></i>
+
+        </button>
+
+      </div>
+
+      <div class="sd-top-user">
+
+        <span class="sd-avatar" data-teacher-avatar>
+          TE
+        </span>
+
+        <span class="sd-top-user-text">
+
+          <strong data-teacher-name>Teacher</strong>
+
+          <small>Teacher</small>
+
+        </span>
+
+      </div>
+
+    </div>
+
+  </header>
+
+</template>
+
 </body>
 </html>

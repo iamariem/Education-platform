@@ -70,5 +70,106 @@
   <div class="sd-backdrop" id="sdBackdrop" hidden></div>
 </template>
 
+<!-- ========================================
+     Teacher Sidebar
+     ======================================== -->
+
+<template id="teacher-sidebar-template">
+
+  <aside class="sd-sidebar" id="teacherSidebar">
+
+    <a href="../shared/landing/index.html" class="sd-brand">
+      <span class="sd-brand-icon">
+        <i data-lucide="graduation-cap"></i>
+      </span>
+      <span class="sd-brand-accent">EduSaaS</span>
+    </a>
+
+    <p class="sd-nav-caption">TEACHER SPACE</p>
+
+    <nav class="sd-side-nav" aria-label="Teacher navigation">
+
+      <button class="sd-side-link" type="button" data-coming-soon>
+        <i data-lucide="layout-dashboard"></i>
+        <span>Dashboard</span>
+      </button>
+
+      <button class="sd-side-link" type="button" data-coming-soon>
+        <i data-lucide="book-open"></i>
+        <span>Courses</span>
+      </button>
+
+      <button class="sd-side-link" type="button" data-coming-soon>
+        <i data-lucide="users"></i>
+        <span>Students</span>
+      </button>
+
+      <a class="sd-side-link"
+         data-layout-active="teacher-assessment"
+         href="Assessment.html">
+        <i data-lucide="clipboard-check"></i>
+        <span>Assessment</span>
+      </a>
+
+      <button class="sd-side-link" type="button" data-coming-soon>
+        <i data-lucide="chart-no-axes-column-increasing"></i>
+        <span>Analytics</span>
+      </button>
+
+      <button class="sd-side-link"
+              id="teacherSidebarNotificationBtn"
+              type="button"
+              aria-expanded="false"
+              aria-controls="teacherMockNotifications"
+              data-teacher-notifications>
+        <i data-lucide="bell"></i>
+        <span>Notifications</span>
+      </button>
+
+      <button class="sd-side-link" type="button" data-coming-soon>
+        <i data-lucide="user-round"></i>
+        <span>Profile</span>
+      </button>
+
+      <button class="sd-side-link" type="button" data-coming-soon>
+        <i data-lucide="settings"></i>
+        <span>Settings</span>
+      </button>
+
+    </nav>
+
+    <div class="sd-sidebar-footer">
+
+      <button class="sd-side-link sd-logout"
+              id="teacherLogoutBtn"
+              type="button">
+        <i data-lucide="log-out"></i>
+        <span>Log Out</span>
+      </button>
+
+      <div class="sd-side-user">
+
+        <span class="sd-avatar" data-teacher-avatar>
+          TE
+        </span>
+
+        <div>
+          <strong data-teacher-name>Teacher</strong>
+          <small>Teacher account</small>
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+  <div class="sd-backdrop"
+       id="teacherBackdrop"
+       hidden>
+  </div>
+
+</template>
+
 </body>
 </html>

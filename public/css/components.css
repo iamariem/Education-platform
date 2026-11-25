@@ -109,6 +109,188 @@
   font-weight: 500;
 }
 
+/* Reusable mathematical equation input */
+.edu-math-input {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  align-items: start;
+  gap: 7px;
+  min-width: 0;
+}
+
+.edu-math-trigger {
+  display: inline-grid;
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--color-navy);
+  cursor: pointer;
+}
+
+
+.edu-math-trigger {
+  display: inline-grid;
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--color-navy);
+  cursor: pointer;
+}
+
+.edu-math-trigger:hover {
+  border-color: var(--color-border);
+  background: var(--color-white);
+}
+
+.edu-math-trigger:active,
+.edu-math-trigger[aria-expanded="true"] {
+  border-color: var(--color-mint);
+  background: var(--color-pale-aqua);
+}
+
+.edu-math-trigger:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 2px;
+}
+
+
+.edu-math-rich-editor {
+  min-width: 0;
+  min-height: 44px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  cursor: text;
+}
+
+.edu-math-rich-editor[aria-multiline="true"][data-rows="2"] {
+  min-height: 72px;
+}
+
+.edu-math-rich-editor[aria-multiline="true"][data-rows="3"] {
+  min-height: 96px;
+}
+
+.edu-math-inline,
+.edu-math-preview {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.edu-math-rich-editor [data-edu-math-atom] {
+  cursor: pointer;
+}
+
+.edu-math-inline-fallback {
+  display: inline-block;
+  padding: 1px 5px;
+  border: 1px dashed var(--color-border);
+  border-radius: 4px;
+  background: #f7fbfa;
+  color: var(--color-text-muted);
+  vertical-align: middle;
+}
+
+.edu-math-backdrop {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+  background: rgba(31, 45, 61, 0.48);
+  backdrop-filter: blur(2px);
+}
+
+.edu-math-backdrop[hidden] {
+  display: none !important;
+}
+
+.edu-math-editor {
+  position: fixed;
+  z-index: 10001;
+  top: 12px;
+  left: 50%;
+  width: min(840px, calc(100vw - 24px));
+  max-width: none;
+  height: auto;
+  max-height: calc(100dvh - var(--edu-math-keyboard-height, 0px) - 24px);
+  margin: 0;
+  padding: 22px;
+  overflow: auto;
+  transform: translateX(-50%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-navy);
+  box-shadow: var(--shadow-modal);
+}
+
+body {
+  --keyboard-zindex: 10002;
+}
+
+.edu-math-editor h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+
+.edu-math-editor > p:not(.edu-math-status) {
+  margin: 0 0 16px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.edu-math-editor-field,
+.edu-math-fallback {
+  display: block;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  min-height: 96px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  font-size: 20px;
+}
+
+.edu-math-editor-field[hidden],
+.edu-math-fallback[hidden] {
+  display: none !important;
+}
+
+.edu-math-editor-field:focus-within,
+.edu-math-fallback:focus {
+  border-color: var(--color-mint);
+  outline: 3px solid rgba(98, 196, 181, 0.18);
+}
+
+.edu-math-status {
+  min-height: 20px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.edu-math-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.edu-math-preview-fallback {
+  padding: 0 3px;
+  color: var(--color-navy);
+}
+
 /* =========================
    Accessibility
 ========================= */

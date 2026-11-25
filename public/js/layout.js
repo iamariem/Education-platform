@@ -36,6 +36,16 @@
   }
 
   function applyPageSpecificSidebarVariant(sidebarTemplate, variant) {
+    if (variant?.startsWith("teacher-")) {
+      const activeLink = sidebarTemplate.querySelector(
+        `[data-layout-active="${CSS.escape(variant)}"]`
+      );
+
+      activeLink?.classList.add("active");
+      activeLink?.setAttribute("aria-current", "page");
+
+      return;
+    }
     if (variant === "student-dashboard") {
       const homeLink = sidebarTemplate.querySelector('[data-layout-active="dashboard-home"]');
       const progressLink = sidebarTemplate.querySelector('[data-layout-active="dashboard-progress"]');
@@ -86,13 +96,18 @@
 
       if (name === "navbar") {
         templateId = `${variant}-navbar-template`;
+
         if (variant?.startsWith("student-")) {
           templateId = `${variant}-topbar-template`;
+        } else if (variant?.startsWith("teacher-")) {
+          templateId = "teacher-topbar-template";
         }
       } else if (name === "footer") {
         templateId = `${variant}-footer-template`;
       } else if (name === "sidebar") {
-        templateId = "student-sidebar-template";
+        templateId = variant?.startsWith("teacher-")
+          ? "teacher-sidebar-template"
+          : "student-sidebar-template";
       }
 
       const template = templateId

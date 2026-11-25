@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Assessment | EduSaaS</title>
+
+  <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+  <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Shared CSS -->
+
+  <link rel="stylesheet" href="../../styles/tokens.css">
+
+  <link rel="stylesheet" href="../../public/css/style.css">
+
+  <link rel="stylesheet" href="../../public/css/components.css">
+
+  <link rel="stylesheet" href="../../public/css/responsive.css">
+
+  <!-- Icons -->
+
+  <script
+    src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"
+    defer>
+  </script>
+
+  <!-- Shared JavaScript -->
+
+  <script src="../../public/js/layout.js" defer></script>
+
+  <script src="../../public/js/api.js?v=assessment-workflow-6" defer></script>
+
+  <script src="../../public/js/main.js?v=assessment-workflow-17" defer></script>
+
+</head>
+
+<body class="teacher-dashboard assessment-page">
+
+  <div class="sd-app">
+
+    <!-- Shared Teacher Sidebar -->
+
+    <div data-layout="sidebar"
+         data-layout-variant="teacher-assessment">
+    </div>
+
+    <div class="sd-page">
+
+      <!-- Shared Teacher Topbar -->
+
+      <div data-layout="navbar"
+           data-layout-variant="teacher-assessment">
+      </div>
+
+      <!-- Assessment Content -->
+
+      <main class="sd-main as-content">
+
+        <!-- Page Header -->
+
+        <header class="as-page-header">
+
+          <div class="as-breadcrumb">
+            <span>Teacher Workspace</span>
+            <i data-lucide="chevron-right"></i>
+            <span>Assessment</span>
+          </div>
+
+          <h1>Assessments</h1>
+
+          <p>
+            Create, manage, and publish assessments
+            for your students.
+          </p>
+
+        </header>
+
+        <!-- Creation Methods -->
+
+        <section class="as-panel"
+                 id="assessmentCreation"
+                 aria-labelledby="creationTitle">
+
+          <div class="as-section-header">
+
+            <h2 id="creationTitle">
+              Create a New Assessment
+            </h2>
+
+            <p>
+              Choose how you would like to create
+              your assessment.
+            </p>
+
+          </div>
+
+          <fieldset class="as-methods">
+
+            <legend class="as-sr-only">
+              Assessment creation method
+            </legend>
+
+            <!-- Upload Assessment -->
+
+            <label class="as-method-card">
+
+              <input type="radio"
+                     name="assessmentMethod"
+                     value="upload">
+
+              <span class="as-method-icon as-icon-upload">
+                <i data-lucide="cloud-upload"></i>
+              </span>
+
+              <span class="as-method-title">
+                Upload Existing Assessment
+              </span>
+
+              <span class="as-method-description">
+                Import an existing assessment and
+                extract editable questions.
+              </span>
+
+              <span class="as-radio-indicator"></span>
+
+            </label>
+
+            <!-- Manual Assessment -->
+
+            <label class="as-method-card">
+
+              <input type="radio"
+                     name="assessmentMethod"
+                     value="manual">
+
+              <span class="as-method-icon as-icon-manual">
+                <i data-lucide="file-pen-line"></i>
+              </span>
+
+              <span class="as-method-title">
+                Create Manually
+              </span>
+
+              <span class="as-method-description">
+                Build your own assessment with MCQ
+                and essay questions.
+              </span>
+
+              <span class="as-radio-indicator"></span>
+
+            </label>
+
+            <!-- AI Assessment -->
+
+            <label class="as-method-card">
+
+              <input type="radio"
+                     name="assessmentMethod"
+                     value="ai">
+
+              <span class="as-method-icon as-icon-ai">
+                <i data-lucide="sparkles"></i>
+              </span>
+
+              <span class="as-method-title">
+                Generate with AI
+              </span>
+
+              <span class="as-method-description">
+                Generate up to 10 questions from
+                your lecture materials.
+              </span>
+
+              <span class="as-radio-indicator"></span>
+
+            </label>
+
+          </fieldset>
+
+          <div class="as-actions">
+
+            <button type="button"
+                    class="btn btn-primary"
+                    id="assessmentContinue"
+                    disabled>
+
+              Continue
+
+              <i data-lucide="arrow-right"></i>
+
+            </button>
+
+          </div>
+
+        </section>
+
+        <p class="as-feedback" id="assessmentFeedback" role="status" aria-live="polite"></p>
+
+        <!-- Assessment Workspace -->
+        <section class="as-panel"
+                 id="assessmentWorkspace"
+                 aria-labelledby="workspaceTitle"
+                 hidden>
+
+          <div class="as-section-header">
+            <h2 id="workspaceTitle"></h2>
+            <p id="workspaceDescription"></p>
+          </div>
+
+          <div id="workspaceContent"></div>
+          <div id="assessmentSummary" class="as-summary" hidden></div>
+          <div id="assessmentQuestionList" class="as-question-list"></div>
+          <div class="as-actions as-workspace-actions" id="workspaceActions">
+            <button type="button" class="btn btn-secondary" data-action="back-to-methods">
+              <i data-lucide="arrow-left"></i> Back
+            </button>
+            <button type="button" class="btn btn-secondary" data-action="save-draft">
+              <i data-lucide="save"></i> Save Draft
+            </button>
+            <button type="button" class="btn btn-secondary" data-action="preview">
+              <i data-lucide="eye"></i> Preview Assessment
+            </button>
+            <button type="button" class="btn btn-primary" data-action="publish">
+              <i data-lucide="send"></i> Publish to Students
+            </button>
+            <button type="button" class="btn btn-secondary" data-action="cancel-workflow">
+              <i data-lucide="x"></i> Cancel
+            </button>
+          </div>
+        </section>
+
+        <!-- Saved Assessments -->
+
+        <section class="as-panel"
+                 id="savedAssessments">
+
+          <div class="as-section-header">
+
+            <h2>Saved Assessments</h2>
+
+            <p>
+              View and manage your existing assessments.
+            </p>
+
+          </div>
+
+          <div class="as-saved-controls">
+            <label>
+              <span class="as-sr-only">Search assessments</span>
+              <input class="form-control" id="savedAssessmentSearch" type="search"
+                     placeholder="Search assessments">
+            </label>
+            <label>
+              <span class="as-sr-only">Filter by status</span>
+              <select class="form-control" id="savedStatusFilter">
+                <option value="all">All statuses</option>
+                <option value="draft">Drafts</option>
+                <option value="published">Published</option>
+              </select>
+            </label>
+            <label>
+              <span class="as-sr-only">Filter by creation method</span>
+              <select class="form-control" id="savedMethodFilter">
+                <option value="all">All methods</option>
+                <option value="upload">Upload</option>
+                <option value="manual">Manual</option>
+                <option value="ai">AI (simulated)</option>
+              </select>
+            </label>
+            <button type="button" class="btn btn-secondary" data-action="refresh-saved">
+              <i data-lucide="refresh-cw"></i> Refresh
+            </button>
+          </div>
+
+          <div id="savedAssessmentList"
+               aria-live="polite">
+            <div class="as-empty-state">
+              <span class="as-empty-icon">
+                <i data-lucide="clipboard-list"></i>
+              </span>
+              <h3>No assessments yet</h3>
+              <p>
+                Create your first assessment to get started.
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <dialog class="as-dialog" id="assessmentPreview" aria-labelledby="previewTitle">
+    <div class="as-dialog-header">
+      <div>
+        <h2 id="previewTitle">Student Preview</h2>
+        <p>Correct answers and teacher-only grading details are hidden.</p>
+      </div>
+      <button type="button" class="sd-icon-btn" data-action="close-preview" aria-label="Close preview">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div id="previewContent"></div>
+  </dialog>
+
+</body>
+
+</html>
