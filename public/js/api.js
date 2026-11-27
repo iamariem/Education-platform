@@ -66,7 +66,7 @@
       const options = (question.options || []).filter((option) => option.text?.trim());
       if (options.length < 2) errors.push(`${label}: add at least two non-empty options.`);
       if (!Number.isInteger(question.correctIndex) ||
-          !question.options?.[question.correctIndex]?.text?.trim()) {
+        !question.options?.[question.correctIndex]?.text?.trim()) {
         errors.push(`${label}: select exactly one correct answer.`);
       }
     }
@@ -87,7 +87,7 @@
           errors.push(`${criterionLabel}: marks must be greater than zero.`);
         }
         if (!criterion.fullCredit?.trim() || !criterion.partialCredit?.trim() ||
-            !criterion.noCredit?.trim()) {
+          !criterion.noCredit?.trim()) {
           errors.push(`${criterionLabel}: complete full, partial, and no-credit descriptions.`);
         }
       });
@@ -97,6 +97,41 @@
 
   function validatePublish(assessment) {
     const errors = [];
+    const duration = Number(assessment.duration_min);
+    const passMarks = Number(assessment.pass_marks);
+    const maxAttempts = Number(assessment.max_attempt);
+
+    const totalMarks = (assessment.questions || []).reduce(
+      (sum, question) => sum + Number(question.marks || 0),
+      0
+    );
+
+    if (!Number.isInteger(duration) || duration < 1) {
+      errors.push("Duration must be at least 1 minute.");
+    }
+
+    if (
+      assessment.pass_marks == null ||
+      assessment.pass_marks === "" ||
+      !Number.isFinite(passMarks) ||
+      passMarks < 0 ||
+      passMarks > totalMarks
+    ) {
+      errors.push(
+        "Pass marks must be between zero and total assessment marks."
+      );
+    }
+
+    if (!Number.isInteger(maxAttempts) || maxAttempts < 1) {
+      errors.push("Maximum attempts must be at least 1.");
+    }
+
+    if (
+      !assessment.start_date_time ||
+      Number.isNaN(Date.parse(assessment.start_date_time))
+    ) {
+      errors.push("Select a valid start date and time.");
+    }
     if (!assessment.title?.trim()) errors.push("Assessment title is required.");
     if (!courses.some((course) => course.id === assessment.courseId)) {
       errors.push("Select a valid course.");
@@ -126,15 +161,15 @@
       modelAnswer: "",
       rubric: type === "essay"
         ? [{
-            id: makeId("criterion"),
-            name: "",
-            evaluates: "",
-            marks,
-            keyPoints: "",
-            fullCredit: "",
-            partialCredit: "",
-            noCredit: ""
-          }]
+          id: makeId("criterion"),
+          name: "",
+          evaluates: "",
+          marks,
+          keyPoints: "",
+          fullCredit: "",
+          partialCredit: "",
+          noCredit: ""
+        }]
         : [],
       origin,
       needsReview: origin === "import" || origin === "ai"
@@ -200,16 +235,16 @@
       (assessment.questionType === "mixed"
         ? Number(assessment.mcqCount || 0) + Number(assessment.essayCount || 0)
         : Number(assessment.questionCount || 0));
-    if (!sourceMaterials?.length && !assessment.pastedText?.trim()) {
-      fail("Add at least one lecture source or paste lecture text.");
+    if (!sourceMaterials?.length) {
+      fail("Select at least one lecture from your course.");
     }
     if (count < 1) fail("Generate at least one question.");
     if (count > config.maxAiQuestions) fail(`AI generation is limited to ${config.maxAiQuestions} questions total.`);
     const types = assessment.questionType === "mixed"
       ? [
-          ...Array(Number(assessment.mcqCount) || 0).fill("mcq"),
-          ...Array(Number(assessment.essayCount) || 0).fill("essay")
-        ]
+        ...Array(Number(assessment.mcqCount) || 0).fill("mcq"),
+        ...Array(Number(assessment.essayCount) || 0).fill("essay")
+      ]
       : Array(count).fill(assessment.questionType === "essay" ? "essay" : "mcq");
     return response({
       simulated: true,
@@ -241,8 +276,8 @@
 
   async function regenerateQuestion(question, assessment, sourceMaterials) {
     await delay();
-    if (!sourceMaterials?.length && !assessment.pastedText?.trim()) {
-      fail("Add at least one lecture source or pasted text before regenerating.");
+    if (!sourceMaterials?.length) {
+      fail("Select at least one lecture before regenerating.");
     }
     const replacement = makeQuestion(question.type, 0, "ai");
     replacement.text = "Simulated replacement prompt — review and edit before use.";

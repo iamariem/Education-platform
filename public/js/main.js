@@ -4874,6 +4874,12 @@ function initTeacherAssessment() {
     mcqMarks: 1,
     essayMarks: 5,
     marksPerQuestion: 1,
+    duration_min: 60,
+    pass_marks: 1,
+    max_attempt: 1,
+    shuffle_question: false,
+    shuffle_option: false,
+    start_date_time: "",
     instructions: "",
     pastedText: "",
     lectureIds: [],
@@ -4938,7 +4944,36 @@ function initTeacherAssessment() {
 
   function captureForm(form) {
     const data = new FormData(form);
+    if (form.elements.namedItem("duration_min")) {
+
+      assessment.duration_min =
+        Number(data.get("duration_min"));
+
+      assessment.pass_marks =
+        Number(data.get("pass_marks"));
+
+      assessment.max_attempt =
+        Number(data.get("max_attempt"));
+
+      assessment.shuffle_question =
+        data.has("shuffle_question");
+
+      assessment.shuffle_option =
+        data.has("shuffle_option");
+
+      assessment.start_date_time =
+        data.get("start_date_time") || "";
+
+    }
     for (const [key, value] of data.entries()) {
+      if ([
+        "duration_min",
+        "pass_marks",
+        "max_attempt",
+        "shuffle_question",
+        "shuffle_option",
+        "start_date_time"
+      ].includes(key)) continue;
       if (key === "lectureIds") continue;
       if (key.endsWith("Count") || key.endsWith("Marks") || key === "questionCount" || key === "marksPerQuestion") {
         assessment[key] = Number(value);
@@ -4988,7 +5023,10 @@ function initTeacherAssessment() {
     const courseControl = el("select", { className: "form-control", name: "courseId", required: true });
     fillCourseOptions(courseControl);
     courseControl.value = assessment.courseId;
-    form.append(labelField("Course", courseControl));
+    form.append(labelField(
+      assessment.method === "ai" ? "Existing courses" : "Course",
+      courseControl
+    ));
 
     if (assessment.method === "upload") {
       form.append(input("Approximate sample question count", assessment.questionCount, {
@@ -5035,29 +5073,149 @@ function initTeacherAssessment() {
           type: "number", name: marksName, min: "1", step: "1"
         }));
       }
-
       if (assessment.method === "ai") {
-        form.append(el("h3", { className: "as-subheading", text: "Lecture source materials" }));
-        const lectureGroup = el("fieldset", { className: "as-lecture-list" });
-        lectureGroup.append(el("legend", { text: "Select available lectures" }));
-        lectures.filter((lecture) => !assessment.courseId || lecture.courseId === assessment.courseId)
-          .forEach((lecture) => {
-            const checkbox = el("input", { type: "checkbox", name: "lectureIds", value: lecture.id });
-            checkbox.checked = assessment.lectureIds.includes(lecture.id);
-            lectureGroup.append(el("label", { className: "as-check-row" }, [
-              checkbox, document.createTextNode(` ${lecture.title}`)
+
+        form.append(el("h3", {
+          className: "as-subheading",
+          text: "Course content"
+        }));
+
+        const lectureGroup = el("fieldset", {
+          className: "as-lecture-list"
+        });
+
+        lectureGroup.append(el("legend", {
+          text: "Select lectures"
+        }));
+
+        const availableLectures = lectures.filter(
+          (lecture) => lecture.courseId === assessment.courseId
+        );
+
+        if (!assessment.courseId) {
+
+          lectureGroup.append(el("p", {
+            className: "as-note",
+            text: "Select a course to view its lectures."
+          }));
+
+        } else if (!availableLectures.length) {
+
+          lectureGroup.append(el("p", {
+            className: "as-note",
+            text: "No lectures are available for this course."
+          }));
+
+        } else {
+
+          availableLectures.forEach((lecture) => {
+
+            const checkbox = el("input", {
+              type: "checkbox",
+              name: "lectureIds",
+              value: lecture.id
+            });
+
+            checkbox.checked =
+              assessment.lectureIds.includes(lecture.id);
+
+            lectureGroup.append(el("label", {
+              className: "as-check-row"
+            }, [
+              checkbox,
+              document.createTextNode(` ${lecture.title}`)
             ]));
+
           });
+
+        }
+
         form.append(lectureGroup);
-        form.append(uploadZone("lecture"));
-        form.append(textarea("Paste lecture text", assessment.pastedText, {
-          name: "pastedText", rows: "5", placeholder: "Paste source material for simulated generation..."
+
+        form.append(el("p", {
+          className: "as-note",
+          text: "Simulated AI generation: no real AI provider or external generation service is used."
         }));
-        form.append(el("div", { className: "as-material-list", "data-material-list": "true" }));
-        form.append(textarea("Additional instructions", assessment.instructions, {
-          name: "instructions", rows: "3", placeholder: "Optional instructions for the simulated generator"
+
+      }
+      if (["manual", "ai"].includes(assessment.method)) {
+
+        form.append(el("h3", {
+          className: "as-subheading",
+          text: "Assessment Settings"
         }));
-        form.append(el("p", { className: "as-note", text: "Simulated AI generation: no real AI provider or external generation service is used." }));
+
+        const settingsGrid = el("div", {
+          className: "as-settings-grid"
+        });
+
+        settingsGrid.append(
+
+          input("Duration (minutes)", assessment.duration_min ?? 60, {
+            name: "duration_min",
+            type: "number",
+            min: "1",
+            step: "1",
+            required: true
+          }),
+
+          input("Pass marks", assessment.pass_marks ?? 1, {
+            name: "pass_marks",
+            type: "number",
+            min: "0",
+            step: "any",
+            required: true
+          }),
+
+          input("Maximum attempts", assessment.max_attempt ?? 1, {
+            name: "max_attempt",
+            type: "number",
+            min: "1",
+            step: "1",
+            required: true
+          }),
+
+          input("Start date & time", assessment.start_date_time ?? "", {
+            name: "start_date_time",
+            type: "datetime-local",
+            required: true
+          })
+
+        );
+
+        form.append(settingsGrid);
+
+        const shuffleGroup = el("fieldset", {
+          className: "as-lecture-list"
+        });
+
+        shuffleGroup.append(el("legend", {
+          text: "Randomization"
+        }));
+
+        [
+          ["shuffle_question", "Shuffle questions"],
+          ["shuffle_option", "Shuffle options"]
+        ].forEach(([name, label]) => {
+
+          const checkbox = el("input", {
+            type: "checkbox",
+            name: name
+          });
+
+          checkbox.checked = Boolean(assessment[name]);
+
+          shuffleGroup.append(el("label", {
+            className: "as-check-row"
+          }, [
+            checkbox,
+            document.createTextNode(` ${label}`)
+          ]));
+
+        });
+
+        form.append(shuffleGroup);
+
       }
 
       const total = assessment.questionType === "mixed"
@@ -5263,6 +5421,32 @@ function initTeacherAssessment() {
     if (field.startsWith("rubric.")) fieldElement.dataset.rubricField = field.split(".").pop();
     return fieldElement;
   }
+  let draggedQuestionId = null;
+
+  function moveQuestion(questionId, targetIndex) {
+
+    const questions = assessment.questions;
+
+    const currentIndex = questions.findIndex(
+      (question) => question.id === questionId
+    );
+
+    if (
+      currentIndex === -1 ||
+      targetIndex < 0 ||
+      targetIndex >= questions.length ||
+      currentIndex === targetIndex
+    ) return;
+
+    const [movedQuestion] =
+      questions.splice(currentIndex, 1);
+
+    questions.splice(targetIndex, 0, movedQuestion);
+
+    renderQuestions();
+    renderSummary();
+
+  }
 
   function renderQuestions() {
     questionList.replaceChildren();
@@ -5275,13 +5459,148 @@ function initTeacherAssessment() {
       });
       const prompt = el("span", { className: "as-question-prompt" });
       window.eduMathInput.renderInline(prompt, question.text || "Untitled question");
+      const dragHandle = el("span", {
+        className: "as-drag-handle",
+        draggable: "true",
+        title: "Drag to reorder question",
+        "aria-label": "Drag to reorder question"
+      }, [
+        el("i", {
+          "data-lucide": "grip-vertical"
+        })
+      ]);
+
+      dragHandle.draggable = true;
+
+      dragHandle.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      });
+
+      dragHandle.addEventListener("dragstart", (event) => {
+
+        draggedQuestionId = question.id;
+
+        event.dataTransfer.effectAllowed = "move";
+
+        event.dataTransfer.setData(
+          "application/x-assessment-question",
+          question.id
+        );
+
+        details.classList.add("as-dragging");
+
+      });
+
+      dragHandle.addEventListener("dragend", () => {
+
+        draggedQuestionId = null;
+
+        questionList
+          .querySelectorAll(".as-question-card")
+          .forEach((card) => {
+            card.classList.remove(
+              "as-dragging",
+              "as-drag-over"
+            );
+          });
+
+      });
+
+      details.addEventListener("dragover", (event) => {
+
+        if (
+          !draggedQuestionId ||
+          draggedQuestionId === question.id
+        ) return;
+
+        event.preventDefault();
+
+        event.dataTransfer.dropEffect = "move";
+
+        details.classList.add("as-drag-over");
+
+      }, true);
+
+      details.addEventListener("dragleave", (event) => {
+
+        if (!details.contains(event.relatedTarget)) {
+          details.classList.remove("as-drag-over");
+        }
+
+      });
+
+      details.addEventListener("drop", (event) => {
+
+        if (!draggedQuestionId) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const sourceId = draggedQuestionId;
+
+        draggedQuestionId = null;
+
+        questionList
+          .querySelectorAll(".as-question-card")
+          .forEach((card) => {
+            card.classList.remove(
+              "as-dragging",
+              "as-drag-over"
+            );
+          });
+
+        moveQuestion(sourceId, index);
+
+      }, true);
       const summaryRow = el("summary", { className: "as-question-summary" }, [
+        dragHandle,
         el("span", { className: "as-question-number", text: `Question ${index + 1}` }),
         el("span", { className: "as-question-type", text: question.type.toUpperCase() }),
         prompt,
         el("span", { className: "as-question-marks", text: `${Number(question.marks) || 0} marks` })
       ]);
       details.append(summaryRow);
+      const reorderControls = el("div", {
+        className: "as-reorder-controls"
+      });
+
+      [
+        [-1, "arrow-up", "Move up"],
+        [1, "arrow-down", "Move down"]
+      ].forEach(([direction, icon, label]) => {
+
+        const targetIndex = index + direction;
+
+        const control = el("button", {
+          type: "button",
+          className: "as-reorder-btn",
+          title: label,
+          "aria-label": `${label} question ${index + 1}`
+        }, [
+          el("i", {
+            "data-lucide": icon
+          })
+        ]);
+
+        control.disabled =
+          targetIndex < 0 ||
+          targetIndex >= assessment.questions.length;
+
+        control.addEventListener("click", (event) => {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          moveQuestion(question.id, targetIndex);
+
+        });
+
+        reorderControls.append(control);
+
+      });
+
+      details.append(reorderControls);
       const actions = el("div", { className: "as-question-actions", "data-no-toggle": "true" });
       actions.append(button("Duplicate", "duplicate-question", "copy"));
       if (question.origin === "ai") actions.append(button("Regenerate", "regenerate-question", "refresh-cw"));
@@ -5299,7 +5618,7 @@ function initTeacherAssessment() {
         select("Difficulty", question.difficulty, [["Easy", "Easy"], ["Medium", "Medium"], ["Hard", "Hard"]], {
           "data-question-field": "difficulty", "data-question-id": question.id
         }),
-        questionInput(question, "marks", "Total marks", question.marks, {
+        questionInput(question, "marks", "Question marks", question.marks, {
           type: "number", min: "1", step: "1"
         })
       ]);
@@ -5827,12 +6146,17 @@ function initTeacherAssessment() {
         setFeedback("Your existing question edits have been preserved.", "success");
         return;
       }
-      const sourceMaterials = [
-        ...assessment.lectureIds.map((id) => lectures.find((item) => item.id === id)).filter(Boolean),
-        ...assessment.materials
-      ];
-      if (!sourceMaterials.length && !assessment.pastedText.trim()) {
-        setFeedback("Select at least one lecture, upload source material, or paste lecture text.", "error");
+      const sourceMaterials = lectures.filter(
+        (lecture) =>
+          lecture.courseId === assessment.courseId &&
+          assessment.lectureIds.includes(lecture.id)
+      );
+
+      if (!sourceMaterials.length) {
+        setFeedback(
+          "Select at least one lecture from your course.",
+          "error"
+        );
         return;
       }
       control.disabled = true;
@@ -5909,8 +6233,14 @@ function initTeacherAssessment() {
       const source = assessment.questions.find((item) => item.id === questionId);
       if (!source) return;
       if (!window.confirm("Replace this question and discard its current edits?")) return;
-      const sources = [...assessment.materials,
-      ...assessment.lectureIds.map((id) => lectures.find((item) => item.id === id)).filter(Boolean)];
+      const lectureResult =
+        await api.getAvailableLectures(assessment.courseId);
+
+      const sources = lectureResult.data.filter(
+        (lecture) =>
+          lecture.courseId === assessment.courseId &&
+          assessment.lectureIds.includes(lecture.id)
+      );
       control.disabled = true;
       try {
         const result = await api.regenerateQuestion(source, assessment, sources);
@@ -6141,11 +6471,25 @@ function initTeacherAssessment() {
         return;
       }
       if (target.name === "courseId" && assessment.method === "ai") {
+
         captureCurrentForm();
-        api.getAvailableLectures(assessment.courseId).then((result) => {
-          lectures = result.data;
-          renderMethodForm();
-        }).catch((error) => setFeedback(error.message, "error"));
+
+        assessment.lectureIds = [];
+
+        const selectedCourseId = assessment.courseId;
+
+        api.getAvailableLectures(selectedCourseId)
+          .then((result) => {
+
+            if (assessment.courseId !== selectedCourseId) return;
+
+            lectures = result.data;
+
+            renderMethodForm();
+
+          })
+          .catch((error) => setFeedback(error.message, "error"));
+
       } else captureCurrentForm();
     } else if (target.id === "savedStatusFilter" || target.id === "savedMethodFilter") {
       loadSaved();

@@ -162,7 +162,7 @@ body::after {
   height: 29px;
 }
 
-.brand > span:last-child {
+.brand>span:last-child {
   color: var(--color-navy);
 }
 
@@ -933,6 +933,7 @@ body::after {
     animation: none;
   }
 }
+
 /* =========================================
    EduSaaS Authentication Pages
 ========================================= */
@@ -1351,7 +1352,8 @@ body::after {
   padding: 10px 12px;
   border-radius: 9px;
   font-size: 12px;
-  line-height: 1.7;}
+  line-height: 1.7;
+}
 
 .auth-message.is-visible {
   display: block;
@@ -1555,6 +1557,7 @@ body::after {
   color: var(--color-text-muted) !important;
   position: static !important;
 }
+
 .student-details select:focus {
   border-color: var(--color-mint);
   box-shadow: 0 0 0 3px rgba(98, 196, 181, 0.15);
@@ -1852,14 +1855,14 @@ body::after {
 
 /* Move the signup welcome content upward */
 .auth-welcome {
-    justify-content: flex-start;
-    padding-top: 38px;
+  justify-content: flex-start;
+  padding-top: 38px;
 }
 
 .auth-welcome .welcome-content {
-    margin-top: 75px;
-    padding-top: 0;
-    padding-bottom: 35px;
+  margin-top: 75px;
+  padding-top: 0;
+  padding-bottom: 35px;
 }
 
 /* Center the email confirmation screen across the page.
@@ -3147,7 +3150,8 @@ body::after {
 
   .registration-intro {
     min-height: 0;
-    padding: 25px 21px;    border-radius: 16px;
+    padding: 25px 21px;
+    border-radius: 16px;
   }
 
   .registration-intro-copy {
@@ -3666,7 +3670,8 @@ body::after {
 
 .book-pages {
   position: absolute;
-  left: 16px;  bottom: 47px;
+  left: 16px;
+  bottom: 47px;
   width: 72px;
   height: 3px;
   border-radius: 3px;
@@ -4205,6 +4210,7 @@ body::after {
   font-weight: 700;
   line-height: 1.35;
 }
+
 .registration-choice__header p {
   margin: 0;
   color: var(--color-text-muted);
@@ -5205,6 +5211,7 @@ html[dir="rtl"] .about-content {
   border: 1px solid #e53935 !important;
   box-shadow: 0 0 0 1px #e53935 !important;
 }
+
 #signupForm input:-webkit-autofill,
 #signupForm input:-webkit-autofill:hover,
 #signupForm input:-webkit-autofill:focus,
@@ -5231,11 +5238,9 @@ html[dir="rtl"] .about-content {
 
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(
-    130deg,
-    #f8fcfd,
-    #fff9fa
-  );
+  background: linear-gradient(130deg,
+      #f8fcfd,
+      #fff9fa);
   color: var(--color-navy);
   font-family: var(--font-family);
   font-size: 13px;
@@ -5269,7 +5274,7 @@ html[dir="rtl"] .about-content {
 :is(.student-dashboard, .teacher-dashboard) a:focus-visible,
 :is(.student-dashboard, .teacher-dashboard) button:focus-visible,
 :is(.student-dashboard, .teacher-dashboard) input:focus-visible {
-  outline: 3px solid rgba(98,196,181,.5);
+  outline: 3px solid rgba(98, 196, 181, .5);
   outline-offset: 3px;
 }
 
@@ -5281,7 +5286,7 @@ html[dir="rtl"] .about-content {
 
 :is(.student-dashboard, .teacher-dashboard) .sd-app {
   display: grid;
-  grid-template-columns: 240px minmax(0,1fr);
+  grid-template-columns: 240px minmax(0, 1fr);
   min-height: 100vh;
 }
 
@@ -5457,7 +5462,7 @@ html[dir="rtl"] .about-content {
   height: 75px;
   padding: 0 4%;
   border-bottom: 1px solid var(--sd-border);
-  background: rgba(255,255,255,.86);
+  background: rgba(255, 255, 255, .86);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
@@ -5474,7 +5479,7 @@ html[dir="rtl"] .about-content {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: min(360px,36vw);
+  width: min(360px, 36vw);
   height: 40px;
   padding: 0 12px;
   border: 1px solid var(--sd-border);
@@ -5530,7 +5535,7 @@ html[dir="rtl"] .about-content {
   gap: 9px;
 }
 
-:is(.student-dashboard, .teacher-dashboard) .sd-top-user > svg {
+:is(.student-dashboard, .teacher-dashboard) .sd-top-user>svg {
   width: 15px;
   height: 15px;
 }
@@ -5566,11 +5571,11 @@ html[dir="rtl"] .about-content {
 
 .student-dashboard .sd-intro h1 {
   margin: 0;
-  font-size: clamp(23px,3vw,31px);
+  font-size: clamp(23px, 3vw, 31px);
   line-height: 1.35;
 }
 
-.student-dashboard .sd-intro > div > p:last-child {
+.student-dashboard .sd-intro>div>p:last-child {
   margin: 5px 0 0;
   color: var(--sd-muted);
   font-size: 12px;
@@ -5591,7 +5596,7 @@ html[dir="rtl"] .about-content {
 
 .student-dashboard .sd-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4,minmax(0,1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 15px;
   margin-bottom: 22px;
 }
@@ -5658,7 +5663,7 @@ html[dir="rtl"] .about-content {
 
 .student-dashboard .sd-feature-grid {
   display: grid;
-  grid-template-columns: minmax(0,1.35fr) minmax(260px,.85fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, .85fr);
   gap: 18px;
   margin-bottom: 35px;
 }
@@ -5880,7 +5885,7 @@ html[dir="rtl"] .about-content {
 
 .student-dashboard .sd-course-grid {
   display: grid;
-  grid-template-columns: repeat(3,minmax(0,1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
 }
 
@@ -5894,7 +5899,7 @@ html[dir="rtl"] .about-content {
 
 .student-dashboard .sd-course-card:hover {
   transform: translateY(-7px);
-  box-shadow: 0 14px 30px rgba(31,45,61,.12);
+  box-shadow: 0 14px 30px rgba(31, 45, 61, .12);
 }
 
 .student-dashboard .sd-course-art {
@@ -5929,7 +5934,7 @@ html[dir="rtl"] .about-content {
   font-weight: 700;
 }
 
-.student-dashboard .sd-course-body > p {
+.student-dashboard .sd-course-body>p {
   min-height: 54px;
   margin: 0 0 18px;
   color: var(--sd-muted);
@@ -6101,11 +6106,11 @@ html[dir="rtl"] .about-content {
 
 @media (max-width: 1200px) {
   .student-dashboard .sd-stats-grid {
-    grid-template-columns: repeat(2,minmax(0,1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .student-dashboard .sd-course-grid {
-    grid-template-columns: repeat(2,minmax(0,1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -6131,7 +6136,7 @@ html[dir="rtl"] .about-content {
     inset: 0;
     z-index: 40;
     display: block;
-    background: rgba(31,45,61,.35);
+    background: rgba(31, 45, 61, .35);
   }
 
   :is(.student-dashboard, .teacher-dashboard) .sd-menu-btn {
@@ -6149,7 +6154,7 @@ html[dir="rtl"] .about-content {
   }
 
   :is(.student-dashboard, .teacher-dashboard) .sd-search {
-    width: min(300px,40vw);
+    width: min(300px, 40vw);
   }
 }
 
@@ -6164,7 +6169,7 @@ html[dir="rtl"] .about-content {
   }
 
   :is(.student-dashboard, .teacher-dashboard) .sd-search {
-    width: min(230px,37vw);
+    width: min(230px, 37vw);
   }
 
   .student-dashboard .sd-feature-grid,
@@ -6177,7 +6182,7 @@ html[dir="rtl"] .about-content {
   }
 
   :is(.student-dashboard, .teacher-dashboard) .sd-top-user-text,
-  :is(.student-dashboard, .teacher-dashboard) .sd-top-user > svg {
+  :is(.student-dashboard, .teacher-dashboard) .sd-top-user>svg {
     display: none;
   }
 }
@@ -6546,6 +6551,7 @@ html[dir="rtl"] .about-content {
     display: none;
   }
 }
+
 /* ==========================================
    NOTIFICATIONS BUTTON - OPEN STATE
 ========================================== */
@@ -6717,11 +6723,9 @@ html[dir="rtl"] .about-content {
 
   padding: var(--space-12);
 
-  background: linear-gradient(
-    120deg,
-    var(--color-pale-aqua),
-    var(--color-white)
-  );
+  background: linear-gradient(120deg,
+      var(--color-pale-aqua),
+      var(--color-white));
 
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -7766,6 +7770,7 @@ html[dir="rtl"] .about-content {
   outline: 2px solid var(--color-primary);
   outline-offset: 3px;
 }
+
 /* SIDEBAR HOVER */
 
 :is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link:hover {
@@ -7794,6 +7799,7 @@ html[dir="rtl"] .about-content {
 :is(.student-dashboard, .teacher-dashboard) .sd-side-nav .sd-side-link.active svg {
   stroke: currentColor;
 }
+
 /* =========================================
    SHARED EMAIL VERIFICATION PAGE
 ========================================= */
@@ -7918,7 +7924,7 @@ html[dir="rtl"] .about-content {
 
 .assessment-page .as-methods {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   border: 0;
   padding: 0;
@@ -8036,11 +8042,11 @@ html[dir="rtl"] .about-content {
   justify-content: center;
 }
 
-.assessment-page input:checked ~ .as-radio-indicator {
+.assessment-page input:checked~.as-radio-indicator {
   border-color: var(--color-primary);
 }
 
-.assessment-page input:checked ~ .as-radio-indicator::after {
+.assessment-page input:checked~.as-radio-indicator::after {
   content: "";
   width: 10px;
   height: 10px;
@@ -8193,13 +8199,13 @@ html[dir="rtl"] .about-content {
   font-weight: 400;
 }
 
-.assessment-page .as-config-form > .as-upload-field,
-.assessment-page .as-config-form > .as-note,
-.assessment-page .as-config-form > .as-subheading,
-.assessment-page .as-config-form > .as-lecture-list,
-.assessment-page .as-config-form > .as-material-list,
-.assessment-page .as-config-form > .as-total-line,
-.assessment-page .as-config-form > .as-actions {
+.assessment-page .as-config-form>.as-upload-field,
+.assessment-page .as-config-form>.as-note,
+.assessment-page .as-config-form>.as-subheading,
+.assessment-page .as-config-form>.as-lecture-list,
+.assessment-page .as-config-form>.as-material-list,
+.assessment-page .as-config-form>.as-total-line,
+.assessment-page .as-config-form>.as-actions {
   grid-column: 1 / -1;
 }
 
@@ -8244,7 +8250,7 @@ html[dir="rtl"] .about-content {
   cursor: pointer;
 }
 
-.assessment-page .as-dropzone > svg {
+.assessment-page .as-dropzone>svg {
   width: 30px;
   height: 30px;
   color: #287f74;
@@ -8464,11 +8470,11 @@ html[dir="rtl"] .about-content {
   padding: 0 16px 18px;
 }
 
-.assessment-page .as-question-body > .as-field,
-.assessment-page .as-question-body > .as-field-grid,
-.assessment-page .as-question-body > .as-subheading,
-.assessment-page .as-question-body > .as-review-flag,
-.assessment-page .as-question-body > .as-rubric-heading {
+.assessment-page .as-question-body>.as-field,
+.assessment-page .as-question-body>.as-field-grid,
+.assessment-page .as-question-body>.as-subheading,
+.assessment-page .as-question-body>.as-review-flag,
+.assessment-page .as-question-body>.as-rubric-heading {
   grid-column: 1 / -1;
 }
 
@@ -8514,57 +8520,57 @@ html[dir="rtl"] .about-content {
   min-width: 0;
 }
 
-.assessment-page .as-rubric-grid > .as-field {
+.assessment-page .as-rubric-grid>.as-field {
   align-content: start;
   min-width: 0;
 }
 
-.assessment-page .as-rubric-grid > [data-rubric-field="name"] {
+.assessment-page .as-rubric-grid>[data-rubric-field="name"] {
   grid-column: 1;
   grid-row: 1;
 }
 
-.assessment-page .as-rubric-grid > [data-rubric-field="marks"] {
+.assessment-page .as-rubric-grid>[data-rubric-field="marks"] {
   grid-column: 2;
   grid-row: 1;
 }
 
-.assessment-page .as-rubric-grid > [data-rubric-field="evaluates"] {
+.assessment-page .as-rubric-grid>[data-rubric-field="evaluates"] {
   grid-column: 1;
   grid-row: 2;
 }
 
-.assessment-page .as-rubric-grid > [data-rubric-field="keyPoints"] {
+.assessment-page .as-rubric-grid>[data-rubric-field="keyPoints"] {
   grid-column: 2;
   grid-row: 2;
 }
 
-.assessment-page .as-rubric-grid > [data-rubric-field="fullCredit"] {
+.assessment-page .as-rubric-grid>[data-rubric-field="fullCredit"] {
   grid-column: 1;
   grid-row: 3;
 }
 
-.assessment-page .as-rubric-grid > [data-rubric-field="partialCredit"] {
+.assessment-page .as-rubric-grid>[data-rubric-field="partialCredit"] {
   grid-column: 2;
   grid-row: 3;
 }
 
-.assessment-page .as-rubric-grid > [data-rubric-field="noCredit"] {
+.assessment-page .as-rubric-grid>[data-rubric-field="noCredit"] {
   grid-column: 1 / -1;
   grid-row: 4;
 }
 
-.assessment-page .as-rubric-grid > [data-rubric-field="name"] .form-control,
-.assessment-page .as-rubric-grid > [data-rubric-field="marks"] .form-control {
+.assessment-page .as-rubric-grid>[data-rubric-field="name"] .form-control,
+.assessment-page .as-rubric-grid>[data-rubric-field="marks"] .form-control {
   min-height: 44px;
   height: 44px;
 }
 
-.assessment-page .as-rubric-grid > [data-rubric-field="evaluates"] .form-control,
-.assessment-page .as-rubric-grid > [data-rubric-field="keyPoints"] .form-control,
-.assessment-page .as-rubric-grid > [data-rubric-field="fullCredit"] .form-control,
-.assessment-page .as-rubric-grid > [data-rubric-field="partialCredit"] .form-control,
-.assessment-page .as-rubric-grid > [data-rubric-field="noCredit"] .form-control {
+.assessment-page .as-rubric-grid>[data-rubric-field="evaluates"] .form-control,
+.assessment-page .as-rubric-grid>[data-rubric-field="keyPoints"] .form-control,
+.assessment-page .as-rubric-grid>[data-rubric-field="fullCredit"] .form-control,
+.assessment-page .as-rubric-grid>[data-rubric-field="partialCredit"] .form-control,
+.assessment-page .as-rubric-grid>[data-rubric-field="noCredit"] .form-control {
   min-height: 92px;
   height: 92px;
   resize: vertical;
@@ -8681,4 +8687,102 @@ html[dir="rtl"] .about-content {
   background: var(--color-white);
   box-shadow: var(--shadow-card);
   color: var(--color-navy);
+}
+/* Assessment Settings */
+
+.as-settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.as-settings-grid .as-field {
+  min-width: 0;
+}
+
+.as-settings-grid .form-control {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .as-settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Assessment Question Reordering */
+
+.as-drag-handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 32px;
+  color: var(--color-navy);
+  cursor: grab;
+  user-select: none;
+  border-radius: 6px;
+}
+
+.as-drag-handle:hover {
+  background: #DFF3F2;
+  color: #1F2D3D;
+}
+
+.as-drag-handle:active {
+  cursor: grabbing;
+}
+
+.as-drag-handle svg {
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.as-question-card.as-dragging {
+  opacity: 0.45;
+}
+
+.as-question-card.as-drag-over {
+  outline: 2px dashed #62C4B5;
+  outline-offset: 3px;
+  background: #DFF3F2;
+}
+
+.as-reorder-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 8px 16px;
+}
+
+.as-reorder-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #1F2D3D;
+  cursor: pointer;
+}
+
+.as-reorder-btn:hover:not(:disabled) {
+  background: #DFF3F2;
+  border-color: #62C4B5;
+}
+
+.as-reorder-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.as-reorder-btn svg {
+  width: 16px;
+  height: 16px;
 }

@@ -5,21 +5,15 @@
 
   <meta charset="UTF-8">
 
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Assessment | EduSaaS</title>
 
-  <link rel="preconnect"
-        href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
 
-  <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Shared CSS -->
 
@@ -33,18 +27,16 @@
 
   <!-- Icons -->
 
-  <script
-    src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"
-    defer>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer>
   </script>
 
   <!-- Shared JavaScript -->
 
   <script src="../../public/js/layout.js" defer></script>
 
-  <script src="../../public/js/api.js?v=assessment-workflow-6" defer></script>
+  <script src="../../public/js/api.js?v=assessment-workflow-7" defer></script>
 
-  <script src="../../public/js/main.js?v=assessment-workflow-17" defer></script>
+  <script src="../../public/js/main.js?v=assessment-workflow-18" defer></script>
 
 </head>
 
@@ -54,16 +46,14 @@
 
     <!-- Shared Teacher Sidebar -->
 
-    <div data-layout="sidebar"
-         data-layout-variant="teacher-assessment">
+    <div data-layout="sidebar" data-layout-variant="teacher-assessment">
     </div>
 
     <div class="sd-page">
 
       <!-- Shared Teacher Topbar -->
 
-      <div data-layout="navbar"
-           data-layout-variant="teacher-assessment">
+      <div data-layout="navbar" data-layout-variant="teacher-assessment">
       </div>
 
       <!-- Assessment Content -->
@@ -91,9 +81,7 @@
 
         <!-- Creation Methods -->
 
-        <section class="as-panel"
-                 id="assessmentCreation"
-                 aria-labelledby="creationTitle">
+        <section class="as-panel" id="assessmentCreation" aria-labelledby="creationTitle">
 
           <div class="as-section-header">
 
@@ -114,38 +102,12 @@
               Assessment creation method
             </legend>
 
-            <!-- Upload Assessment -->
-
-            <label class="as-method-card">
-
-              <input type="radio"
-                     name="assessmentMethod"
-                     value="upload">
-
-              <span class="as-method-icon as-icon-upload">
-                <i data-lucide="cloud-upload"></i>
-              </span>
-
-              <span class="as-method-title">
-                Upload Existing Assessment
-              </span>
-
-              <span class="as-method-description">
-                Import an existing assessment and
-                extract editable questions.
-              </span>
-
-              <span class="as-radio-indicator"></span>
-
-            </label>
 
             <!-- Manual Assessment -->
 
             <label class="as-method-card">
 
-              <input type="radio"
-                     name="assessmentMethod"
-                     value="manual">
+              <input type="radio" name="assessmentMethod" value="manual">
 
               <span class="as-method-icon as-icon-manual">
                 <i data-lucide="file-pen-line"></i>
@@ -168,9 +130,7 @@
 
             <label class="as-method-card">
 
-              <input type="radio"
-                     name="assessmentMethod"
-                     value="ai">
+              <input type="radio" name="assessmentMethod" value="ai">
 
               <span class="as-method-icon as-icon-ai">
                 <i data-lucide="sparkles"></i>
@@ -182,7 +142,7 @@
 
               <span class="as-method-description">
                 Generate up to 10 questions from
-                your lecture materials.
+                your existing courses and lectures.
               </span>
 
               <span class="as-radio-indicator"></span>
@@ -193,10 +153,7 @@
 
           <div class="as-actions">
 
-            <button type="button"
-                    class="btn btn-primary"
-                    id="assessmentContinue"
-                    disabled>
+            <button type="button" class="btn btn-primary" id="assessmentContinue" disabled>
 
               Continue
 
@@ -211,10 +168,7 @@
         <p class="as-feedback" id="assessmentFeedback" role="status" aria-live="polite"></p>
 
         <!-- Assessment Workspace -->
-        <section class="as-panel"
-                 id="assessmentWorkspace"
-                 aria-labelledby="workspaceTitle"
-                 hidden>
+        <section class="as-panel" id="assessmentWorkspace" aria-labelledby="workspaceTitle" hidden>
 
           <div class="as-section-header">
             <h2 id="workspaceTitle"></h2>
@@ -245,8 +199,7 @@
 
         <!-- Saved Assessments -->
 
-        <section class="as-panel"
-                 id="savedAssessments">
+        <section class="as-panel" id="savedAssessments">
 
           <div class="as-section-header">
 
@@ -261,8 +214,7 @@
           <div class="as-saved-controls">
             <label>
               <span class="as-sr-only">Search assessments</span>
-              <input class="form-control" id="savedAssessmentSearch" type="search"
-                     placeholder="Search assessments">
+              <input class="form-control" id="savedAssessmentSearch" type="search" placeholder="Search assessments">
             </label>
             <label>
               <span class="as-sr-only">Filter by status</span>
@@ -276,7 +228,6 @@
               <span class="as-sr-only">Filter by creation method</span>
               <select class="form-control" id="savedMethodFilter">
                 <option value="all">All methods</option>
-                <option value="upload">Upload</option>
                 <option value="manual">Manual</option>
                 <option value="ai">AI (simulated)</option>
               </select>
@@ -286,8 +237,7 @@
             </button>
           </div>
 
-          <div id="savedAssessmentList"
-               aria-live="polite">
+          <div id="savedAssessmentList" aria-live="polite">
             <div class="as-empty-state">
               <span class="as-empty-icon">
                 <i data-lucide="clipboard-list"></i>
