@@ -759,3 +759,152 @@ img {
     grid-column: auto;
   }
 }
+
+/* Student Assessments Responsive */
+
+@media (max-width: 1100px) {
+
+  .sa-assessment-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .sa-toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sa-search {
+    grid-column: 1 / -1;
+  }
+
+  .sa-stats-grid {
+    gap: 12px;
+  }
+
+}
+
+@media (max-width: 520px) {
+
+  .sa-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sa-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .sa-assessment-card {
+    padding: 16px;
+  }
+
+  .sa-card-details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sa-card-header {
+    flex-wrap: wrap;
+  }
+
+}
+
+
+/* =========================================
+   STUDENT ASSESSMENT RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+  .sta-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sta-question-nav {
+    grid-template-columns: repeat(6, 40px);
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .sar-summary-card {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 20px;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .sta-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sta-header h1 {
+    font-size: 22px;
+  }
+
+  .sta-timer {
+    width: 100%;
+  }
+
+  .sta-question-card,
+  .sta-overview-card,
+  .sar-question-card {
+    padding: 18px;
+  }
+
+  .sta-navigation {
+    flex-wrap: wrap;
+  }
+
+  .sta-navigation .btn {
+    flex: 1;
+  }
+
+  .sta-question-nav {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .sta-option {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .sta-progress-card {
+    padding: 16px;
+  }
+
+  .sta-question-text {
+    font-size: 14px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .sar-stats article {
+    padding: 14px;
+  }
+
+  .sar-score > strong {
+    font-size: 30px;
+  }
+
+  .sar-question-heading {
+    gap: 6px;
+  }
+
+  .sar-question-marks {
+    font-size: 15px;
+  }
+
+  .sta-navigation .btn {
+    flex-basis: 100%;
+  }
+
+}

@@ -54,6 +54,21 @@
       progressLink?.setAttribute("href", "#progress");
     }
 
+    if (variant === "student-assessment") {
+
+      const assessmentLink = sidebarTemplate.querySelector(
+        'a[href$="student-assessment.html"]'
+      );
+
+      assessmentLink?.classList.add("active");
+
+      assessmentLink?.setAttribute(
+        "aria-current",
+        "page"
+      );
+
+    }
+    
     if (variant === "student-ai") {
       const aiLink = sidebarTemplate.querySelector('[data-layout-active="ai-tutor"]');
       aiLink?.classList.add("active");

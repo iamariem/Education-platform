@@ -8786,3 +8786,1555 @@ html[dir="rtl"] .about-content {
   width: 16px;
   height: 16px;
 }
+
+
+/* =========================================
+   STUDENT ASSESSMENTS
+========================================= */
+
+.sa-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.sa-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 200px 180px;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.sa-search {
+  position: relative;
+  min-width: 0;
+}
+
+.sa-search > svg {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.sa-search .form-control {
+  padding-left: 42px;
+}
+
+.sa-assessment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.sa-assessment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  padding: 24px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sa-assessment-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(31, 45, 61, 0.08);
+}
+
+.sa-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.sa-card-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--color-pale-aqua);
+  color: var(--color-navy);
+}
+
+.sa-card-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.sa-card-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.sa-card-title h3 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  color: var(--color-navy);
+  overflow-wrap: anywhere;
+}
+
+.sa-card-title p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.sa-status {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.sa-status-available {
+  background: #DFF3F2;
+  color: #21856B;
+}
+
+.sa-status-upcoming {
+  background: #FFF3DF;
+  color: #A66C20;
+}
+
+.sa-status-unavailable {
+  background: #F1F3F5;
+  color: var(--color-text-muted);
+}
+
+.sa-card-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px 12px;
+  padding-block: 20px;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sa-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.sa-detail-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.sa-detail-label svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--color-mint);
+}
+
+.sa-detail strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-navy);
+  overflow-wrap: anywhere;
+}
+
+.sa-start-btn {
+  width: 100%;
+  margin-top: auto;
+}
+
+.sa-start-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sa-empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--color-white);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.sa-empty-state[hidden] {
+  display: none;
+}
+
+.sa-empty-state > svg {
+  width: 48px;
+  height: 48px;
+  color: var(--color-mint);
+}
+
+.sa-empty-state h3 {
+  margin: 15px 0 8px;
+  color: var(--color-navy);
+}
+
+.sa-empty-state p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+#saFeedback {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: var(--color-pale-aqua);
+  color: var(--color-navy);
+  font-size: 13px;
+}
+
+/* =========================================
+   FIX ASSESSMENT QUESTION HEADER
+========================================= */
+
+.as-question-card > .as-question-summary {
+  display: grid;
+  grid-template-columns:
+    24px
+    max-content
+    max-content
+    minmax(0, 1fr)
+    max-content;
+
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  min-width: 0;
+  list-style: none;
+}
+
+.as-question-summary::-webkit-details-marker {
+  display: none;
+}
+
+.as-question-summary::marker {
+  content: "";
+}
+
+.as-question-summary .as-question-drag-handle {
+  position: static;
+  inset: auto;
+  transform: none;
+  width: 24px;
+  height: 30px;
+}
+
+.as-question-summary .as-question-number {
+  grid-column: 2;
+  white-space: nowrap;
+}
+
+.as-question-summary .as-question-type {
+  grid-column: 3;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.as-question-summary .as-question-prompt {
+  grid-column: 4;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.as-question-summary .as-question-marks {
+  grid-column: 5;
+  white-space: nowrap;
+  text-align: right;
+  justify-self: end;
+}
+
+/* Mobile question header */
+
+@media (max-width: 600px) {
+
+  .as-question-card > .as-question-summary {
+    grid-template-columns:
+      24px
+      max-content
+      max-content
+      minmax(0, 1fr);
+
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .as-question-summary .as-question-marks {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
+  .as-question-summary .as-question-prompt {
+    grid-column: 2 / -1;
+    grid-row: 2;
+  }
+
+}
+
+
+/* =========================================
+   STUDENT ASSESSMENT VIEWS
+========================================= */
+
+.student-assessment #saListView[hidden],
+.student-assessment #saTakeView[hidden],
+.student-assessment #saResultsView[hidden],
+.student-assessment #staPlayer[hidden],
+.student-assessment #staFeedback[hidden] {
+  display: none !important;
+}
+
+.student-assessment #saListView,
+.student-assessment #saTakeView,
+.student-assessment #saResultsView {
+  width: 100%;
+  min-width: 0;
+}
+
+#staBack,
+#sarBack {
+  margin-bottom: 20px;
+}
+
+/* Assessment List Additions */
+
+.sa-card-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.sa-card-actions .btn {
+  width: 100%;
+}
+
+.sa-attempts-note {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.sa-status-completed {
+  background: #DFF3F2;
+  color: #287D72;
+}
+
+.sa-status-in-progress {
+  background: #E5EDF7;
+  color: #355C8A;
+}
+
+/* =========================================
+   ASSESSMENT PLAYER
+========================================= */
+
+.sta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0 28px;
+}
+
+.sta-header h1 {
+  margin: 8px 0;
+  color: var(--color-navy);
+  font-size: 28px;
+  overflow-wrap: anywhere;
+}
+
+.sta-header p:not(.sd-eyebrow) {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+/* Timer */
+
+.sta-timer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  padding: 16px 22px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-pale-aqua);
+  color: var(--color-navy);
+}
+
+.sta-timer svg {
+  width: 26px;
+  height: 26px;
+}
+
+.sta-timer small,
+.sta-timer strong {
+  display: block;
+}
+
+.sta-timer small {
+  font-size: 11px;
+}
+
+.sta-timer strong {
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+}
+
+.sta-timer.is-urgent {
+  background: #FCE5E6;
+  color: #B74450;
+  border-color: #F0787B;
+}
+
+/* Progress */
+
+.sta-progress-card {
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.sta-progress-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--color-navy);
+}
+
+.sta-progress-info span {
+  color: var(--color-text-muted);
+}
+
+.sta-progress-track {
+  height: 8px;
+  overflow: hidden;
+  background: #EDF0F3;
+  border-radius: 20px;
+}
+
+#staProgressBar {
+  height: 100%;
+  width: 0;
+  background: var(--color-mint);
+  border-radius: 20px;
+  transition: width 0.2s ease;
+}
+
+/* Player Layout */
+
+.sta-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+  gap: 24px;
+}
+
+.sta-question-card,
+.sta-overview-card {
+  min-width: 0;
+  padding: 26px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+/* Question */
+
+.sta-question-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+#staQuestionType {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--color-pale-aqua);
+  color: #287D72;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+#staQuestionMarks {
+  color: var(--color-navy);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+#staQuestionNumber {
+  margin: 0 0 14px;
+  font-size: 18px;
+  color: var(--color-navy);
+}
+
+.sta-question-text {
+  margin-bottom: 28px;
+  color: var(--color-navy);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+#staAnswerArea {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* MCQ Options */
+
+.sta-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.sta-option:hover {
+  background: #F5FBFA;
+  border-color: var(--color-mint);
+}
+
+.sta-option.is-selected {
+  background: var(--color-pale-aqua);
+  border-color: var(--color-mint);
+}
+
+.sta-option input {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  accent-color: #62C4B5;
+}
+
+.sta-option-letter {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #F1F3F5;
+  color: var(--color-navy);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sta-option-text {
+  min-width: 0;
+  color: var(--color-navy);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+/* Essay Answer */
+
+.sta-answer-label {
+  margin: 0;
+  color: var(--color-navy);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sta-essay-input {
+  width: 100%;
+  min-width: 0;
+}
+
+.sta-essay-input .edu-math-rich-editor,
+.sta-essay-textarea {
+  min-height: 200px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.sta-essay-textarea {
+  resize: vertical;
+}
+
+.sta-answer-hint {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+/* Previous and Next */
+
+.sta-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Question Navigator */
+
+.sta-overview-card h3 {
+  margin: 0 0 8px;
+  color: var(--color-navy);
+  font-size: 17px;
+}
+
+.sta-overview-card > p {
+  margin: 0 0 20px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.sta-question-nav {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.sta-nav-button {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-navy);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sta-nav-button:hover {
+  border-color: var(--color-mint);
+}
+
+.sta-nav-button.is-answered {
+  background: var(--color-pale-aqua);
+  border-color: var(--color-mint);
+}
+
+.sta-nav-button.is-current {
+  background: var(--color-navy);
+  border-color: var(--color-navy);
+  color: var(--color-white);
+}
+
+.sta-legend {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.sta-legend span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.sta-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
+.sta-dot-current {
+  background: var(--color-navy);
+}
+
+.sta-dot-answered {
+  background: var(--color-pale-aqua);
+  border-color: var(--color-mint);
+}
+
+.sta-dot-unanswered {
+  background: var(--color-white);
+}
+
+.sta-submit {
+  width: 100%;
+}
+
+.sta-overview-card .sta-save-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 14px 0 0;
+  font-size: 10px;
+}
+
+.sta-save-note svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--color-mint);
+}
+
+#staFeedback:not(:empty) {
+  padding: 14px 18px;
+  margin-block: 16px;
+  border-radius: var(--radius-md);
+  background: var(--color-pale-aqua);
+  color: var(--color-navy);
+  font-size: 13px;
+}
+
+/* =========================================
+   ASSESSMENT RESULTS
+========================================= */
+
+.sar-summary-card {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  align-items: center;
+  gap: 30px;
+  padding: 30px;
+  margin: 24px 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.sar-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 30px;
+  background: var(--color-pale-aqua);
+  border-radius: var(--radius-lg);
+  color: var(--color-navy);
+}
+
+.sar-score > svg {
+  width: 42px;
+  height: 42px;
+  color: #287D72;
+}
+
+.sar-score > strong {
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.sar-score > span {
+  font-size: 13px;
+}
+
+#sarStatus {
+  padding: 6px 16px;
+  border-radius: 30px;
+  background: var(--color-white);
+  font-weight: 600;
+}
+
+.sar-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.sar-stats article {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.sar-stats article span {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.sar-stats article strong {
+  font-size: 22px;
+  color: var(--color-navy);
+}
+
+#sarQuestionResults {
+  display: grid;
+  gap: 16px;
+}
+
+.sar-pending-message {
+  padding: 18px 20px;
+  background: var(--color-pale-aqua);
+  border-radius: var(--radius-md);
+  color: var(--color-navy);
+  font-size: 13px;
+}
+
+/* Individual Question Result */
+
+.sar-question-card {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  padding: 24px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.sar-question-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.sar-question-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sar-question-heading h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--color-navy);
+}
+
+.sar-question-type {
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: var(--color-pale-aqua);
+  color: #287D72;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.sar-question-marks {
+  flex-shrink: 0;
+  color: var(--color-navy);
+  font-size: 18px;
+}
+
+.sar-question-text {
+  color: var(--color-navy);
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.sar-student-answer {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #F8FAFB;
+  font-size: 13px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.sar-student-answer small {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.sar-feedback-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sar-feedback-status svg {
+  width: 19px;
+  height: 19px;
+}
+
+.sar-status-correct {
+  color: #287D72;
+}
+
+.sar-status-partial {
+  color: #A66C20;
+}
+
+.sar-status-incorrect {
+  color: #B74450;
+}
+
+.sar-status-pending {
+  color: #A66C20;
+}
+
+.sar-explanation {
+  padding: 16px 18px;
+  background: #FFF7E8;
+  border: 1px solid #F3E3C5;
+  border-radius: var(--radius-md);
+  color: var(--color-navy);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.sar-explanation p {
+  margin: 8px 0 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+
+/* =========================================
+   EDUSAAS - QUESTION IMAGE UPLOAD
+========================================= */
+
+.as-question-image-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0 22px;
+  min-width: 0;
+}
+
+.as-question-image-field [hidden] {
+  display: none !important;
+}
+
+.as-question-image-input {
+  display: none;
+}
+
+/* IMAGE UPLOAD BUTTON */
+
+.as-question-image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 130px;
+  padding: 22px 16px;
+  border: 1.5px dashed #62C4B5;
+  border-radius: 12px;
+  background: #F5FBFA;
+  color: #1F2D3D;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.as-question-image-upload:hover {
+  background: #DFF3F2;
+  border-color: #409F90;
+}
+
+.as-question-image-upload:focus-visible {
+  outline: 2px solid #409F90;
+  outline-offset: 3px;
+}
+
+.as-question-image-upload:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.as-question-image-upload svg {
+  width: 28px;
+  height: 28px;
+  color: #409F90;
+}
+
+.as-question-image-upload strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.as-question-image-upload small {
+  font-size: 12px;
+  font-weight: 400;
+  color: #718096;
+}
+
+/* IMAGE PREVIEW */
+
+.as-question-image-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.as-question-image-preview img {
+  display: block;
+  max-width: 100%;
+  max-height: 320px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* IMAGE ACTIONS */
+
+.as-question-image-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.as-question-image-upload.has-image {
+  flex-direction: row;
+  width: auto;
+  min-height: 42px;
+  padding: 10px 16px;
+  border-style: solid;
+}
+
+.as-question-image-upload.has-image svg {
+  width: 18px;
+  height: 18px;
+}
+
+.as-remove-image {
+  color: #C65058;
+  border-color: #F4C5C7;
+}
+
+.as-remove-image:hover {
+  color: #C65058;
+  background: #FFF1F2;
+  border-color: #F0787B;
+}
+
+/* IMAGE VALIDATION ERROR */
+
+.as-question-image-error {
+  margin: 0;
+  color: #C65058;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   QUESTION IMAGES - TEACHER PREVIEW
+   STUDENT PLAYER & STUDENT RESULTS
+========================================= */
+
+.as-preview-question-image,
+.sta-question-image,
+.sar-question-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 480px;
+  margin: 18px auto;
+  object-fit: contain;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  background: #FFFFFF;
+}
+
+/* =========================================
+   RESPONSIVE QUESTION IMAGES
+========================================= */
+
+@media (max-width: 600px) {
+
+  .as-question-image-upload {
+    min-height: 110px;
+    padding: 16px 12px;
+  }
+
+  .as-question-image-preview {
+    padding: 10px;
+  }
+
+  .as-question-image-preview img {
+    max-height: 240px;
+  }
+
+  .as-question-image-upload.has-image,
+  .as-remove-image {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .as-preview-question-image,
+  .sta-question-image,
+  .sar-question-image {
+    max-height: 320px;
+    margin: 14px auto;
+  }
+
+}
+
+/* =========================================
+   TEACHER GRADING - SPACING IMPROVEMENTS
+========================================= */
+
+/* Dialog */
+
+.tg-dialog {
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.tg-dialog .as-dialog-header {
+  margin-bottom: 24px;
+}
+
+/* Statistics */
+
+.tg-dialog .tg-stats,
+.tg-dialog .tg-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.tg-dialog .tg-stat,
+.tg-dialog .tg-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  background: #F5FAFA;
+  border: 1px solid #DDECEB;
+  border-radius: 12px;
+}
+
+.tg-stat strong {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+/* Submission Cards */
+
+.tg-dialog .tg-submission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.tg-dialog .tg-submission-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+}
+
+.tg-submission-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tg-submission-details h3,
+.tg-submission-details p {
+  margin: 0;
+}
+
+.tg-dialog .tg-submission-score {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.tg-dialog .tg-submission-card .btn {
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Status */
+
+.tg-dialog .tg-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.tg-status-graded {
+  background: #DFF3F2;
+  color: #278D7E;
+}
+
+.tg-status-pending {
+  background: #FFF3DE;
+  color: #A05D14;
+}
+
+/* Back to Submissions Button */
+
+#tgBack {
+  margin-top: 8px;
+  margin-bottom: 24px;
+}
+
+/* Grading Workspace */
+
+#tgWorkspace:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#tgWorkspace .tg-summary {
+  margin: 0 0 8px;
+}
+
+#tgBack {
+  align-self: flex-start;
+}
+
+/* Question Results */
+
+#tgQuestions {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tg-dialog .tg-question-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+}
+
+.tg-question-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tg-question-heading h3 {
+  margin: 0;
+}
+
+.tg-question-text {
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+/* Student Answer & Model Answer */
+
+.tg-dialog .tg-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 10px;
+  background: #F8FAFC;
+}
+
+.tg-dialog .tg-student-answer {
+  background: #F1F5F9;
+}
+
+.tg-dialog .tg-model-answer {
+  background: #DFF3F2;
+}
+
+.tg-info-label {
+  display: block;
+  font-weight: 600;
+}
+
+.tg-math-content {
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Rubric Grading */
+
+.tg-dialog .tg-criterion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+}
+
+.tg-criterion-heading {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tg-dialog .tg-credit-guide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tg-dialog .tg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tg-dialog .tg-field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.tg-final-marks,
+.tg-correct,
+.tg-incorrect {
+  display: block;
+  margin: 8px 0;
+}
+
+/* Publish Results */
+
+.tg-dialog .tg-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #E2E8F0;
+}
+
+.tg-dialog [hidden] {
+  display: none !important;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+
+  .tg-dialog .tg-submission-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+  }
+
+  .tg-dialog .tg-credit-guide {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .tg-dialog {
+    padding: 16px;
+  }
+
+  .tg-dialog .tg-stats,
+  .tg-dialog .tg-summary {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .tg-dialog .tg-submission-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .tg-dialog .tg-question-card,
+  .tg-dialog .tg-criterion {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .tg-dialog .tg-submission-card .btn,
+  .tg-dialog .tg-footer .btn {
+    width: 100%;
+  }
+
+  #tgBack {
+    margin-bottom: 16px;
+  }
+
+}
+
+
+/* Teacher Submissions - Button Spacing */
+
+.tg-submission-card .btn {
+  margin-inline-start: 16px;
+}
+
+.tg-submission-score {
+  margin-inline-start: 10px;
+}
+
+@media (max-width: 600px) {
+  .tg-submission-card .btn {
+    margin-inline-start: 0;
+    margin-top: 10px;
+  }
+}
+
+/* =========================================
+   ASSESSMENT - ADD QUESTION TOOLBAR
+========================================= */
+
+.assessment-page .as-question-toolbar:not([hidden]) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  padding: 4px 0;
+}
+
+/* Question Type Dropdown */
+
+.assessment-page .as-question-toolbar select {
+  width: 170px;
+  height: 44px;
+  margin: 0;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+/* Add Question Button */
+
+.assessment-page .as-question-toolbar .btn {
+  height: 44px;
+  padding: 0 20px;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 600px) {
+
+  .assessment-page .as-question-toolbar:not([hidden]) {
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .assessment-page .as-question-toolbar select,
+  .assessment-page .as-question-toolbar .btn {
+    width: 100%;
+  }
+
+}
+
+/* =========================================
+   ASSESSMENT - UNIFIED ROUNDED CORNERS
+========================================= */
+
+/* Buttons */
+
+.assessment-page .as-content .btn,
+.assessment-page .as-dialog .btn {
+  border-radius: 14px;
+}
+
+/* Inputs, Dropdowns and Textareas */
+
+.assessment-page .as-content .form-control,
+.assessment-page .as-dialog .form-control,
+.assessment-page .as-content select,
+.assessment-page .as-content textarea {
+  border-radius: 14px;
+}
+
+/* Add Question Toolbar */
+
+.assessment-page .as-question-toolbar select,
+.assessment-page .as-question-toolbar .btn {
+  border-radius: 14px;
+  min-height: 44px;
+}
+
+/* Assessment Cards */
+
+.assessment-page .as-panel,
+.assessment-page .as-summary,
+.assessment-page .as-question-card,
+.assessment-page .as-method-card,
+.assessment-page .tg-submission-card,
+.assessment-page .tg-question-card,
+.assessment-page .tg-criterion {
+  border-radius: 18px;
+}
+
+/* Dialogs */
+
+.assessment-page .as-dialog {
+  border-radius: 20px;
+}

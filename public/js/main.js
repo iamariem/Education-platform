@@ -4886,6 +4886,7 @@ function initTeacherAssessment() {
     materials: [],
     questions: [],
     showRubricToStudents: false,
+    gradingMethod: "manual",
     status: "draft"
   });
 
@@ -4919,6 +4920,7 @@ function initTeacherAssessment() {
       id: localId("question"),
       type,
       text: "",
+      image: "",
       topic: "",
       difficulty: assessment?.difficulty || "Medium",
       marks: Number(type === "mcq" ? assessment?.mcqMarks : assessment?.essayMarks) || 1,
@@ -5389,6 +5391,26 @@ function initTeacherAssessment() {
       errors.slice(0, 5).map((error) => el("li", { text: error }))));
     const hasEssay = assessment.questions.some((question) => question.type === "essay");
     if (hasEssay) {
+      const gradingSelect = el("select", {
+        className: "form-control",
+        "data-assessment-field": "gradingMethod"
+      }, [
+        el("option", {
+          value: "manual",
+          text: "Manual Grading"
+        }),
+        el("option", {
+          value: "ai",
+          text: "AI Grading"
+        })
+      ]);
+
+      gradingSelect.value =
+        assessment.gradingMethod || "manual";
+
+      summary.append(
+        labelField("Essay Grading Method", gradingSelect)
+      );
       summary.append(el("label", { className: "as-check-row as-rubric-toggle" }, [
         el("input", { type: "checkbox", "data-assessment-field": "showRubricToStudents", checked: assessment.showRubricToStudents }),
         document.createTextNode(" Show rubric to students before submission")
@@ -5398,55 +5420,309 @@ function initTeacherAssessment() {
     }
   }
 
+
   function questionInput(question, field, label, value, attrs = {}) {
+
     const { multiline, math, ...controlAttrs } = attrs;
+
     const controlAttrsForField = {
       "data-question-field": field,
       "data-question-id": question.id
     };
+
     const control = math
       ? window.eduMathInput.createField(value, {
         ...controlAttrsForField,
         "aria-label": label,
         "aria-multiline": String(Boolean(multiline)),
-        ...(multiline ? { "data-rows": String(controlAttrs.rows || 3) } : {})
+        ...(multiline
+          ? { "data-rows": String(controlAttrs.rows || 3) }
+          : {})
       })
       : multiline
-        ? el("textarea", { className: "form-control", ...controlAttrsForField, rows: controlAttrs.rows || 3 })
-        : el("input", { className: "form-control", ...controlAttrsForField, value, ...controlAttrs });
+        ? el("textarea", {
+          className: "form-control",
+          ...controlAttrsForField,
+          rows: controlAttrs.rows || 3
+        })
+        : el("input", {
+          className: "form-control",
+          ...controlAttrsForField,
+          value,
+          ...controlAttrs
+        });
+
+    // Preserve existing textarea values after re-rendering.
+    if (!math && multiline) {
+      control.value = value ?? "";
+    }
+
     const fieldControl = math
-      ? el("div", { className: "edu-math-input" }, [control, window.eduMathInput.createButton(control, label)])
+      ? el("div", { className: "edu-math-input" }, [
+        control,
+        window.eduMathInput.createButton(control, label)
+      ])
       : control;
+
     const fieldElement = labelField(label, fieldControl);
-    if (field.startsWith("rubric.")) fieldElement.dataset.rubricField = field.split(".").pop();
+
+    if (field.startsWith("rubric.")) {
+      fieldElement.dataset.rubricField = field.split(".").pop();
+    }
+
     return fieldElement;
   }
-  let draggedQuestionId = null;
 
-  function moveQuestion(questionId, targetIndex) {
 
-    const questions = assessment.questions;
+  /* =========================================
+     QUESTION IMAGE UPLOAD
+  ========================================= */
 
-    const currentIndex = questions.findIndex(
-      (question) => question.id === questionId
+  function renderQuestionImage(question) {
+
+    const wrapper = el("div", {
+      className: "as-question-image-field"
+    });
+
+    const heading = el("span", {
+      className: "as-field-label",
+      text: "Question image (optional)"
+    });
+
+    const fileInput = el("input", {
+      type: "file",
+      accept: "image/jpeg,image/png,image/webp",
+      className: "as-question-image-input"
+    });
+
+    fileInput.hidden = true;
+
+    const preview = el("div", {
+      className: "as-question-image-preview"
+    });
+
+    const uploadButton = el("button", {
+      type: "button",
+      className: "as-question-image-upload"
+    });
+
+    const removeButton = el("button", {
+      type: "button",
+      className: "btn btn-secondary as-remove-image"
+    }, [
+      icon("trash-2"),
+      document.createTextNode(" Remove image")
+    ]);
+
+    const error = el("p", {
+      className: "as-question-image-error",
+      role: "alert"
+    });
+
+    error.hidden = true;
+
+    let uploadVersion = 0;
+
+    function showImageError(message = "") {
+
+      error.textContent = message;
+      error.hidden = !message;
+
+    }
+
+    function updatePreview() {
+
+      preview.replaceChildren();
+      uploadButton.replaceChildren();
+
+      if (question.image) {
+
+        const image = el("img", {
+          src: question.image,
+          alt: "Question image"
+        });
+
+        preview.append(image);
+
+        uploadButton.classList.add("has-image");
+
+        uploadButton.append(
+          icon("image-plus"),
+          el("strong", {
+            text: "Change image"
+          })
+        );
+
+      } else {
+
+        uploadButton.classList.remove("has-image");
+
+        uploadButton.append(
+
+          icon("image-plus"),
+
+          el("strong", {
+            text: "Add Question Image"
+          }),
+
+          el("small", {
+            text: "JPG, PNG or WEBP · Max 1 MB"
+          })
+
+        );
+
+      }
+
+      preview.hidden = !question.image;
+
+      removeButton.hidden = !question.image;
+
+      refreshIcons();
+
+    }
+
+    uploadButton.addEventListener("click", () => {
+
+      if (!ensureEditable()) return;
+
+      fileInput.click();
+
+    });
+
+    fileInput.addEventListener("change", () => {
+
+      const file = fileInput.files[0];
+
+      fileInput.value = "";
+
+      if (!file || !ensureEditable()) return;
+
+      const version = ++uploadVersion;
+
+      showImageError();
+
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+
+        showImageError(
+          "Please select a JPG, PNG or WEBP image."
+        );
+
+        return;
+
+      }
+
+      if (file.size > 1024 * 1024) {
+
+        showImageError(
+          "Image size must not exceed 1 MB."
+        );
+
+        return;
+
+      }
+
+      const reader = new FileReader();
+
+      uploadButton.disabled = true;
+
+      reader.onload = () => {
+
+        if (version !== uploadVersion) return;
+
+        const imageCheck = new Image();
+
+        imageCheck.onload = () => {
+
+          if (version !== uploadVersion) return;
+
+          question.image = String(reader.result);
+
+          uploadButton.disabled = false;
+
+          updatePreview();
+
+        };
+
+        imageCheck.onerror = () => {
+
+          if (version !== uploadVersion) return;
+
+          uploadButton.disabled = false;
+
+          showImageError(
+            "This image could not be opened."
+          );
+
+        };
+
+        imageCheck.src = String(reader.result);
+
+      };
+
+      reader.onerror = () => {
+
+        if (version !== uploadVersion) return;
+
+        uploadButton.disabled = false;
+
+        showImageError(
+          "Unable to read the selected image."
+        );
+
+      };
+
+      reader.readAsDataURL(file);
+
+    });
+
+    removeButton.addEventListener("click", () => {
+
+      if (!ensureEditable()) return;
+
+      uploadVersion++;
+
+      question.image = "";
+
+      fileInput.value = "";
+
+      uploadButton.disabled = false;
+
+      showImageError();
+
+      updatePreview();
+
+    });
+
+    const actions = el("div", {
+      className: "as-question-image-actions"
+    });
+
+    actions.append(
+      uploadButton,
+      removeButton
     );
 
-    if (
-      currentIndex === -1 ||
-      targetIndex < 0 ||
-      targetIndex >= questions.length ||
-      currentIndex === targetIndex
-    ) return;
+    wrapper.append(
+      heading,
+      fileInput,
+      preview,
+      actions,
+      error
+    );
 
-    const [movedQuestion] =
-      questions.splice(currentIndex, 1);
+    updatePreview();
 
-    questions.splice(targetIndex, 0, movedQuestion);
-
-    renderQuestions();
-    renderSummary();
+    return wrapper;
 
   }
+
+
 
   function renderQuestions() {
     questionList.replaceChildren();
@@ -5613,6 +5889,8 @@ function initTeacherAssessment() {
       body.append(questionInput(question, "text", "Question text", question.text, {
         multiline: true, rows: 3, required: true, math: true
       }));
+
+      body.append(renderQuestionImage(question));
       const common = el("div", { className: "as-field-grid" }, [
         questionInput(question, "topic", "Topic", question.topic),
         select("Difficulty", question.difficulty, [["Easy", "Easy"], ["Medium", "Medium"], ["Hard", "Hard"]], {
@@ -5811,8 +6089,44 @@ function initTeacherAssessment() {
       [...actions.querySelectorAll("[data-action]")].forEach((control) => {
         control.dataset.assessmentId = item.id;
       });
+
+      /* Teacher Assessment Submissions */
+
+      if (item.status === "published") {
+
+        const submissionsButton = el("button", {
+
+          type: "button",
+
+          className: "btn btn-primary tg-view-btn",
+
+          text: item.gradingMethod === "ai"
+            ? "View Results"
+            : "View Submissions"
+
+        });
+
+        submissionsButton.prepend(
+          icon("users")
+        );
+
+        submissionsButton.addEventListener(
+          "click",
+          () => {
+
+            window.eduTeacherGrading.open(item.id);
+
+          }
+        );
+
+        actions.append(submissionsButton);
+
+      }
+
       card.append(actions);
+
       grid.append(card);
+
     });
     savedList.append(grid);
     refreshIcons();
@@ -5841,6 +6155,19 @@ function initTeacherAssessment() {
       const questionText = el("p");
       window.eduMathInput.renderInline(questionText, question.text || "Question text not provided.");
       block.append(questionText);
+
+      if (question.image) {
+
+        const questionImage = el("img", {
+          className: "as-preview-question-image",
+          src: question.image,
+          alt: "Question image",
+          loading: "lazy"
+        });
+
+        block.append(questionImage);
+
+      }
       if (question.type === "mcq") {
         const options = el("ol", { type: "A" });
         question.options.filter((option) => option.text?.trim()).forEach((option) => {
@@ -6104,18 +6431,64 @@ function initTeacherAssessment() {
         setFeedback("Enter a title, select a course, and configure at least one question.", "error");
         return;
       }
-      if (assessment.questions.length) {
-        showBuilder(assessment.questions);
-        setFeedback("Your existing question edits have been preserved.", "success");
-        return;
+
+      const existingQuestions = assessment.questions;
+
+      const requiredCounts = {
+        mcq: assessment.questionType === "mixed"
+          ? Number(assessment.mcqCount)
+          : assessment.questionType === "mcq"
+            ? count : 0,
+
+        essay: assessment.questionType === "mixed"
+          ? Number(assessment.essayCount)
+          : assessment.questionType === "essay"
+            ? count : 0
+      };
+
+      const updatedQuestions = [];
+
+      const usedCounts = {
+        mcq: 0,
+        essay: 0
+      };
+
+      /* Preserve existing questions */
+
+      existingQuestions.forEach(question => {
+        const type = question.type;
+
+        if (usedCounts[type] < requiredCounts[type]) {
+          updatedQuestions.push(question);
+          usedCounts[type]++;
+        }
+      });
+
+      /* Add newly requested questions */
+
+      ["mcq", "essay"].forEach(type => {
+        while (usedCounts[type] < requiredCounts[type]) {
+          updatedQuestions.push(questionTemplate(type));
+          usedCounts[type]++;
+        }
+      });
+
+      /* Confirm before removing questions */
+
+      const removedQuestions = existingQuestions.filter(
+        question => !updatedQuestions.includes(question)
+      );
+
+      if (removedQuestions.length > 0) {
+        const confirmed = window.confirm(
+          `This change will remove ${removedQuestions.length} existing question(s). Continue?`
+        );
+
+        if (!confirmed) return;
       }
-      assessment.questions = assessment.questionType === "mixed"
-        ? [
-          ...Array(Number(assessment.mcqCount)).fill("mcq"),
-          ...Array(Number(assessment.essayCount)).fill("essay")
-        ].map((type) => questionTemplate(type))
-        : Array.from({ length: count }, () =>
-          questionTemplate(assessment.questionType));
+
+      assessment.questions = updatedQuestions;
+
       showBuilder(assessment.questions);
       setFeedback("Blank editable question cards are ready.", "success");
       return;
@@ -6244,8 +6617,12 @@ function initTeacherAssessment() {
       control.disabled = true;
       try {
         const result = await api.regenerateQuestion(source, assessment, sources);
+
         assessment.questions[assessment.questions.indexOf(source)] = {
-          ...result.data, id: source.id, marks: source.marks
+          ...result.data,
+          id: source.id,
+          marks: source.marks,
+          image: source.image || ""
         };
         renderQuestions();
         renderSummary();
@@ -6608,3 +6985,2762 @@ function initTeacherAssessment() {
 
   void start();
 }
+
+
+/* =========================================
+   EduSaaS - Student Assessments
+========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const $ = id => document.getElementById(id);
+
+  const grid = $("saAssessmentGrid");
+
+  if (!grid) return;
+
+  const api = window.eduApi?.assessment;
+  const math = window.eduMathInput;
+
+  const search = $("saSearch");
+  const courseFilter = $("saCourseFilter");
+  const statusFilter = $("saStatusFilter");
+  const emptyState = $("saEmptyState");
+  const feedback = $("saFeedback");
+
+  let assessments = [];
+  let attempts = [];
+  let attempt = null;
+  let index = 0;
+  let timer = null;
+  let busy = false;
+
+  /* =========================================
+     SHARED HELPERS
+  ========================================= */
+
+  function el(tag, className, text) {
+
+    const element = document.createElement(tag);
+
+    if (className) {
+      element.className = className;
+    }
+
+    if (text !== undefined) {
+      element.textContent = String(text);
+    }
+
+    return element;
+
+  }
+
+  function icon(name) {
+
+    const element = document.createElement("i");
+
+    element.setAttribute("data-lucide", name);
+
+    return element;
+
+  }
+
+  function refreshIcons() {
+    window.lucide?.createIcons?.();
+  }
+
+  function text(id, value) {
+
+    const element = $(id);
+
+    if (element) {
+      element.textContent = value;
+    }
+
+  }
+
+  function renderMath(node, value) {
+
+    node.replaceChildren();
+
+    if (math?.renderInline) {
+      math.renderInline(node, value || "");
+    } else {
+      node.textContent = value || "";
+    }
+
+  }
+
+  function showView(id) {
+
+    [
+      "saListView",
+      "saTakeView",
+      "saResultsView"
+    ].forEach(name => {
+
+      const element = $(name);
+
+      if (element) {
+        element.hidden = name !== id;
+      }
+
+    });
+
+    window.scrollTo(0, 0);
+
+    refreshIcons();
+
+  }
+
+  function showError(message = "") {
+
+    const node = $("staFeedback");
+
+    if (!node) return;
+
+    node.textContent = message;
+    node.hidden = !message;
+
+  }
+
+  function showListError(message = "") {
+
+    feedback.textContent = message;
+    feedback.hidden = !message;
+
+  }
+
+  /* =========================================
+     STUDENT ATTEMPTS
+  ========================================= */
+
+  function history(id) {
+
+    return attempts.filter(
+      item => item.assessmentId === id
+    );
+
+  }
+
+  function active(id) {
+
+    return history(id).find(
+      item => item.status === "in-progress"
+    );
+
+  }
+
+  function latest(id) {
+
+    return history(id)
+      .filter(item => item.status === "submitted")
+      .sort((a, b) => b.submittedAt - a.submittedAt)[0];
+
+  }
+
+  function isAnswered(question) {
+
+    return Boolean(
+      String(attempt?.answers?.[question.id] || "").trim()
+    );
+
+  }
+
+  /* =========================================
+     ASSESSMENT STATUS
+  ========================================= */
+
+  function getStatus(assessment) {
+
+    if (active(assessment.id)) {
+      return "in-progress";
+    }
+
+    if (latest(assessment.id)) {
+      return "completed";
+    }
+
+    const startDate = Date.parse(
+      assessment.start_date_time
+    );
+
+    if (!Number.isFinite(startDate)) {
+      return "unavailable";
+    }
+
+    return startDate > Date.now()
+      ? "upcoming"
+      : "available";
+
+  }
+
+  function formatDate(value) {
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return "Not scheduled";
+    }
+
+    return date.toLocaleString("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+
+  }
+
+  /* =========================================
+     ASSESSMENT STATISTICS
+  ========================================= */
+
+  function updateStatistics() {
+
+    text(
+      "saAvailableCount",
+      assessments.filter(assessment =>
+        ["available", "in-progress"].includes(
+          getStatus(assessment)
+        )
+      ).length
+    );
+
+    text(
+      "saUpcomingCount",
+      assessments.filter(assessment =>
+        getStatus(assessment) === "upcoming"
+      ).length
+    );
+
+    text(
+      "saCompletedCount",
+      assessments.filter(assessment =>
+        latest(assessment.id)
+      ).length
+    );
+
+  }
+
+  /* =========================================
+     COURSE FILTER
+  ========================================= */
+
+  function renderCourseFilter() {
+
+    const selected = courseFilter.value;
+
+    courseFilter.replaceChildren(
+      new Option("All courses", "all")
+    );
+
+    const courses = new Map(
+      assessments.map(assessment => [
+        assessment.courseId,
+        assessment.courseName
+      ])
+    );
+
+    courses.forEach((name, id) => {
+
+      courseFilter.append(
+        new Option(name, id)
+      );
+
+    });
+
+    if (courses.has(selected)) {
+      courseFilter.value = selected;
+    }
+
+  }
+
+  /* =========================================
+     ASSESSMENT CARD DETAILS
+  ========================================= */
+
+  function createDetail(iconName, label, value) {
+
+    const detail = el("div", "sa-detail");
+
+    const heading = el(
+      "span",
+      "sa-detail-label"
+    );
+
+    heading.append(
+      icon(iconName),
+      document.createTextNode(label)
+    );
+
+    detail.append(
+      heading,
+      el("strong", "", value)
+    );
+
+    return detail;
+
+  }
+
+  /* =========================================
+     CREATE ASSESSMENT CARD
+  ========================================= */
+
+  function createAssessmentCard(assessment) {
+
+    const status = getStatus(assessment);
+
+    const card = el(
+      "article",
+      "sa-assessment-card"
+    );
+
+    const header = el(
+      "div",
+      "sa-card-header"
+    );
+
+    const cardIcon = el(
+      "span",
+      "sa-card-icon"
+    );
+
+    cardIcon.append(
+      icon("clipboard-list")
+    );
+
+    const titleGroup = el(
+      "div",
+      "sa-card-title"
+    );
+
+    titleGroup.append(
+      el("h3", "", assessment.title),
+      el("p", "", assessment.courseName)
+    );
+
+    const statusLabels = {
+      available: "Available",
+      upcoming: "Upcoming",
+      completed: "Completed",
+      "in-progress": "In progress",
+      unavailable: "Unavailable"
+    };
+
+    const statusBadge = el(
+      "span",
+      `sa-status sa-status-${status}`,
+      statusLabels[status]
+    );
+
+    header.append(
+      cardIcon,
+      titleGroup,
+      statusBadge
+    );
+
+    const details = el(
+      "div",
+      "sa-card-details"
+    );
+
+    details.append(
+
+      createDetail(
+        "clock",
+        "Duration",
+        `${assessment.duration_min ?? "—"} min`
+      ),
+
+      createDetail(
+        "file-text",
+        "Questions",
+        assessment.questionCount
+      ),
+
+      createDetail(
+        "award",
+        "Total marks",
+        assessment.totalMarks
+      ),
+
+      createDetail(
+        "target",
+        "Pass marks",
+        assessment.pass_marks ?? "—"
+      ),
+
+      createDetail(
+        "repeat",
+        "Max attempts",
+        assessment.max_attempt ?? "—"
+      ),
+
+      createDetail(
+        "calendar",
+        "Start date",
+        formatDate(assessment.start_date_time)
+      )
+
+    );
+
+    const remaining = Math.max(
+      0,
+      (Number(assessment.max_attempt) || 1)
+      - history(assessment.id).length
+    );
+
+    const actions = el(
+      "div",
+      "sa-card-actions"
+    );
+
+    let buttonLabel = "Not available yet";
+
+    if (active(assessment.id)) {
+
+      buttonLabel = "Resume Assessment";
+
+    } else if (remaining === 0) {
+
+      buttonLabel = "No attempts remaining";
+
+    } else if (status === "completed") {
+
+      buttonLabel = "Retake Assessment";
+
+    } else if (status === "available") {
+
+      buttonLabel = "Start Assessment";
+
+    }
+
+    const startButton = el(
+      "button",
+      "btn btn-primary sa-start-btn",
+      buttonLabel
+    );
+
+    startButton.type = "button";
+
+    startButton.disabled =
+      !active(assessment.id) &&
+      (
+        remaining === 0 ||
+        !["available", "completed"].includes(status) ||
+        Date.parse(assessment.start_date_time) > Date.now()
+      );
+
+    startButton.addEventListener(
+      "click",
+      () => openAssessment(assessment.id)
+    );
+
+    actions.append(startButton);
+
+    if (latest(assessment.id)) {
+
+      const resultsButton = el(
+        "button",
+        "btn btn-secondary",
+        "View Results"
+      );
+
+      resultsButton.type = "button";
+
+      resultsButton.addEventListener(
+        "click",
+        () => showResults(latest(assessment.id))
+      );
+
+      actions.append(resultsButton);
+
+    }
+
+    card.append(
+      header,
+      details,
+      el(
+        "p",
+        "sa-attempts-note",
+        `Attempts remaining: ${remaining}`
+      ),
+      actions
+    );
+
+    return card;
+
+  }
+
+  /* =========================================
+     RENDER ASSESSMENT LIST
+  ========================================= */
+
+  function renderAssessments() {
+
+    const term = search.value
+      .trim()
+      .toLowerCase();
+
+    const filtered = assessments.filter(assessment => {
+
+      const matchesSearch =
+        `${assessment.title} ${assessment.courseName}`
+          .toLowerCase()
+          .includes(term);
+
+      const matchesCourse =
+        courseFilter.value === "all" ||
+        assessment.courseId === courseFilter.value;
+
+      const status = getStatus(assessment);
+
+      const matchesStatus =
+        statusFilter.value === "all" ||
+        status === statusFilter.value ||
+        (
+          statusFilter.value === "available" &&
+          status === "in-progress"
+        );
+
+      return matchesSearch &&
+        matchesCourse &&
+        matchesStatus;
+
+    });
+
+    grid.replaceChildren();
+
+    filtered.forEach(assessment => {
+
+      grid.append(
+        createAssessmentCard(assessment)
+      );
+
+    });
+
+    emptyState.hidden = filtered.length !== 0;
+
+    text(
+      "saAssessmentCount",
+      `${filtered.length} assessment${filtered.length === 1 ? "" : "s"}`
+    );
+
+    updateStatistics();
+
+    refreshIcons();
+
+  }
+
+  /* =========================================
+     LOAD PUBLISHED ASSESSMENTS
+  ========================================= */
+
+  async function loadAssessments() {
+
+    try {
+
+      if (
+        !api?.getPublishedAssessments ||
+        !api?.getStudentAttempts
+      ) {
+        throw new Error(
+          "Student Assessment API is unavailable."
+        );
+      }
+
+      const [result, historyResult] =
+        await Promise.all([
+
+          api.getPublishedAssessments(),
+
+          api.getStudentAttempts()
+
+        ]);
+
+      assessments = result.data;
+
+      attempts = historyResult.data;
+
+      showListError();
+
+      renderCourseFilter();
+
+      renderAssessments();
+
+    } catch (error) {
+
+      showListError(error.message);
+
+    }
+
+  }
+
+  /* =========================================
+     ASSESSMENT PROGRESS
+  ========================================= */
+
+  function renderProgress() {
+
+    if (!attempt) return;
+
+    const total = attempt.questions.length;
+
+    const answered = attempt.questions.filter(
+      isAnswered
+    ).length;
+
+    text(
+      "staProgressText",
+      `Question ${index + 1} of ${total}`
+    );
+
+    text(
+      "staAnswered",
+      `${answered} of ${total} answered`
+    );
+
+    $("staProgressBar").style.width =
+      `${total ? answered / total * 100 : 0}%`;
+
+    const navigation = $("staQuestionNav");
+
+    navigation.replaceChildren();
+
+    attempt.questions.forEach((question, position) => {
+
+      const button = el(
+        "button",
+        "sta-nav-button",
+        position + 1
+      );
+
+      button.type = "button";
+
+      button.classList.toggle(
+        "is-current",
+        position === index
+      );
+
+      button.classList.toggle(
+        "is-answered",
+        isAnswered(question)
+      );
+
+      button.setAttribute(
+        "aria-label",
+        `Question ${position + 1}`
+      );
+
+      button.addEventListener(
+        "click",
+        () => goToQuestion(position)
+      );
+
+      navigation.append(button);
+
+    });
+
+  }
+
+  /* =========================================
+     SAVE STUDENT ANSWER
+  ========================================= */
+
+  function saveAnswer(question, value) {
+
+    if (busy || !attempt) return;
+
+    if (Date.now() >= attempt.expiresAt) {
+
+      void submitAssessment(true);
+
+      return;
+
+    }
+
+    try {
+
+      const result = api.saveStudentAnswer(
+        attempt.id,
+        question.id,
+        value
+      );
+
+      attempt = result.data;
+
+      renderProgress();
+
+      showError();
+
+    } catch (error) {
+
+      showError(error.message);
+
+    }
+
+  }
+
+  /* =========================================
+     RENDER MCQ ANSWERS
+  ========================================= */
+
+  function renderMCQ(question, area) {
+
+    question.options.forEach((option, position) => {
+
+      const label = el(
+        "label",
+        "sta-option"
+      );
+
+      const radio = el("input");
+
+      radio.type = "radio";
+
+      radio.name = `answer-${question.id}`;
+
+      radio.value = option.id;
+
+      radio.checked =
+        attempt.answers[question.id] === option.id;
+
+      label.classList.toggle(
+        "is-selected",
+        radio.checked
+      );
+
+      const letter = el(
+        "span",
+        "sta-option-letter",
+        String.fromCharCode(65 + position)
+      );
+
+      const optionText = el(
+        "span",
+        "sta-option-text"
+      );
+
+      renderMath(
+        optionText,
+        option.text
+      );
+
+      label.append(
+        radio,
+        letter,
+        optionText
+      );
+
+      radio.addEventListener("change", () => {
+
+        saveAnswer(question, option.id);
+
+        area.querySelectorAll(".sta-option")
+          .forEach(item => {
+
+            item.classList.toggle(
+              "is-selected",
+              item.querySelector("input").checked
+            );
+
+          });
+
+      });
+
+      area.append(label);
+
+    });
+
+  }
+
+  /* =========================================
+     RENDER ESSAY ANSWER
+  ========================================= */
+
+  function renderEssay(question, area) {
+
+    area.append(
+      el(
+        "p",
+        "sta-answer-label",
+        "Your answer"
+      )
+    );
+
+    const savedAnswer =
+      attempt.answers[question.id] || "";
+
+    if (
+      math?.createField &&
+      math?.createButton &&
+      math?.serializeField
+    ) {
+
+      const editor = math.createField(
+        savedAnswer,
+        {
+          "aria-label": "Your answer",
+          "aria-multiline": "true",
+          "data-rows": "6"
+        }
+      );
+
+      const wrapper = el(
+        "div",
+        "edu-math-input sta-essay-input"
+      );
+
+      const mathButton = math.createButton(
+        editor,
+        "Your answer"
+      );
+
+      wrapper.append(
+        editor,
+        mathButton
+      );
+
+      editor.addEventListener("input", () => {
+
+        saveAnswer(
+          question,
+          math.serializeField(editor)
+        );
+
+      });
+
+      area.append(wrapper);
+
+    } else {
+
+      const textarea = el(
+        "textarea",
+        "form-control sta-essay-textarea"
+      );
+
+      textarea.rows = 7;
+
+      textarea.value = savedAnswer;
+
+      textarea.placeholder =
+        "Write your answer here...";
+
+      textarea.addEventListener("input", () => {
+
+        saveAnswer(
+          question,
+          textarea.value
+        );
+
+      });
+
+      area.append(textarea);
+
+    }
+
+  }
+
+  /* =========================================
+     RENDER CURRENT QUESTION
+  ========================================= */
+
+  function renderQuestion() {
+
+    if (!attempt) return;
+
+    const question = attempt.questions[index];
+
+    if (!question) return;
+
+    text(
+      "staQuestionNumber",
+      `Question ${index + 1}`
+    );
+
+    text(
+      "staQuestionType",
+      question.type === "mcq"
+        ? "MULTIPLE CHOICE"
+        : "ESSAY"
+    );
+
+    text(
+      "staQuestionMarks",
+      `${question.marks} marks`
+    );
+
+    const questionText = $("staQuestionText");
+
+    renderMath(
+      questionText,
+      question.text
+    );
+
+    if (question.image) {
+
+      const image = el(
+        "img",
+        "sta-question-image"
+      );
+
+      image.src = question.image;
+
+      image.alt = "Question image";
+
+      questionText.append(image);
+
+    }
+
+    const area = $("staAnswerArea");
+
+    area.replaceChildren();
+
+    if (question.type === "mcq") {
+
+      renderMCQ(question, area);
+
+    } else {
+
+      renderEssay(question, area);
+
+    }
+
+    $("staPrevious").disabled = index === 0;
+
+    text(
+      "staNext",
+      index === attempt.questions.length - 1
+        ? "Finish Assessment"
+        : "Next Question"
+    );
+
+    renderProgress();
+
+    refreshIcons();
+
+  }
+
+  /* =========================================
+     QUESTION NAVIGATION
+  ========================================= */
+
+  function goToQuestion(position) {
+
+    if (
+      busy ||
+      !attempt ||
+      position < 0 ||
+      position >= attempt.questions.length
+    ) return;
+
+    if (Date.now() >= attempt.expiresAt) {
+
+      void submitAssessment(true);
+
+      return;
+
+    }
+
+    try {
+
+      const result = api.saveStudentPosition(
+        attempt.id,
+        position
+      );
+
+      attempt = result.data;
+
+      index = position;
+
+      renderQuestion();
+
+    } catch (error) {
+
+      showError(error.message);
+
+    }
+
+  }
+
+  /* =========================================
+     ASSESSMENT TIMER
+  ========================================= */
+
+  function updateTimer() {
+
+    if (!attempt || busy) return;
+
+    const seconds = Math.max(
+      0,
+      Math.ceil(
+        (attempt.expiresAt - Date.now()) / 1000
+      )
+    );
+
+    const minutes = String(
+      Math.floor(seconds / 60)
+    ).padStart(2, "0");
+
+    const remainingSeconds = String(
+      seconds % 60
+    ).padStart(2, "0");
+
+    text(
+      "staTimer",
+      `${minutes}:${remainingSeconds}`
+    );
+
+    $("staTimerBox")?.classList.toggle(
+      "is-urgent",
+      seconds <= 300
+    );
+
+    if (seconds === 0) {
+
+      void submitAssessment(true);
+
+    }
+
+  }
+
+  /* =========================================
+     START OR RESUME ASSESSMENT
+  ========================================= */
+
+  async function openAssessment(id) {
+
+    if (busy) return;
+
+    if (!$("saTakeView") || !$("staPlayer")) {
+
+      showListError(
+        "Assessment player HTML is missing."
+      );
+
+      return;
+
+    }
+
+    busy = true;
+
+    try {
+
+      const result =
+        await api.startStudentAssessment(id);
+
+      attempt = result.data;
+
+      index = attempt.currentIndex || 0;
+
+      text("staTitle", attempt.title);
+
+      text("staCourse", attempt.courseName);
+
+      $("staPlayer").hidden = false;
+
+      $("staPlayer").inert = false;
+
+      $("staSubmit").disabled = false;
+
+      showView("saTakeView");
+
+      showError();
+
+      if (math?.prepare) {
+
+        void math.prepare()
+          .then(() => {
+
+            math.settleInitialization?.();
+
+          })
+          .catch(error => {
+
+            math.settleInitialization?.(error);
+
+          });
+
+      }
+
+      renderQuestion();
+
+      clearInterval(timer);
+
+      timer = setInterval(
+        updateTimer,
+        1000
+      );
+
+    } catch (error) {
+
+      showListError(error.message);
+
+      showError(error.message);
+
+    } finally {
+
+      busy = false;
+
+      if (attempt) {
+
+        updateTimer();
+
+      }
+
+    }
+
+  }
+
+  /* =========================================
+     CREATE QUESTION RESULT
+  ========================================= */
+
+  function createResultCard(
+    submittedAttempt,
+    question,
+    position
+  ) {
+
+    const result = submittedAttempt.results.find(
+      item => item.questionId === question.id
+    );
+
+    if (!result) return null;
+
+    const card = el(
+      "article",
+      "sar-question-card"
+    );
+
+    const header = el(
+      "div",
+      "sar-question-header"
+    );
+
+    header.append(
+
+      el(
+        "h3",
+        "",
+        `Question ${position + 1} — ${question.type.toUpperCase()}`
+      ),
+
+      el(
+        "strong",
+        "sar-question-marks",
+        `${result.marks ?? "—"} / ${result.maxMarks}`
+      )
+
+    );
+
+    const prompt = el(
+      "div",
+      "sar-question-text"
+    );
+
+    renderMath(
+      prompt,
+      question.text
+    );
+
+    if (question.image) {
+
+      const image = el(
+        "img",
+        "sar-question-image"
+      );
+
+      image.src = question.image;
+
+      image.alt = "Question image";
+
+      prompt.append(image);
+
+    }
+
+    const answer = el(
+      "div",
+      "sar-student-answer"
+    );
+
+    const answerText = el("div");
+
+    const savedAnswer =
+      submittedAttempt.answers[question.id];
+
+    const displayedAnswer =
+      question.type === "mcq"
+        ? question.options.find(
+          option => option.id === savedAnswer
+        )?.text
+        : savedAnswer;
+
+    renderMath(
+      answerText,
+      displayedAnswer || "Not answered"
+    );
+
+    answer.append(
+      el("small", "", "Your answer"),
+      answerText
+    );
+
+    const statusLabels = {
+      correct: "Correct answer",
+      incorrect: "Incorrect answer",
+      partial: "Partially correct",
+      pending: "Awaiting grading"
+    };
+
+    const status = el(
+      "div",
+      `sar-feedback-status sar-status-${result.status}`,
+      statusLabels[result.status] || "Awaiting grading"
+    );
+
+    card.append(
+      header,
+      prompt,
+      answer,
+      status
+    );
+
+    /* No explanation for full marks */
+
+    if (
+      result.status !== "correct" &&
+      result.feedback?.length
+    ) {
+
+      const explanation = el(
+        "div",
+        "sar-explanation"
+      );
+
+      explanation.append(
+
+        el(
+          "strong",
+          "",
+          result.status === "pending"
+            ? "Grading status"
+            : "Explanation"
+        )
+
+      );
+
+      result.feedback.forEach(message => {
+
+        const paragraph = el("p");
+
+        renderMath(
+          paragraph,
+          message
+        );
+
+        explanation.append(paragraph);
+
+      });
+
+      card.append(explanation);
+
+    }
+
+    return card;
+
+  }
+
+  /* =========================================
+     STUDENT ASSESSMENT CONFETTI CELEBRATION
+  ========================================= */
+
+  function celebrateAssessment(submittedAttempt) {
+
+    if (!submittedAttempt) return;
+
+    if (submittedAttempt.gradingStatus !== "graded") {
+      return;
+    }
+
+    const earnedMarks = Number(
+      submittedAttempt.earnedMarks
+    );
+
+    const totalMarks = Number(
+      submittedAttempt.totalMarks
+    );
+
+    const lostMarks = totalMarks - earnedMarks;
+
+    /* Celebrate full marks or losing only one mark */
+
+    if (
+      !Number.isFinite(earnedMarks) ||
+      !Number.isFinite(totalMarks) ||
+      totalMarks <= 0 ||
+      earnedMarks <= 0 ||
+      lostMarks < -0.000001 ||
+      lostMarks > 1.000001
+    ) {
+      return;
+    }
+
+    if (typeof window.confetti !== "function") {
+      return;
+    }
+
+    const colors = [
+      "#62C4B5",
+      "#F0787B",
+      "#1F2D3D",
+      "#F4C95D",
+      "#DFF3F2"
+    ];
+
+    /* Left side celebration */
+
+    window.confetti({
+      particleCount: 100,
+      angle: 60,
+      spread: 85,
+      startVelocity: 55,
+      gravity: 1.2,
+      ticks: 150,
+      origin: {
+        x: 0,
+        y: 0.7
+      },
+      colors,
+      zIndex: 9999,
+      disableForReducedMotion: true
+    });
+
+    /* Right side celebration */
+
+    window.confetti({
+      particleCount: 100,
+      angle: 120,
+      spread: 85,
+      startVelocity: 55,
+      gravity: 1.2,
+      ticks: 150,
+      origin: {
+        x: 1,
+        y: 0.7
+      },
+      colors,
+      zIndex: 9999,
+      disableForReducedMotion: true
+    });
+
+  }
+
+  /* =========================================
+     SHOW ASSESSMENT RESULTS
+  ========================================= */
+
+  function showResults(submittedAttempt) {
+
+    if (!submittedAttempt) return;
+
+    if (!$("saResultsView")) {
+
+      showListError(
+        "Assessment results HTML is missing."
+      );
+
+      return;
+
+    }
+
+    const pending =
+      submittedAttempt.gradingStatus === "pending";
+
+    const passed =
+      submittedAttempt.earnedMarks >=
+      submittedAttempt.passMarks;
+
+    const percentage =
+      submittedAttempt.totalMarks > 0
+        ? Math.round(
+          submittedAttempt.earnedMarks /
+          submittedAttempt.totalMarks * 1000
+        ) / 10
+        : 0;
+
+    text(
+      "sarAssessmentTitle",
+      submittedAttempt.title
+    );
+
+    text(
+      "sarScore",
+      `${pending ? "—" : submittedAttempt.earnedMarks} / ${submittedAttempt.totalMarks}`
+    );
+
+    text(
+      "sarPercentage",
+      pending ? "Pending" : `${percentage}%`
+    );
+
+    text(
+      "sarPassMarks",
+      submittedAttempt.passMarks
+    );
+
+    text(
+      "sarCorrectCount",
+      submittedAttempt.results.filter(
+        item => item.status === "correct"
+      ).length
+    );
+
+    text(
+      "sarAttempt",
+      submittedAttempt.attemptNumber
+    );
+
+    text(
+      "sarStatus",
+      pending
+        ? "Grading pending"
+        : passed
+          ? "Passed"
+          : "Not passed"
+    );
+
+    const status = $("sarStatus");
+
+    status.classList.remove(
+      "sar-status-pending",
+      "sar-status-correct",
+      "sar-status-incorrect"
+    );
+
+    status.classList.add(
+      pending
+        ? "sar-status-pending"
+        : passed
+          ? "sar-status-correct"
+          : "sar-status-incorrect"
+    );
+
+    const area = $("sarQuestionResults");
+
+    area.replaceChildren();
+
+    if (pending) {
+
+      area.append(
+
+        el(
+          "p",
+          "sar-pending-message",
+          "Multiple-choice answers are graded. Essay answers are awaiting grading."
+        )
+
+      );
+
+    }
+
+    submittedAttempt.questions.forEach(
+      (question, position) => {
+
+        const card = createResultCard(
+          submittedAttempt,
+          question,
+          position
+        );
+
+        if (card) {
+          area.append(card);
+        }
+
+      }
+    );
+
+    showView("saResultsView");
+
+  }
+
+  /* =========================================
+     SUBMIT ASSESSMENT
+  ========================================= */
+
+  async function submitAssessment(auto = false) {
+
+    if (!attempt || busy) return;
+
+    if (!auto) {
+
+      const unanswered =
+        attempt.questions.filter(
+          question => !isAnswered(question)
+        ).length;
+
+      const message = unanswered > 0
+
+        ? `You have ${unanswered} unanswered question(s). Submit your assessment?`
+
+        : "Submit your assessment?";
+
+      if (!window.confirm(message)) return;
+
+    }
+
+    busy = true;
+
+    $("staPlayer").inert = true;
+
+    $("staSubmit").disabled = true;
+
+    try {
+
+      const result =
+        await api.submitStudentAssessment(
+          attempt.id
+        );
+
+      attempt = result.data;
+
+      clearInterval(timer);
+
+      showResults(attempt);
+
+      celebrateAssessment(attempt);
+
+      if (auto) {
+
+        $("sarQuestionResults").prepend(
+
+          el(
+            "p",
+            "sar-pending-message",
+            "Time is up. Your assessment was submitted automatically."
+          )
+
+        );
+
+      }
+
+      attempt = null;
+
+      await loadAssessments();
+
+    } catch (error) {
+
+      showError(error.message);
+
+      $("staPlayer").inert = false;
+
+      $("staSubmit").disabled = false;
+
+    } finally {
+
+      busy = false;
+
+    }
+
+  }
+
+  /* =========================================
+     PREVIOUS QUESTION
+  ========================================= */
+
+  $("staPrevious")?.addEventListener(
+    "click",
+    () => goToQuestion(index - 1)
+  );
+
+  /* =========================================
+     NEXT QUESTION
+  ========================================= */
+
+  $("staNext")?.addEventListener("click", () => {
+
+    if (!attempt) return;
+
+    if (index === attempt.questions.length - 1) {
+
+      void submitAssessment();
+
+    } else {
+
+      goToQuestion(index + 1);
+
+    }
+
+  });
+
+  /* =========================================
+     SUBMIT BUTTON
+  ========================================= */
+
+  $("staSubmit")?.addEventListener(
+    "click",
+    () => submitAssessment()
+  );
+
+  /* =========================================
+     BACK TO ASSESSMENT LIST
+  ========================================= */
+
+  $("staBack")?.addEventListener("click", () => {
+
+    if (busy) return;
+
+    if (attempt) {
+
+      const confirmed = window.confirm(
+        "Your answers are saved, but the timer will continue. Leave assessment?"
+      );
+
+      if (!confirmed) return;
+
+    }
+
+    clearInterval(timer);
+
+    attempt = null;
+
+    showView("saListView");
+
+    void loadAssessments();
+
+  });
+
+  /* =========================================
+     BACK FROM RESULTS
+  ========================================= */
+
+  $("sarBack")?.addEventListener("click", () => {
+
+    showView("saListView");
+
+    void loadAssessments();
+
+  });
+
+  /* =========================================
+     SEARCH AND FILTERS
+  ========================================= */
+
+  search.addEventListener(
+    "input",
+    renderAssessments
+  );
+
+  courseFilter.addEventListener(
+    "change",
+    renderAssessments
+  );
+
+  statusFilter.addEventListener(
+    "change",
+    renderAssessments
+  );
+
+  /* =========================================
+     STORAGE SYNCHRONIZATION
+  ========================================= */
+
+  window.addEventListener("storage", event => {
+
+    if (
+      event.key === "edusaas.assessments.v1" ||
+      event.key === "edusaas.student-assessment-attempts.v1" ||
+      event.key === null
+    ) {
+
+      void loadAssessments();
+
+    }
+
+  });
+
+  window.addEventListener("focus", () => {
+
+    void loadAssessments();
+
+  });
+
+  setInterval(
+    loadAssessments,
+    30000
+  );
+
+  /* =========================================
+     INITIAL RENDER
+  ========================================= */
+
+  void loadAssessments();
+
+});
+
+
+/* =========================================
+   EduSaaS - Teacher Assessment Grading
+========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const $ = id => document.getElementById(id);
+
+  const dialog = $("teacherGradingDialog");
+
+  if (!dialog) return;
+
+  const api = window.eduApi?.assessment;
+
+  const math = window.eduMathInput;
+
+  const submissionsArea = $("tgSubmissions");
+
+  const workspace = $("tgWorkspace");
+
+  const questionsArea = $("tgQuestions");
+
+  const form = $("tgForm");
+
+  const publishButton = $("tgPublish");
+
+  let assessmentId = null;
+
+  let selectedAttempt = null;
+
+  let gradeControls = [];
+
+  let busy = false;
+
+
+  /* =========================================
+     SHARED HELPERS
+  ========================================= */
+
+  function el(tag, className = "", text = "") {
+
+    const node = document.createElement(tag);
+
+    if (className) {
+
+      node.className = className;
+
+    }
+
+    if (text !== "") {
+
+      node.textContent = text;
+
+    }
+
+    return node;
+
+  }
+
+  function text(id, value) {
+
+    const node = $(id);
+
+    if (node) {
+
+      node.textContent = value;
+
+    }
+
+  }
+
+  function refreshIcons() {
+
+    window.lucide?.createIcons();
+
+  }
+
+  function renderMath(node, value) {
+
+    node.replaceChildren();
+
+    if (math?.renderInline) {
+
+      math.renderInline(node, value || "");
+
+    } else {
+
+      node.textContent = value || "";
+
+    }
+
+  }
+
+  function round(value) {
+
+    return Math.round(value * 10000) / 10000;
+
+  }
+
+  function feedback(message = "", error = false) {
+
+    const node = $("tgFeedback");
+
+    node.textContent = message;
+
+    node.classList.toggle("tg-error", error);
+
+  }
+
+  function makeButton(label, handler, primary = false) {
+
+    const button = el(
+      "button",
+      primary ? "btn btn-primary" : "btn btn-secondary",
+      label
+    );
+
+    button.type = "button";
+
+    button.addEventListener("click", handler);
+
+    return button;
+
+  }
+
+  function infoBlock(label, value, className = "") {
+
+    const block = el(
+      "div",
+      `tg-info-block ${className}`
+    );
+
+    const content = el("div", "tg-math-content");
+
+    renderMath(content, value);
+
+    block.append(
+      el("strong", "tg-info-label", label),
+      content
+    );
+
+    return block;
+
+  }
+
+
+  /* =========================================
+     LOAD SUBMISSIONS
+  ========================================= */
+
+  async function loadSubmissions() {
+
+    selectedAttempt = null;
+
+    gradeControls = [];
+
+    workspace.hidden = true;
+
+    submissionsArea.hidden = false;
+
+    text("tgTitle", "Assessment Submissions");
+
+    text(
+      "tgSubtitle",
+      "Review and grade submitted assessments."
+    );
+
+    feedback();
+
+    submissionsArea.replaceChildren(
+
+      el("p", "tg-empty", "Loading submissions...")
+
+    );
+
+    try {
+
+      const result = await api.getTeacherSubmissions(
+        assessmentId
+      );
+
+      renderSubmissions(result.data);
+
+    } catch (error) {
+
+      submissionsArea.replaceChildren();
+
+      feedback(error.message, true);
+
+    }
+
+  }
+
+
+  /* =========================================
+     RENDER SUBMISSIONS
+  ========================================= */
+
+  function renderSubmissions(submissions) {
+
+    submissionsArea.replaceChildren();
+
+    const pendingCount = submissions.filter(
+      attempt => attempt.gradingStatus === "pending"
+    ).length;
+
+    const gradedCount = submissions.filter(
+      attempt => attempt.gradingStatus === "graded"
+    ).length;
+
+    const stats = el("div", "tg-stats");
+
+    [
+
+      ["Submissions", submissions.length],
+
+      ["Pending grading", pendingCount],
+
+      ["Graded", gradedCount]
+
+    ].forEach(([label, value]) => {
+
+      const card = el("div", "tg-stat");
+
+      card.append(
+
+        el("span", "", label),
+
+        el("strong", "", String(value))
+
+      );
+
+      stats.append(card);
+
+    });
+
+    submissionsArea.append(stats);
+
+    if (!submissions.length) {
+
+      submissionsArea.append(
+
+        el(
+          "p",
+          "tg-empty",
+          "No students have submitted this assessment yet."
+        )
+
+      );
+
+      return;
+
+    }
+
+    const list = el("div", "tg-submission-list");
+
+    submissions.forEach(attempt => {
+
+      const pending =
+        attempt.gradingStatus === "pending";
+
+      const card = el("article", "tg-submission-card");
+
+      const details = el("div", "tg-submission-details");
+
+      details.append(
+
+        el(
+          "h3",
+          "",
+          attempt.studentName || "Demo Student"
+        ),
+
+        el(
+          "p",
+          "",
+          `Attempt ${attempt.attemptNumber}`
+        ),
+
+        el(
+          "small",
+          "",
+          new Date(attempt.submittedAt).toLocaleString()
+        )
+
+      );
+
+      const status = el(
+
+        "span",
+
+        pending
+          ? "tg-status tg-status-pending"
+          : "tg-status tg-status-graded",
+
+        pending ? "Pending grading" : "Graded"
+
+      );
+
+      const score = el(
+
+        "strong",
+
+        "tg-submission-score",
+
+        pending
+          ? `— / ${attempt.totalMarks}`
+          : `${attempt.earnedMarks} / ${attempt.totalMarks}`
+
+      );
+
+      const button = makeButton(
+
+        pending && attempt.gradingMethod !== "ai"
+          ? "Grade Submission"
+          : "View Results",
+
+        () => openSubmission(attempt),
+
+        pending
+
+      );
+
+      card.append(
+        details,
+        status,
+        score,
+        button
+      );
+
+      list.append(card);
+
+    });
+
+    submissionsArea.append(list);
+
+    refreshIcons();
+
+  }
+
+
+  /* =========================================
+     LIVE TOTAL SCORE
+  ========================================= */
+
+  function updateScore() {
+
+    if (!selectedAttempt) return;
+
+    const existingMarks = selectedAttempt.results.reduce(
+
+      (sum, result) =>
+        sum + Number(result.marks || 0),
+
+      0
+
+    );
+
+    const manualMarks = gradeControls.reduce(
+
+      (sum, question) => {
+
+        return sum + question.criteria.reduce(
+
+          (total, criterion) =>
+            total + Number(criterion.input.value || 0),
+
+          0
+
+        );
+
+      },
+
+      0
+
+    );
+
+    text(
+
+      "tgScore",
+
+      `${round(existingMarks + manualMarks)} / ${selectedAttempt.totalMarks}`
+
+    );
+
+  }
+
+
+  /* =========================================
+     RUBRIC CRITERION
+  ========================================= */
+
+  function renderCriterion(criterion) {
+
+    const card = el("div", "tg-criterion");
+
+    const heading = el("div", "tg-criterion-heading");
+
+    heading.append(
+
+      el("h4", "", criterion.name),
+
+      el(
+        "span",
+        "tg-max-marks",
+        `${criterion.marks} Marks`
+      )
+
+    );
+
+    card.append(heading);
+
+    if (criterion.evaluates) {
+
+      card.append(
+
+        infoBlock(
+          "Evaluates",
+          criterion.evaluates
+        )
+
+      );
+
+    }
+
+    if (criterion.keyPoints) {
+
+      card.append(
+
+        infoBlock(
+          "Expected Key Points",
+          criterion.keyPoints
+        )
+
+      );
+
+    }
+
+    const guide = el("div", "tg-credit-guide");
+
+    [
+
+      ["Full Credit", criterion.fullCredit],
+
+      ["Partial Credit", criterion.partialCredit],
+
+      ["No Credit", criterion.noCredit]
+
+    ].forEach(([label, value]) => {
+
+      if (value) {
+
+        guide.append(
+          infoBlock(label, value)
+        );
+
+      }
+
+    });
+
+    card.append(guide);
+
+    /* Criterion marks */
+
+    const marksLabel = el(
+      "label",
+      "tg-field",
+      "Awarded Marks"
+    );
+
+    const input = el("input", "form-control");
+
+    input.type = "number";
+
+    input.min = "0";
+
+    input.max = String(criterion.marks);
+
+    input.step = "any";
+
+    input.required = true;
+
+    input.placeholder = `0 – ${criterion.marks}`;
+
+    marksLabel.append(input);
+
+    /* Deduction feedback */
+
+    const reasonLabel = el(
+      "label",
+      "tg-field",
+      "Missing Points / Reason for Deduction"
+    );
+
+    const reason = el("textarea", "form-control");
+
+    reason.rows = 3;
+
+    reason.placeholder =
+      "Explain what is missing from the student's answer.";
+
+    reasonLabel.append(reason);
+
+    reasonLabel.hidden = true;
+
+    const deduction = el("p", "tg-deduction");
+
+    input.addEventListener("input", () => {
+
+      const entered = input.value !== "";
+
+      const awarded = Number(input.value);
+
+      const lost = round(
+        Number(criterion.marks) - awarded
+      );
+
+      const valid =
+        entered &&
+        Number.isFinite(awarded) &&
+        awarded >= 0 &&
+        awarded <= Number(criterion.marks);
+
+      const requiresReason = valid && lost > 0;
+
+      reasonLabel.hidden = !requiresReason;
+
+      reason.required = requiresReason;
+
+      deduction.textContent = requiresReason
+        ? `Deducted: ${lost} mark(s)`
+        : "";
+
+      updateScore();
+
+    });
+
+    card.append(
+      marksLabel,
+      deduction,
+      reasonLabel
+    );
+
+    return {
+
+      card,
+
+      criterionId: criterion.id,
+
+      input,
+
+      reason
+
+    };
+
+  }
+
+
+  /* =========================================
+     RENDER QUESTION
+  ========================================= */
+
+  function renderQuestion(question, index, attempt) {
+
+    const result = attempt.results.find(
+      item => item.questionId === question.id
+    );
+
+    if (!result) return;
+
+    const key = attempt.gradingKeys?.[question.id] || {};
+
+    const card = el("article", "tg-question-card");
+
+    const heading = el("div", "tg-question-heading");
+
+    heading.append(
+
+      el(
+        "h3",
+        "",
+        `Question ${index + 1} — ${question.type.toUpperCase()}`
+      ),
+
+      el(
+        "strong",
+        "tg-max-marks",
+        `${question.marks} Marks`
+      )
+
+    );
+
+    card.append(heading);
+
+    const prompt = el("div", "tg-question-text");
+
+    renderMath(prompt, question.text);
+
+    card.append(prompt);
+
+    /* Question image */
+
+    if (question.image) {
+
+      const image = el("img", "tg-question-image");
+
+      image.src = question.image;
+
+      image.alt = "Question image";
+
+      card.append(image);
+
+    }
+
+    /* Student answer */
+
+    const savedAnswer = attempt.answers[question.id];
+
+    const studentAnswer = question.type === "mcq"
+
+      ? question.options.find(
+        option => option.id === savedAnswer
+      )?.text
+
+      : savedAnswer;
+
+    card.append(
+
+      infoBlock(
+
+        "Student Answer",
+
+        studentAnswer || "Not answered",
+
+        "tg-student-answer"
+
+      )
+
+    );
+
+    /* Automatically graded MCQ */
+
+    if (question.type === "mcq") {
+
+      card.append(
+
+        infoBlock(
+
+          "Correct Answer",
+
+          key.correctAnswer,
+
+          "tg-model-answer"
+
+        ),
+
+        el(
+
+          "p",
+
+          result.status === "correct"
+            ? "tg-correct"
+            : "tg-incorrect",
+
+          `Automatically graded: ${result.marks} / ${result.maxMarks}`
+
+        )
+
+      );
+
+      if (result.feedback?.length) {
+
+        result.feedback.forEach(message => {
+
+          card.append(
+            infoBlock("Feedback", message)
+          );
+
+        });
+
+      }
+
+      questionsArea.append(card);
+
+      return;
+
+    }
+
+    /* Essay model answer */
+
+    card.append(
+
+      infoBlock(
+
+        "Model Answer",
+
+        key.modelAnswer || "No model answer available.",
+
+        "tg-model-answer"
+
+      )
+
+    );
+
+    /* Already graded or unanswered essay */
+
+    if (result.status !== "pending") {
+
+      card.append(
+
+        el(
+
+          "strong",
+
+          "tg-final-marks",
+
+          `Final grade: ${result.marks} / ${result.maxMarks}`
+
+        )
+
+      );
+
+      result.rubricResults?.forEach(criterion => {
+
+        card.append(
+
+          infoBlock(
+
+            `${criterion.name} — ${criterion.marks}/${criterion.maxMarks}`,
+
+            criterion.feedback || "No deduction."
+
+          )
+
+        );
+
+      });
+
+      result.feedback?.forEach(message => {
+
+        card.append(
+          infoBlock("Feedback", message)
+        );
+
+      });
+
+      questionsArea.append(card);
+
+      return;
+
+    }
+    if (attempt.gradingMethod === "ai") {
+
+      card.append(
+        el(
+          "p",
+          "as-note",
+          "Awaiting AI grading. Manual grading is disabled."
+        )
+      );
+
+      questionsArea.append(card);
+
+      return;
+
+    }
+    /* Manual essay grading */
+
+    card.append(
+      el("h3", "tg-rubric-title", "Rubric Grading")
+    );
+
+    const rubric = key.rubric || [];
+
+    const controls = [];
+
+    rubric.forEach(criterion => {
+
+      const control = renderCriterion(criterion);
+
+      controls.push(control);
+
+      card.append(control.card);
+
+    });
+
+    if (!rubric.length) {
+
+      card.append(
+
+        el(
+          "p",
+          "tg-error",
+          "This essay has no grading rubric."
+        )
+
+      );
+
+    }
+
+    /* Additional teacher feedback */
+
+    const feedbackLabel = el(
+      "label",
+      "tg-field",
+      "Additional Teacher Feedback (Optional)"
+    );
+
+    const feedbackInput = el(
+      "textarea",
+      "form-control"
+    );
+
+    feedbackInput.rows = 3;
+
+    feedbackInput.placeholder =
+      "Add any additional comments.";
+
+    feedbackLabel.append(feedbackInput);
+
+    card.append(feedbackLabel);
+
+    gradeControls.push({
+
+      questionId: question.id,
+
+      criteria: controls,
+
+      feedbackInput
+
+    });
+
+    questionsArea.append(card);
+
+  }
+
+
+  /* =========================================
+     OPEN SUBMISSION
+  ========================================= */
+
+  function openSubmission(attempt) {
+
+    selectedAttempt = attempt;
+
+    gradeControls = [];
+
+    feedback();
+
+    submissionsArea.hidden = true;
+
+    workspace.hidden = false;
+
+    questionsArea.replaceChildren();
+
+    text("tgTitle", attempt.title);
+
+    text(
+      "tgSubtitle",
+      "Review student answers and grading criteria."
+    );
+
+    text(
+      "tgStudent",
+      attempt.studentName || "Demo Student"
+    );
+
+    text("tgAttempt", attempt.attemptNumber);
+
+    attempt.questions.forEach((question, index) => {
+
+      renderQuestion(question, index, attempt);
+
+    });
+
+    publishButton.hidden =
+      attempt.gradingStatus === "graded" ||
+      attempt.gradingMethod === "ai";
+
+    updateScore();
+
+    refreshIcons();
+
+    dialog.scrollTop = 0;
+
+  }
+
+
+  /* =========================================
+     PUBLISH FINAL RESULTS
+  ========================================= */
+
+  form.addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    if (!selectedAttempt || busy) return;
+
+    if (!form.reportValidity()) return;
+
+    const essayGrades = gradeControls.map(question => ({
+
+      questionId: question.questionId,
+
+      feedback: question.feedbackInput.value.trim(),
+
+      criteria: question.criteria.map(criterion => ({
+
+        criterionId: criterion.criterionId,
+
+        marks: criterion.input.value,
+
+        feedback: criterion.reason.value.trim()
+
+      }))
+
+    }));
+
+    const confirmed = window.confirm(
+
+      "Publish final grades? The student will be able to view the completed results."
+
+    );
+
+    if (!confirmed) return;
+
+    busy = true;
+
+    publishButton.disabled = true;
+
+    publishButton.textContent = "Publishing...";
+
+    feedback();
+
+    try {
+
+      await api.publishEssayGrades(
+
+        selectedAttempt.id,
+
+        essayGrades
+
+      );
+
+      await loadSubmissions();
+
+      feedback("Results published successfully.");
+
+    } catch (error) {
+
+      feedback(error.message, true);
+
+    } finally {
+
+      busy = false;
+
+      publishButton.disabled = false;
+
+      publishButton.textContent = "Publish Results";
+
+      refreshIcons();
+
+    }
+
+  });
+
+
+  /* =========================================
+     DIALOG CONTROLS
+  ========================================= */
+
+  function canLeave() {
+
+    if (busy) return false;
+
+    const hasUnsavedGrades =
+
+      selectedAttempt?.gradingStatus === "pending" &&
+
+      gradeControls.some(question =>
+
+        question.feedbackInput.value.trim() ||
+
+        question.criteria.some(criterion =>
+
+          criterion.input.value !== "" ||
+
+          criterion.reason.value.trim()
+
+        )
+
+      );
+
+    return !hasUnsavedGrades || window.confirm(
+
+      "Leave without publishing these grades?"
+
+    );
+
+  }
+
+  $("tgClose").addEventListener("click", () => {
+
+    if (canLeave()) {
+
+      dialog.close();
+
+    }
+
+  });
+
+  $("tgBack").addEventListener("click", () => {
+
+    if (canLeave()) {
+
+      loadSubmissions();
+
+    }
+
+  });
+
+  dialog.addEventListener("cancel", event => {
+
+    if (!canLeave()) {
+
+      event.preventDefault();
+
+    }
+
+  });
+
+  window.eduTeacherGrading = {
+
+    async open(id) {
+
+      if (busy) return;
+
+      busy = true;
+
+      try {
+
+        assessmentId = id;
+
+        await loadSubmissions();
+
+        if (!dialog.open) {
+
+          dialog.showModal();
+
+        }
+
+        dialog.scrollTop = 0;
+
+        refreshIcons();
+
+      } finally {
+
+        busy = false;
+
+      }
+
+    }
+
+  };
+
+});

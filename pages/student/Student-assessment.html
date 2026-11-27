@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Assessments | EduSaaS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../styles/tokens.css">
+    <link rel="stylesheet" href="../../public/css/components.css">
+    <link rel="stylesheet" href="../../public/css/style.css">
+    <link rel="stylesheet" href="../../public/css/responsive.css">
+
+</head>
+
+<body class="student-dashboard student-assessment">
+
+    <div class="sd-app">
+
+        <!-- SIDEBAR -->
+
+        <div data-layout="sidebar" data-layout-variant="student-assessment"></div>
+
+        <div class="sd-page">
+
+            <!-- NAVBAR -->
+
+            <div data-layout="navbar" data-layout-variant="student-dashboard"></div>
+
+            <main class="sd-main">
+
+                <!-- =====================================
+                     VIEW 1 - MY ASSESSMENTS
+                ====================================== -->
+
+                <div id="saListView">
+
+                    <!-- INTRO -->
+
+                    <section class="sd-intro">
+
+                        <div>
+
+                            <p class="sd-eyebrow">
+                                CHECK YOUR KNOWLEDGE
+                            </p>
+
+                            <h1>My Assessments</h1>
+
+                            <p>
+                                Track your assessments and
+                                review your performance.
+                            </p>
+
+                        </div>
+
+                    </section>
+
+                    <!-- STATISTICS -->
+
+                    <section class="sa-stats-grid">
+
+                        <!-- Available -->
+
+                        <article class="sd-stat-card">
+
+                            <span class="sd-stat-icon sd-mint">
+                                <i data-lucide="clipboard-list"></i>
+                            </span>
+
+                            <div>
+
+                                <strong id="saAvailableCount">
+                                    0
+                                </strong>
+
+                                <small>Available</small>
+
+                            </div>
+
+                        </article>
+
+                        <!-- Upcoming -->
+
+                        <article class="sd-stat-card">
+
+                            <span class="sd-stat-icon sd-blue">
+                                <i data-lucide="calendar"></i>
+                            </span>
+
+                            <div>
+
+                                <strong id="saUpcomingCount">
+                                    0
+                                </strong>
+
+                                <small>Upcoming</small>
+
+                            </div>
+
+                        </article>
+
+                        <!-- Completed -->
+
+                        <article class="sd-stat-card">
+
+                            <span class="sd-stat-icon sd-rose">
+                                <i data-lucide="circle-check"></i>
+                            </span>
+
+                            <div>
+
+                                <strong id="saCompletedCount">
+                                    0
+                                </strong>
+
+                                <small>Completed</small>
+
+                            </div>
+
+                        </article>
+
+                    </section>
+
+                    <!-- ASSESSMENT FILTERS -->
+
+                    <section class="sd-section">
+
+                        <div class="sa-toolbar">
+
+                            <!-- Search -->
+
+                            <div class="sa-search">
+
+                                <i data-lucide="search"></i>
+
+                                <input class="form-control" id="saSearch" type="search"
+                                    placeholder="Search assessments..." aria-label="Search assessments">
+
+                            </div>
+
+                            <!-- Course Filter -->
+
+                            <select class="form-control" id="saCourseFilter" aria-label="Filter by course">
+
+                                <option value="all">
+                                    All courses
+                                </option>
+
+                            </select>
+
+                            <!-- Status Filter -->
+
+                            <select class="form-control" id="saStatusFilter" aria-label="Filter by status">
+
+                                <option value="all">
+                                    All statuses
+                                </option>
+
+                                <option value="available">
+                                    Available
+                                </option>
+
+                                <option value="upcoming">
+                                    Upcoming
+                                </option>
+
+                                <option value="completed">
+                                    Completed
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <!-- ASSESSMENT SECTION HEADING -->
+
+                        <div class="sd-section-heading">
+
+                            <div>
+
+                                <h2>Course Assessments</h2>
+
+                                <p>
+                                    Complete assessments
+                                    published by your teachers.
+                                </p>
+
+                            </div>
+
+                            <span class="sd-count-chip" id="saAssessmentCount">
+
+                                0 assessments
+
+                            </span>
+
+                        </div>
+
+                        <!-- Feedback -->
+
+                        <p id="saFeedback" role="status" hidden></p>
+
+                        <!-- Assessment Cards -->
+
+                        <div class="sa-assessment-grid" id="saAssessmentGrid"></div>
+
+                        <!-- Empty State -->
+
+                        <div class="sa-empty-state" id="saEmptyState" hidden>
+
+                            <i data-lucide="clipboard-list"></i>
+
+                            <h3>No assessments found</h3>
+
+                            <p>
+                                Published assessments
+                                will appear here.
+                            </p>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+                <!-- =====================================
+                     VIEW 2 - TAKE ASSESSMENT
+                ====================================== -->
+
+                <div id="saTakeView" hidden>
+
+                    <!-- Back Button -->
+
+                    <button type="button" class="btn btn-secondary" id="staBack">
+
+                        <i data-lucide="arrow-left"></i>
+
+                        Back to assessments
+
+                    </button>
+
+                    <!-- Feedback -->
+
+                    <p id="staFeedback" role="status" hidden></p>
+
+                    <!-- Assessment Player -->
+
+                    <div id="staPlayer" hidden>
+
+                        <!-- ASSESSMENT HEADER -->
+
+                        <section class="sta-header">
+
+                            <div>
+
+                                <p class="sd-eyebrow">
+                                    ASSESSMENT IN PROGRESS
+                                </p>
+
+                                <h1 id="staTitle"></h1>
+
+                                <p id="staCourse"></p>
+
+                            </div>
+
+                            <!-- Timer -->
+
+                            <div class="sta-timer" id="staTimerBox">
+
+                                <i data-lucide="clock"></i>
+
+                                <div>
+
+                                    <small>
+                                        Time remaining
+                                    </small>
+
+                                    <strong id="staTimer">
+                                        00:00
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <!-- ASSESSMENT PROGRESS -->
+
+                        <section class="sta-progress-card">
+
+                            <div class="sta-progress-info">
+
+                                <strong id="staProgressText">
+                                </strong>
+
+                                <span id="staAnswered">
+                                </span>
+
+                            </div>
+
+                            <div class="sta-progress-track">
+
+                                <div id="staProgressBar"></div>
+
+                            </div>
+
+                        </section>
+
+                        <!-- ASSESSMENT CONTENT -->
+
+                        <div class="sta-layout">
+
+                            <!-- QUESTION CARD -->
+
+                            <section class="sta-question-card">
+
+                                <!-- Question Type and Marks -->
+
+                                <div class="sta-question-heading">
+
+                                    <span id="staQuestionType">
+                                    </span>
+
+                                    <strong id="staQuestionMarks">
+                                    </strong>
+
+                                </div>
+
+                                <!-- Question Number -->
+
+                                <h2 id="staQuestionNumber"></h2>
+
+                                <!-- Question Text -->
+
+                                <div id="staQuestionText" class="sta-question-text">
+                                </div>
+
+                                <!--
+                                    Answer Area:
+                                    MCQ options or Essay input
+                                    with Math Editor.
+                                    Generated by JavaScript.
+                                -->
+
+                                <div id="staAnswerArea"></div>
+
+                                <!-- Question Navigation -->
+
+                                <div class="sta-navigation">
+
+                                    <button type="button" class="btn btn-secondary" id="staPrevious">
+
+                                        <i data-lucide="arrow-left"></i>
+
+                                        Previous
+
+                                    </button>
+
+                                    <button type="button" class="btn btn-primary" id="staNext">
+
+                                        Next Question
+
+                                        <i data-lucide="arrow-right"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </section>
+
+                            <!-- QUESTION NAVIGATOR -->
+
+                            <aside class="sta-overview-card">
+
+                                <h3>Question Navigator</h3>
+
+                                <p>Jump to any question.</p>
+
+                                <!-- Question Numbers -->
+
+                                <div id="staQuestionNav" class="sta-question-nav">
+                                </div>
+
+                                <!-- Navigator Legend -->
+
+                                <div class="sta-legend">
+
+                                    <span>
+
+                                        <i class="sta-dot sta-dot-current"></i>
+
+                                        Current
+
+                                    </span>
+
+                                    <span>
+
+                                        <i class="sta-dot sta-dot-answered"></i>
+
+                                        Answered
+
+                                    </span>
+
+                                    <span>
+
+                                        <i class="sta-dot sta-dot-unanswered"></i>
+
+                                        Unanswered
+
+                                    </span>
+
+                                </div>
+
+                                <!-- Submit Assessment -->
+
+                                <button type="button" class="btn btn-primary sta-submit" id="staSubmit">
+
+                                    <i data-lucide="send"></i>
+
+                                    Submit Assessment
+
+                                </button>
+
+                                <!-- Auto Save Message -->
+
+                                <p class="sta-save-note">
+
+                                    <i data-lucide="shield-check"></i>
+
+                                    Your answers are saved automatically.
+
+                                </p>
+
+                            </aside>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- =====================================
+                     VIEW 3 - ASSESSMENT RESULTS
+                ====================================== -->
+
+                <div id="saResultsView" hidden>
+
+                    <!-- Back Button -->
+
+                    <button type="button" class="btn btn-secondary" id="sarBack">
+
+                        <i data-lucide="arrow-left"></i>
+
+                        Back to assessments
+
+                    </button>
+
+                    <!-- RESULTS INTRO -->
+
+                    <section class="sd-intro">
+
+                        <div>
+
+                            <p class="sd-eyebrow">
+                                YOUR PERFORMANCE
+                            </p>
+
+                            <h1>Assessment Results</h1>
+
+                            <p id="sarAssessmentTitle"></p>
+
+                        </div>
+
+                    </section>
+
+                    <!-- RESULT SUMMARY -->
+
+                    <section class="sar-summary-card">
+
+                        <!-- Final Score -->
+
+                        <div class="sar-score">
+
+                            <i data-lucide="award"></i>
+
+                            <span>Your score</span>
+
+                            <strong id="sarScore">—</strong>
+
+                            <span id="sarStatus">
+                                Grading pending
+                            </span>
+
+                        </div>
+
+                        <!-- Result Statistics -->
+
+                        <div class="sar-stats">
+
+                            <!-- Percentage -->
+
+                            <article>
+
+                                <span>Percentage</span>
+
+                                <strong id="sarPercentage">
+                                    —
+                                </strong>
+
+                            </article>
+
+                            <!-- Pass Marks -->
+
+                            <article>
+
+                                <span>Pass marks</span>
+
+                                <strong id="sarPassMarks">
+                                    —
+                                </strong>
+
+                            </article>
+
+                            <!-- Correct Answers -->
+
+                            <article>
+
+                                <span>Correct answers</span>
+
+                                <strong id="sarCorrectCount">
+                                    —
+                                </strong>
+
+                            </article>
+
+                            <!-- Attempt Number -->
+
+                            <article>
+
+                                <span>Attempt</span>
+
+                                <strong id="sarAttempt">
+                                    —
+                                </strong>
+
+                            </article>
+
+                        </div>
+
+                    </section>
+
+                    <!-- QUESTION FEEDBACK -->
+
+                    <section class="sd-section">
+
+                        <div class="sd-section-heading">
+
+                            <div>
+
+                                <h2>Answer Review</h2>
+
+                                <p>
+                                    Review your answers and
+                                    understand where you can improve.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <!--
+                            Individual Question Results:
+
+                            Full marks:
+                            Correct answer.
+
+                            Partial marks:
+                            Partially correct.
+                            Missing key points and deductions.
+
+                            Zero marks:
+                            Incorrect answer.
+                            Explanation.
+
+                            Generated by JavaScript.
+                        -->
+
+                        <div id="sarQuestionResults"></div>
+
+                    </section>
+
+                </div>
+
+                <!-- FOOTER -->
+
+                <div data-layout="footer" data-layout-variant="student"></div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+
+    <!-- SCRIPTS -->
+
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer>
+    </script>
+
+    <script src="../../public/js/layout.js" defer></script>
+    <script src="../../public/js/api.js" defer></script>
+    <script src="../../public/js/main.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+</body>
+
+</html>

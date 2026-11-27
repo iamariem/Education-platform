@@ -34,9 +34,9 @@
 
   <script src="../../public/js/layout.js" defer></script>
 
-  <script src="../../public/js/api.js?v=assessment-workflow-7" defer></script>
+<script src="../../public/js/api.js?v=assessment-workflow-8" defer></script>
 
-  <script src="../../public/js/main.js?v=assessment-workflow-18" defer></script>
+<script src="../../public/js/main.js?v=assessment-workflow-19" defer></script>
 
 </head>
 
@@ -266,8 +266,97 @@
         <i data-lucide="x"></i>
       </button>
     </div>
-    <div id="previewContent"></div>
+    
+  <div id="previewContent"></div>
   </dialog>
+
+  <!-- =========================================
+       Teacher Assessment Submissions & Grading
+  ========================================== -->
+
+  <dialog class="as-dialog tg-dialog" id="teacherGradingDialog" aria-labelledby="tgTitle">
+
+    <div class="as-dialog-header">
+
+      <div>
+        <h2 id="tgTitle">Assessment Submissions</h2>
+
+        <p id="tgSubtitle">
+          Review and grade student answers.
+        </p>
+      </div>
+
+      <button type="button" class="sd-icon-btn" id="tgClose" aria-label="Close grading">
+
+        <i data-lucide="x"></i>
+
+      </button>
+
+    </div>
+
+    <p id="tgFeedback" class="as-feedback" role="status">
+    </p>
+
+    <!-- Submitted Attempts -->
+
+    <div id="tgSubmissions"></div>
+
+    <!-- Grading Workspace -->
+
+    <div id="tgWorkspace" hidden>
+
+      <button type="button" class="btn btn-secondary" id="tgBack">
+
+        <i data-lucide="arrow-left"></i>
+
+        Back to Submissions
+
+      </button>
+
+      <div class="tg-summary">
+
+        <div>
+          <span>Student</span>
+          <strong id="tgStudent"></strong>
+        </div>
+
+        <div>
+          <span>Attempt</span>
+          <strong id="tgAttempt"></strong>
+        </div>
+
+        <div>
+          <span>Total Score</span>
+          <strong id="tgScore"></strong>
+        </div>
+
+      </div>
+
+      <form id="tgForm">
+
+        <div id="tgQuestions"></div>
+
+        <div class="tg-footer">
+
+          <button type="submit" class="btn btn-primary" id="tgPublish">
+
+            <i data-lucide="check-circle"></i>
+
+            Publish Results
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </dialog>
+
+</body>
+
+</html>
 
 </body>
 
