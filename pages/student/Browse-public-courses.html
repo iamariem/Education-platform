@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Browse Public Courses | EduSaaS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../styles/tokens.css">
+
+    <link rel="stylesheet" href="../../public/css/components.css">
+
+    <link rel="stylesheet" href="../../public/css/style.css">
+
+    <link rel="stylesheet" href="../../public/css/responsive.css">
+</head>
+
+<body class="student-dashboard student-courses-page public-courses-page">
+
+    <div class="sd-app">
+
+        <div data-layout="sidebar" data-layout-variant="student-browse-courses">
+        </div>
+
+        <div class="sd-page">
+
+            <div data-layout="navbar" data-layout-variant="student-dashboard">
+            </div>
+
+            <main class="sd-main">
+
+                <!-- BACK -->
+
+                <a href="Student-courses.html" class="bc-back-link">
+
+                    <i data-lucide="arrow-left"></i>
+                    Back to My Courses
+
+                </a>
+
+                <!-- HERO -->
+
+                <section class="bc-hero">
+
+                    <div>
+
+                        <p class="sd-eyebrow">
+                            EXPAND YOUR KNOWLEDGE
+                        </p>
+
+                        <h1>Browse Public Courses</h1>
+
+                        <p>
+                            Discover new courses, explore
+                            your interests and take the next
+                            step in your learning journey.
+                        </p>
+
+                    </div>
+
+                    <div class="bc-hero-icon">
+                        <i data-lucide="book-open-text"></i>
+                    </div>
+
+                </section>
+
+                <!-- SEARCH AND FILTERS -->
+
+                <section class="sc-toolbar">
+
+                    <div class="sc-search">
+
+                        <i data-lucide="search"></i>
+
+                        <input type="search" id="bcSearch" aria-label="Search public courses"
+                            placeholder="Search courses or instructors...">
+
+                    </div>
+
+                    <select id="bcCategory" aria-label="Filter by category">
+
+                        <option value="all">All Categories</option>
+                        <option value="Programming">Programming</option>
+                        <option value="Data Science">Data Science</option>
+                        <option value="Artificial Intelligence">
+                            Artificial Intelligence
+                        </option>
+
+                    </select>
+
+                    <select id="bcLevel" aria-label="Filter by level">
+
+                        <option value="all">All Levels</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+
+                    </select>
+
+                </section>
+
+                <!-- AVAILABLE COURSES -->
+
+                <section class="sd-section">
+
+                    <div class="sd-section-heading">
+
+                        <div>
+
+                            <p class="sd-eyebrow">
+                                FIND YOUR NEXT COURSE
+                            </p>
+
+                            <h2>Available Courses</h2>
+
+                            <p>
+                                Explore courses open to all students.
+                            </p>
+
+                        </div>
+
+                        <span class="sd-count-chip" id="bcCount">
+                            0 courses
+                        </span>
+
+                    </div>
+
+                    <p id="bcFeedback" class="bc-feedback" role="status" hidden>
+                    </p>
+
+                    <div class="sd-course-grid" id="bcCourseGrid">
+                    </div>
+                    <!-- LOAD MORE PUBLIC COURSES -->
+
+                    <div class="sc-load-more" id="bcLoadMoreWrapper" hidden>
+
+                        <p class="sc-showing-count" id="bcShowingCount"></p>
+
+                        <button type="button" class="sc-load-more-btn" id="bcLoadMore">
+
+                            Load More
+
+                            <i data-lucide="chevron-down"></i>
+
+                        </button>
+
+                    </div>
+
+                    <!-- EMPTY STATE -->
+
+                    <div class="sc-empty" id="bcEmpty" hidden>
+
+                        <span class="sc-empty-icon">
+                            <i data-lucide="search"></i>
+                        </span>
+
+                        <h3>No courses found</h3>
+
+                        <p>
+                            Try changing your search or filters.
+                        </p>
+
+                        <button type="button" class="sc-reset-btn" id="bcReset">
+                            Clear Filters
+                        </button>
+
+                    </div>
+
+                </section>
+
+                <div data-layout="footer" data-layout-variant="student">
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+
+    <script src="../../public/js/layout.js" defer></script>
+
+    <script src="../../public/js/main.js" defer></script>
+
+</body>
+
+</html>

@@ -1954,12 +1954,87 @@ document.addEventListener("DOMContentLoaded", () => {
             "Master arrays, linked lists, stacks, queues, trees and graphs.",
           image:
             "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80",
+
           progress: 85,
           lessons: "11 of 13 lessons"
+        },
+
+        {
+          id: "database-systems",
+          title: "Database Systems",
+          category: "Computer Science",
+          description:
+            "Learn database design, SQL queries and relational database management.",
+          image:
+            "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800&auto=format&fit=crop&q=80",
+          progress: 60,
+          lessons: "6 of 10 lessons"
+        },
+
+        {
+          id: "web-development",
+          title: "Web Development",
+          category: "Programming",
+          description:
+            "Build modern responsive websites using HTML, CSS and JavaScript.",
+          image:
+            "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop&q=80",
+          progress: 25,
+          lessons: "4 of 16 lessons"
+        },
+
+        {
+          id: "computer-networks",
+          title: "Computer Networks",
+          category: "Computer Science",
+          description:
+            "Understand network architecture, communication protocols and connectivity.",
+          image:
+            "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=80",
+          progress: 100,
+          lessons: "12 of 12 lessons"
+        },
+
+        {
+          id: "software-engineering",
+          title: "Software Engineering",
+          category: "Computer Science",
+          description:
+            "Explore software design, development methodologies and testing techniques.",
+          image:
+            "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&auto=format&fit=crop&q=80",
+          progress: 50,
+          lessons: "7 of 14 lessons"
+        },
+
+        {
+          id: "cybersecurity",
+          title: "Cybersecurity Fundamentals",
+          category: "Computer Science",
+          description:
+            "Discover security principles, common threats and data protection techniques.",
+          image:
+            "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop&q=80",
+          progress: 0,
+          lessons: "0 of 10 lessons"
+        },
+
+        {
+          id: "cloud-computing",
+          title: "Cloud Computing",
+          category: "Computer Science",
+          description:
+            "Learn cloud infrastructure, virtualization and modern cloud services.",
+          image:
+            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80",
+          progress: 100,
+          lessons: "15 of 15 lessons"
         }
+
       ],
 
       plan: [
+
         {
           title: "Watch Lesson 9",
           subtitle: "Neural Networks",
@@ -2096,6 +2171,51 @@ document.addEventListener("DOMContentLoaded", () => {
       return track;
     }
 
+    /* LOAD NEWLY ENROLLED PUBLIC COURSES */
+
+    try {
+
+      const enrolledPublicCourses = JSON.parse(
+
+        localStorage.getItem(
+          "edusaas.student-enrolled-courses.v1"
+        ) || "[]"
+
+      );
+
+      if (Array.isArray(enrolledPublicCourses)) {
+
+        enrolledPublicCourses.forEach(course => {
+
+          const alreadyExists = data.courses.some(
+            item => item.id === course.id
+          );
+
+          if (!alreadyExists) {
+
+            data.courses.push(course);
+
+          }
+
+        });
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Unable to load enrolled public courses:",
+        error
+      );
+
+    }
+
+    /* MY COURSES PAGINATION */
+
+    const scPageSize = 6;
+
+    let scVisibleCount = scPageSize;
+
     /* ENROLLED COURSES */
 
     function renderCourses(search = "") {
@@ -2106,11 +2226,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
       grid.replaceChildren();
 
-      const filteredCourses = data.courses.filter(course =>
-        `${course.title} ${course.category}`
-          .toLowerCase()
-          .includes(search.toLowerCase().trim())
-      );
+      const statusFilter =
+        $("#scStatusFilter")?.value || "all";
+
+      const filteredCourses = data.courses.filter(course => {
+
+        const matchesSearch =
+          `${course.title} ${course.category}`
+            .toLowerCase()
+            .includes(search.toLowerCase().trim());
+
+        const progress = Number(course.progress || 0);
+
+        const status =
+          progress >= 100
+            ? "completed"
+            : progress > 0
+              ? "in-progress"
+              : "not-started";
+
+        const matchesStatus =
+          statusFilter === "all" ||
+          statusFilter === status;
+
+        return matchesSearch && matchesStatus;
+
+      });
 
       const empty = $("#sdSearchEmpty");
 
@@ -2118,7 +2259,16 @@ document.addEventListener("DOMContentLoaded", () => {
         empty.hidden = filteredCourses.length > 0;
       }
 
-      filteredCourses.forEach(course => {
+      const isMyCoursesPage =
+        document.body.classList.contains(
+          "student-courses-page"
+        );
+
+      const visibleCourses = isMyCoursesPage
+        ? filteredCourses.slice(0, scVisibleCount)
+        : filteredCourses;
+
+      visibleCourses.forEach(course => {
 
         const card = make("article", "sd-course-card");
 
@@ -2151,7 +2301,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Demo link until lesson pages are created
 
-        button.href = "StudentDashboard.html#progress";
+        button.href = "#";
+
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          window.alert("Course details are coming soon.");
+        });
 
         button.append(makeIcon("arrow-right"));
 
@@ -2176,7 +2331,62 @@ document.addEventListener("DOMContentLoaded", () => {
         `${filteredCourses.length} courses`
       );
 
+      setText(
+        "#scEnrolledCount",
+        data.courses.length
+      );
+
+      setText(
+        "#scInProgressCount",
+        data.courses.filter(course =>
+          course.progress > 0 &&
+          course.progress < 100
+        ).length
+      );
+
+      setText(
+        "#scCompletedCount",
+        data.courses.filter(course =>
+          course.progress >= 100
+        ).length
+      );
+
+      /* UPDATE LOAD MORE */
+
+      const scLoadMoreWrapper =
+        document.getElementById("scLoadMoreWrapper");
+
+      const scLoadMoreButton =
+        document.getElementById("scLoadMore");
+
+      const scShowingCount =
+        document.getElementById("scShowingCount");
+
+      if (scLoadMoreWrapper) {
+
+        scLoadMoreWrapper.hidden =
+          filteredCourses.length === 0;
+
+        scLoadMoreButton.hidden =
+          filteredCourses.length <= scPageSize;
+
+        const scAllVisible =
+          visibleCourses.length >= filteredCourses.length;
+
+        scLoadMoreButton.dataset.expanded =
+          String(scAllVisible);
+
+        scLoadMoreButton.innerHTML = scAllVisible
+          ? `Show Less <i data-lucide="chevron-up"></i>`
+          : `Show More <i data-lucide="chevron-down"></i>`;
+
+        scShowingCount.textContent =
+          `Showing ${visibleCourses.length} of ${filteredCourses.length} courses`;
+
+      }
+
       refreshIcons();
+
     }
 
     /* CONTINUE LEARNING */
@@ -2206,11 +2416,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const button = make(
         "a",
-        "sd-primary-btn",
-        "Continue Learning"
+        "sd-course-continue-btn",
+        course.progress >= 100
+          ? "Review Course"
+          : course.progress > 0
+            ? "Continue Learning"
+            : "Start Learning"
       );
 
-      button.href = "StudentDashboard.html#progress";
+      const courseStatus = make(
+        "span",
+        "sc-course-status",
+        course.progress >= 100
+          ? "Completed"
+          : course.progress > 0
+            ? "In Progress"
+            : "Not Started"
+      );
+
+      courseStatus.dataset.status =
+        course.progress >= 100
+          ? "completed"
+          : course.progress > 0
+            ? "in-progress"
+            : "not-started";
+
+      if (
+        document.body.classList.contains(
+          "student-courses-page"
+        )
+      ) {
+        art.append(courseStatus);
+      }
+
+      button.href = "#";
+
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.alert("Course details are coming soon.");
+      });
 
       button.append(makeIcon("arrow-right"));
 
@@ -2721,6 +2965,38 @@ document.addEventListener("DOMContentLoaded", () => {
       event => {
 
         renderCourses(event.target.value);
+
+      }
+    );
+
+    /* MY COURSES SEARCH AND FILTERS */
+
+    function updateMyCourses() {
+
+      scVisibleCount = scPageSize;
+
+      renderCourses(
+        $("#scSearch")?.value || ""
+      );
+
+    }
+
+    $("#scLoadMore")?.addEventListener(
+      "click",
+      () => {
+
+        const button = $("#scLoadMore");
+
+        const isExpanded =
+          button.dataset.expanded === "true";
+
+        scVisibleCount = isExpanded
+          ? scPageSize
+          : scVisibleCount + scPageSize;
+
+        renderCourses(
+          $("#scSearch")?.value || ""
+        );
 
       }
     );
@@ -9742,5 +10018,497 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
   };
+
+});
+
+
+/* ==========================================
+   STUDENT - BROWSE PUBLIC COURSES
+========================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const grid = document.getElementById("bcCourseGrid");
+
+  if (!grid) return;
+
+  const search = document.getElementById("bcSearch");
+  const category = document.getElementById("bcCategory");
+  const level = document.getElementById("bcLevel");
+  const count = document.getElementById("bcCount");
+  const empty = document.getElementById("bcEmpty");
+  const feedback = document.getElementById("bcFeedback");
+
+  const storageKey = "edusaas.student-enrolled-courses.v1";
+
+  /* PUBLIC COURSES PAGINATION */
+
+  const bcPageSize = 6;
+
+  let bcVisibleCount = bcPageSize;
+
+  const bcLoadMoreWrapper =
+    document.getElementById("bcLoadMoreWrapper");
+
+  const bcLoadMoreButton =
+    document.getElementById("bcLoadMore");
+
+  const bcShowingCount =
+    document.getElementById("bcShowingCount");
+
+
+  /* MOCK PUBLIC COURSES */
+
+  const publicCourses = [
+
+    {
+      id: "python-fundamentals",
+      title: "Python Fundamentals",
+      category: "Programming",
+      description:
+        "Learn Python programming from the basics and build your first applications.",
+      instructor: "Demo Instructor",
+      level: "Beginner",
+      totalLessons: 12,
+      image:
+        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80"
+    },
+
+    {
+      id: "intro-data-science",
+      title: "Introduction to Data Science",
+      category: "Data Science",
+      description:
+        "Explore data analysis, visualization and essential data science concepts.",
+      instructor: "Demo Instructor",
+      level: "Beginner",
+      totalLessons: 15,
+      image:
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=80"
+    },
+
+    {
+      id: "machine-learning",
+      title: "Machine Learning",
+      category: "Artificial Intelligence",
+      description:
+        "Discover machine learning algorithms and intelligent prediction models.",
+      instructor: "Demo Instructor",
+      level: "Intermediate",
+      totalLessons: 18,
+      image:
+        "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop&q=80"
+    },
+
+    {
+      id: "javascript-essentials",
+      title: "JavaScript Essentials",
+      category: "Programming",
+      description:
+        "Create interactive web applications and master modern JavaScript concepts.",
+      instructor: "Demo Instructor",
+      level: "Beginner",
+      totalLessons: 14,
+      image:
+        "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&auto=format&fit=crop&q=80"
+    },
+
+    {
+      id: "data-visualization",
+      title: "Data Visualization",
+      category: "Data Science",
+      description:
+        "Transform complex datasets into meaningful charts and interactive dashboards.",
+      instructor: "Demo Instructor",
+      level: "Intermediate",
+      totalLessons: 10,
+      image:
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80"
+    },
+
+    {
+      id: "computer-vision",
+      title: "Computer Vision",
+      category: "Artificial Intelligence",
+      description:
+        "Explore image processing, object detection and visual recognition systems.",
+      instructor: "Demo Instructor",
+      level: "Advanced",
+      totalLessons: 20,
+      image:
+        "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop&q=80"
+    },
+
+    {
+      id: "java-programming",
+      title: "Java Programming",
+      category: "Programming",
+      description:
+        "Master object-oriented programming and develop powerful Java applications.",
+      instructor: "Demo Instructor",
+      level: "Intermediate",
+      totalLessons: 16,
+      image:
+        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&auto=format&fit=crop&q=80"
+    },
+
+    {
+      id: "big-data-analytics",
+      title: "Big Data Analytics",
+      category: "Data Science",
+      description:
+        "Learn how to process, analyze and extract insights from large datasets.",
+      instructor: "Demo Instructor",
+      level: "Advanced",
+      totalLessons: 22,
+      image:
+        "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=800&auto=format&fit=crop&q=80"
+    },
+
+    {
+      id: "natural-language-processing",
+      title: "Natural Language Processing",
+      category: "Artificial Intelligence",
+      description:
+        "Build intelligent systems that understand and process human language.",
+      instructor: "Demo Instructor",
+      level: "Advanced",
+      totalLessons: 18,
+      image:
+        "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=80"
+    }
+
+  ];
+
+
+  /* STORAGE */
+
+  function getEnrollments() {
+
+    try {
+
+      const saved = JSON.parse(
+        localStorage.getItem(storageKey) || "[]"
+      );
+
+      return Array.isArray(saved) ? saved : [];
+
+    } catch {
+
+      return [];
+
+    }
+
+  }
+
+  /* ELEMENT HELPERS */
+
+  function make(tag, className = "", text = "") {
+
+    const element = document.createElement(tag);
+
+    if (className) {
+      element.className = className;
+    }
+
+    if (text) {
+      element.textContent = text;
+    }
+
+    return element;
+
+  }
+
+  function makeIcon(name) {
+
+    const icon = document.createElement("i");
+
+    icon.setAttribute("data-lucide", name);
+
+    return icon;
+
+  }
+
+  /* ENROLL */
+
+  function enrollCourse(course) {
+
+    const enrolled = getEnrollments();
+
+    if (enrolled.some(item => item.id === course.id)) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Enroll in ${course.title}?`
+    );
+
+    if (!confirmed) return;
+
+    enrolled.push({
+
+      ...course,
+
+      progress: 0,
+
+      lessons: `0 of ${course.totalLessons} lessons`,
+
+      enrolledAt: new Date().toISOString()
+
+    });
+
+    try {
+
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(enrolled)
+      );
+
+      feedback.textContent =
+        `Successfully enrolled in ${course.title}! You can now find it in My Courses.`;
+
+      feedback.dataset.status = "success";
+      feedback.hidden = false;
+
+      renderCourses();
+
+    } catch {
+
+      feedback.textContent =
+        "Unable to save enrollment. Please try again.";
+
+      feedback.dataset.status = "error";
+      feedback.hidden = false;
+
+    }
+
+  }
+
+  /* RENDER PUBLIC COURSES */
+
+  function renderCourses() {
+
+    const query = search.value.trim().toLowerCase();
+
+    const enrolledIds = new Set(
+      getEnrollments().map(course => course.id)
+    );
+
+    const filtered = publicCourses.filter(course => {
+
+      const matchesSearch =
+        `${course.title} ${course.category} ${course.instructor}`
+          .toLowerCase()
+          .includes(query);
+
+      const matchesCategory =
+        category.value === "all" ||
+        course.category === category.value;
+
+      const matchesLevel =
+        level.value === "all" ||
+        course.level === level.value;
+
+      return matchesSearch &&
+        matchesCategory &&
+        matchesLevel;
+
+    });
+
+    grid.replaceChildren();
+
+    count.textContent =
+      `${filtered.length} ${filtered.length === 1 ? "course" : "courses"}`;
+
+    empty.hidden = filtered.length > 0;
+
+    const visibleCourses =
+      filtered.slice(0, bcVisibleCount);
+
+    bcLoadMoreWrapper.hidden =
+      filtered.length === 0;
+
+    bcLoadMoreButton.hidden =
+      filtered.length <= bcPageSize;
+
+    const bcAllVisible =
+      visibleCourses.length >= filtered.length;
+
+    bcLoadMoreButton.dataset.expanded =
+      String(bcAllVisible);
+
+    bcLoadMoreButton.innerHTML = bcAllVisible
+      ? `Show Less <i data-lucide="chevron-up"></i>`
+      : `Show More <i data-lucide="chevron-down"></i>`;
+
+    bcShowingCount.textContent =
+      `Showing ${visibleCourses.length} of ${filtered.length} courses`;
+
+    visibleCourses.forEach(course => {
+
+      const isEnrolled = enrolledIds.has(course.id);
+
+      const card = make("article", "sd-course-card");
+
+      const art = make("div", "sd-course-art");
+
+      const image = make("img");
+
+      image.src = course.image;
+      image.alt = course.title;
+      image.loading = "lazy";
+
+      const badge = make(
+        "span",
+        "bc-public-badge",
+        isEnrolled ? "Enrolled" : "Public Course"
+      );
+
+      art.append(image, badge);
+
+      const body = make("div", "sd-course-body");
+
+      const instructor = make(
+        "div",
+        "bc-course-instructor"
+      );
+
+      instructor.append(
+        makeIcon("user-round"),
+        make("span", "", course.instructor)
+      );
+
+      const meta = make("div", "bc-course-meta");
+
+      const lessons = make("span");
+
+      lessons.append(
+        makeIcon("book-open"),
+        document.createTextNode(
+          `${course.totalLessons} Lessons`
+        )
+      );
+
+      const difficulty = make("span");
+
+      difficulty.append(
+        makeIcon("chart-no-axes-column-increasing"),
+        document.createTextNode(course.level)
+      );
+
+      meta.append(lessons, difficulty);
+
+      const button = make(
+        isEnrolled ? "a" : "button",
+        "bc-enroll-btn",
+        isEnrolled ? "Go to My Courses" : "Enroll Now"
+      );
+
+      if (isEnrolled) {
+
+        button.href = "Student-courses.html";
+        button.classList.add("is-enrolled");
+
+        button.append(makeIcon("circle-check"));
+
+      } else {
+
+        button.type = "button";
+
+        button.append(makeIcon("arrow-right"));
+
+        button.addEventListener("click", () => {
+          enrollCourse(course);
+        });
+
+      }
+
+      body.append(
+
+        make(
+          "span",
+          "sd-course-category",
+          course.category
+        ),
+
+        make("h3", "", course.title),
+
+        make("p", "", course.description),
+
+        instructor,
+
+        meta,
+
+        button
+
+      );
+
+      card.append(art, body);
+
+      grid.append(card);
+
+    });
+
+    window.lucide?.createIcons();
+
+  }
+
+  /* SEARCH AND FILTER EVENTS */
+
+  function updatePublicCourses() {
+
+    bcVisibleCount = bcPageSize;
+
+    renderCourses();
+
+  }
+
+  search.addEventListener(
+    "input",
+    updatePublicCourses
+  );
+
+  category.addEventListener(
+    "change",
+    updatePublicCourses
+  );
+
+  level.addEventListener(
+    "change",
+    updatePublicCourses
+  );
+
+  bcLoadMoreButton.addEventListener(
+    "click",
+    () => {
+
+      const isExpanded =
+        bcLoadMoreButton.dataset.expanded === "true";
+
+      bcVisibleCount = isExpanded
+        ? bcPageSize
+        : bcVisibleCount + bcPageSize;
+
+      renderCourses();
+
+    }
+  );
+
+  document.getElementById("bcReset")
+    ?.addEventListener("click", () => {
+
+      search.value = "";
+
+      category.value = "all";
+
+      level.value = "all";
+
+      updatePublicCourses();
+
+    });
+
+  window.addEventListener("pageshow", renderCourses);
+
+  renderCourses();
 
 });

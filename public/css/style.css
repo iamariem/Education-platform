@@ -10338,3 +10338,536 @@ html[dir="rtl"] .about-content {
 .assessment-page .as-dialog {
   border-radius: 20px;
 }
+
+
+/* ==========================================
+   STUDENT - MY COURSES
+========================================== */
+
+.student-courses-page .sc-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+/* BROWSE PUBLIC COURSES BUTTON */
+
+.student-courses-page .sc-browse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 20px;
+  border-radius: 14px;
+  background: #F0787B;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background .2s ease,
+              transform .2s ease;
+}
+
+.student-courses-page .sc-browse-btn:hover {
+  background: #df666c;
+  transform: translateY(-2px);
+}
+
+.student-courses-page .sc-browse-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* STATISTICS */
+
+.student-courses-page .sc-stats {
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.student-courses-page .sd-stat-card {
+  border-radius: 18px;
+}
+
+/* SEARCH AND FILTERS */
+
+.student-courses-page .sc-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 20px;
+  margin: 8px 0 24px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.student-courses-page .sc-search {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 12px;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.student-courses-page .sc-search svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--sd-muted);
+}
+
+.student-courses-page .sc-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #1F2D3D;
+  font-size: 13px;
+}
+
+.student-courses-page .sc-search:focus-within {
+  border-color: #62C4B5;
+  box-shadow: 0 0 0 3px rgba(98,196,181,.15);
+}
+
+.student-courses-page .sc-toolbar select {
+  min-width: 190px;
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: #f8fafc;
+  color: #1F2D3D;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* COURSE CARDS */
+
+.student-courses-page .sd-course-grid {
+  gap: 24px;
+}
+
+.student-courses-page .sd-course-card {
+  border-radius: 20px;
+}
+
+.student-courses-page .sd-course-art {
+  position: relative;
+  height: 190px;
+}
+
+.student-courses-page .sd-course-body {
+  padding: 22px;
+}
+
+.student-courses-page .sd-course-footer {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.student-courses-page .sd-course-lessons {
+  font-size: 12px;
+}
+
+.student-courses-page .sd-course-continue-btn {
+  width: 100%;
+  min-height: 44px;
+  border-radius: 14px;
+  font-size: 12px;
+}
+
+/* COURSE STATUS */
+
+.student-courses-page .sc-course-status {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 7px 12px;
+  border-radius: 50px;
+  background: #ffffff;
+  color: #1F2D3D;
+  font-size: 11px;
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(31,45,61,.1);
+}
+
+.student-courses-page
+.sc-course-status[data-status="in-progress"] {
+  background: #DFF3F2;
+  color: #287e72;
+}
+
+.student-courses-page
+.sc-course-status[data-status="completed"] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.student-courses-page
+.sc-course-status[data-status="not-started"] {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* EMPTY STATE */
+
+.student-courses-page .sc-empty:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 300px;
+  padding: 40px 24px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px dashed var(--color-border);
+  border-radius: 20px;
+}
+
+.student-courses-page .sc-empty[hidden] {
+  display: none;
+}
+
+.student-courses-page .sc-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #DFF3F2;
+  color: #409f90;
+}
+
+.student-courses-page .sc-empty-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.student-courses-page .sc-empty h3 {
+  margin: 0;
+  color: #1F2D3D;
+}
+
+.student-courses-page .sc-empty p {
+  margin: 0;
+  color: var(--sd-muted);
+  font-size: 13px;
+}
+
+.student-courses-page .sc-reset-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 14px;
+  background: #DFF3F2;
+  color: #287e72;
+  font-weight: 600;
+  cursor: pointer;
+}
+/* Dashboard - Continue Learning Spacing */
+
+.student-dashboard #sdContinueCourse .sd-progress-track {
+  margin-bottom: 20px;
+}
+
+.student-dashboard #sdContinueCourse .sd-primary-btn {
+  margin-top: 0;
+}
+
+
+/* ==========================================
+   STUDENT - BROWSE PUBLIC COURSES
+========================================== */
+
+/* BACK LINK */
+
+.public-courses-page .bc-back-link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  width: fit-content;
+  margin-bottom: 20px;
+  color: #F0787B;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.public-courses-page .bc-back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.public-courses-page .bc-back-link:hover {
+  color: #d65e65;
+}
+
+/* HERO */
+
+.public-courses-page .bc-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 36px;
+  margin-bottom: 28px;
+  border: 1px solid rgba(98, 196, 181, .25);
+  border-radius: 20px;
+  background: linear-gradient(
+    120deg,
+    #DFF3F2,
+    #f5fcfb
+  );
+}
+
+.public-courses-page .bc-hero h1 {
+  margin: 10px 0 14px;
+  color: #1F2D3D;
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+}
+
+.public-courses-page .bc-hero p:not(.sd-eyebrow) {
+  max-width: 580px;
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.public-courses-page .bc-hero-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 110px;
+  height: 110px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, .75);
+  color: #409f90;
+}
+
+.public-courses-page .bc-hero-icon svg {
+  width: 58px;
+  height: 58px;
+}
+
+/* PUBLIC COURSE LABEL */
+
+.public-courses-page .bc-public-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 8px 14px;
+  border-radius: 30px;
+  background: #DFF3F2;
+  color: #287e72;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* COURSE CARDS */
+
+.public-courses-page .sd-course-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.public-courses-page .sd-course-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 14px;
+}
+
+.public-courses-page .sd-course-body h3,
+.public-courses-page .sd-course-body p {
+  margin: 0;
+}
+
+/* INSTRUCTOR */
+
+.public-courses-page .bc-course-instructor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.public-courses-page .bc-course-instructor svg {
+  width: 17px;
+  height: 17px;
+  color: #409f90;
+}
+
+/* COURSE INFORMATION */
+
+.public-courses-page .bc-course-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  padding: 16px 0;
+  margin-top: auto;
+  border-top: 1px solid var(--color-border);
+  color: #64748b;
+  font-size: 12px;
+}
+
+.public-courses-page .bc-course-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.public-courses-page .bc-course-meta svg {
+  width: 16px;
+  height: 16px;
+  color: #409f90;
+}
+
+/* ENROLL BUTTON */
+
+.public-courses-page .bc-enroll-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 14px;
+  background: #F0787B;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease,
+              transform .2s ease;
+}
+
+.public-courses-page .bc-enroll-btn:hover {
+  background: #df666c;
+  transform: translateY(-2px);
+}
+
+.public-courses-page .bc-enroll-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.public-courses-page .bc-enroll-btn.is-enrolled {
+  background: #DFF3F2;
+  color: #287e72;
+}
+
+.public-courses-page .bc-enroll-btn.is-enrolled:hover {
+  background: #ccebe7;
+}
+
+/* ENROLLMENT FEEDBACK */
+
+.public-courses-page .bc-feedback:not([hidden]) {
+  padding: 16px 20px;
+  margin: 0 0 20px;
+  border: 1px solid rgba(98, 196, 181, .35);
+  border-radius: 14px;
+  background: #DFF3F2;
+  color: #287e72;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.public-courses-page .bc-feedback[data-status="error"] {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #be123c;
+}
+
+.public-courses-page .bc-feedback[hidden] {
+  display: none;
+}
+
+/* ==========================================
+   STUDENT COURSES - LOAD MORE
+========================================== */
+
+.student-courses-page .sc-load-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.student-courses-page .sc-showing-count {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.student-courses-page .sc-load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  min-width: 180px;
+  min-height: 46px;
+  padding: 12px 24px;
+
+  border: 1.5px solid #F0787B;
+  border-radius: 14px;
+
+  background: #ffffff;
+  color: #F0787B;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+.student-courses-page .sc-load-more-btn:hover {
+  background: #F0787B;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.student-courses-page .sc-load-more-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.student-courses-page .sc-load-more[hidden],
+.student-courses-page .sc-load-more-btn[hidden] {
+  display: none;
+}

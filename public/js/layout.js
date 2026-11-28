@@ -54,10 +54,52 @@
       progressLink?.setAttribute("href", "#progress");
     }
 
+    /* STUDENT COURSES NAVIGATION */
+
+    if (
+      variant === "student-courses" ||
+      variant === "student-browse-courses"
+    ) {
+
+      const coursesLink = sidebarTemplate.querySelector(
+        `[data-layout-active="${variant}"]`
+      );
+
+      coursesLink?.classList.add("active");
+
+      coursesLink?.setAttribute(
+        "aria-current",
+        "page"
+      );
+
+    }
+
+    /* STUDENT COURSES */
+
+    if (
+      variant === "student-courses" ||
+      variant === "student-browse-courses"
+    ) {
+
+      const coursesLink = sidebarTemplate.querySelector(
+        '[data-layout-active="student-courses"]'
+      );
+
+      coursesLink?.classList.add("active");
+
+      coursesLink?.setAttribute(
+        "aria-current",
+        "page"
+      );
+
+    }
+
+    /* STUDENT ASSESSMENT */
+
     if (variant === "student-assessment") {
 
       const assessmentLink = sidebarTemplate.querySelector(
-        'a[href$="student-assessment.html"]'
+        'a[href$="Student-assessment.html"]'
       );
 
       assessmentLink?.classList.add("active");
@@ -68,7 +110,7 @@
       );
 
     }
-    
+
     if (variant === "student-ai") {
       const aiLink = sidebarTemplate.querySelector('[data-layout-active="ai-tutor"]');
       aiLink?.classList.add("active");
